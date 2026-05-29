@@ -30,6 +30,12 @@ yarn-error.log*
 
 # env files
 .env*
+!.env.example
+!.env.local.example
+
+# python api
+services/welllog-api/.venv
+services/welllog-api/.env
 
 # typescript
 *.tsbuildinfo

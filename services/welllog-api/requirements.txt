@@ -1,0 +1,9 @@
+fastapi==0.136.1
+uvicorn==0.32.0
+python-multipart==0.0.20
+lasio==0.32
+numpy==2.2.4
+pandas==2.2.3
+groq==1.2.0
+psycopg2-binary==2.9.12
+python-dotenv==1.0.1
