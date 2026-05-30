@@ -18,6 +18,19 @@ export default function Home() {
           <ul className="mt-4 space-y-3">
             <li>
               <Link
+                href="/learn/prosper"
+                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-amber-400 hover:shadow-md"
+              >
+                <span className="font-medium text-slate-900">
+                  🛢️ Prosper simulyatoru
+                </span>
+                <span className="mt-1 block text-sm text-slate-600">
+                  Quyu parametrlərini dəyişdir, məhsuldarlıq və axın rejimini izlə
+                </span>
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/learn/well-log"
                 className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-amber-400 hover:shadow-md"
               >
