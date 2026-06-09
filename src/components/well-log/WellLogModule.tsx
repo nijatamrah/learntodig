@@ -7,6 +7,7 @@ import WellChart from "./WellChart";
 import AISummary from "./AISummary";
 import ChatBox from "./ChatBox";
 import { getWellLogApiBase } from "@/lib/well-log-client";
+import { buildWellLogExplainPayload } from "@/lib/well-log-explain";
 import type { LogData } from "@/lib/well-log-types";
 import styles from "./well-log.module.css";
 
@@ -16,6 +17,10 @@ export default function WellLogModule() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedDepth, setSelectedDepth] = useState<number | null>(null);
+  const [explanation, setExplanation] = useState<string | null>(null);
+  const [aiExplainLoading, setAiExplainLoading] = useState(false);
+  const [aiExplainError, setAiExplainError] = useState<string | null>(null);
+  const [showAiExplain, setShowAiExplain] = useState(false);
 
   const doUpload = useCallback(
     async (file: File | undefined) => {
@@ -24,6 +29,9 @@ export default function WellLogModule() {
       setError("");
       setLogData(null);
       setSelectedDepth(null);
+      setExplanation(null);
+      setAiExplainError(null);
+      setShowAiExplain(false);
       const form = new FormData();
       form.append("file", file);
       try {
@@ -54,6 +62,39 @@ export default function WellLogModule() {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     void doUpload(e.dataTransfer.files[0]);
+  };
+
+  const handleExplain = async () => {
+    if (!logData) return;
+
+    setShowAiExplain(true);
+    setAiExplainLoading(true);
+    setAiExplainError(null);
+
+    try {
+      const res = await fetch("/api/well-log/explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          buildWellLogExplainPayload(logData, selectedDepth),
+        ),
+      });
+
+      const data = (await res.json()) as { explanation?: string; error?: string };
+
+      if (!res.ok) {
+        throw new Error(data.error ?? "Xəta baş verdi");
+      }
+
+      setExplanation(data.explanation ?? "");
+    } catch (err) {
+      setExplanation(null);
+      setAiExplainError(
+        err instanceof Error ? err.message : "İzah alınarkən xəta baş verdi",
+      );
+    } finally {
+      setAiExplainLoading(false);
+    }
   };
 
   return (
@@ -116,6 +157,14 @@ export default function WellLogModule() {
               </div>
               <div className={styles.sidePanel}>
                 <AISummary summary={logData.ai_summary} />
+                <button
+                  type="button"
+                  className={styles.btn}
+                  onClick={() => void handleExplain()}
+                  disabled={aiExplainLoading}
+                >
+                  {aiExplainLoading ? "Yüklənir…" : "AI ilə izah et"}
+                </button>
                 <ChatBox
                   logData={logData}
                   selectedDepth={selectedDepth}
@@ -123,6 +172,24 @@ export default function WellLogModule() {
                 />
               </div>
             </div>
+
+            {showAiExplain && (
+              <section className={styles.aiExplainSection}>
+                <div className={styles.aiExplainTitle}>AI izahı</div>
+                {aiExplainLoading && (
+                  <div className={styles.aiExplainLoading}>
+                    <span className={styles.aiExplainSpinner} aria-hidden />
+                    AI izah hazırlanır…
+                  </div>
+                )}
+                {!aiExplainLoading && aiExplainError && (
+                  <p className={styles.aiExplainError}>{aiExplainError}</p>
+                )}
+                {!aiExplainLoading && !aiExplainError && explanation && (
+                  <p className={styles.aiExplainText}>{explanation}</p>
+                )}
+              </section>
+            )}
           </div>
         )}
       </main>

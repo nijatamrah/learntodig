@@ -217,3 +217,62 @@
 .logToggleActive {
   opacity: 1;
 }
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.aiExplainSection {
+  background: #1a1d2e;
+  border-radius: 10px;
+  padding: 16px;
+  border-left: 3px solid #4f5b99;
+}
+
+.aiExplainTitle {
+  font-size: 0.78rem;
+  color: #f0b429;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.aiExplainLoading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.aiExplainSpinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #4f5b99;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: wellLogSpin 0.8s linear infinite;
+}
+
+.aiExplainText {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.aiExplainError {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: #f87171;
+}
+
+@keyframes wellLogSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
