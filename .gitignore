@@ -39,3 +39,4 @@ services/welllog-api/.env
 
 # typescript
 *.tsbuildinfo
+.vercel
