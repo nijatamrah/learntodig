@@ -5,7 +5,7 @@ import Link from "next/link";
 import axios from "axios";
 import WellChart from "./WellChart";
 import AISummary from "./AISummary";
-import ChatBox from "./ChatBox";
+import WellLogChat from "./WellLogChat";
 import { getWellLogApiBase } from "@/lib/well-log-client";
 import { buildWellLogExplainPayload } from "@/lib/well-log-explain";
 import type { LogData } from "@/lib/well-log-types";
@@ -165,11 +165,6 @@ export default function WellLogModule() {
                 >
                   {aiExplainLoading ? "Yüklənir…" : "AI ilə izah et"}
                 </button>
-                <ChatBox
-                  logData={logData}
-                  selectedDepth={selectedDepth}
-                  apiBase={apiBase}
-                />
               </div>
             </div>
 
@@ -190,6 +185,8 @@ export default function WellLogModule() {
                 )}
               </section>
             )}
+
+            <WellLogChat logData={logData} selectedDepth={selectedDepth} />
           </div>
         )}
       </main>

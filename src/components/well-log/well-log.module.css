@@ -176,9 +176,8 @@
 
 .legend {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   flex-wrap: wrap;
-  margin-bottom: 12px;
 }
 
 .legendItem {
@@ -195,11 +194,75 @@
   border-radius: 3px;
 }
 
+.chartWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chartToolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.canvasWrap {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #2d3148;
+}
+
+.chartCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: crosshair;
+}
+
+.chartTooltip {
+  position: absolute;
+  z-index: 10;
+  min-width: 140px;
+  background: rgba(15, 17, 23, 0.95);
+  border: 1px solid #2d3148;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.chartTooltipDepth {
+  color: #f0b429;
+  font-weight: 700;
+  font-family: ui-monospace, monospace;
+}
+
+.chartTooltipZone {
+  color: #94a3b8;
+  margin: 4px 0 6px;
+  text-transform: capitalize;
+}
+
+.chartTooltipRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #cbd5e1;
+  margin-top: 2px;
+}
+
+.chartTooltipHint {
+  color: #64748b;
+  margin-top: 8px;
+  font-size: 0.7rem;
+}
+
 .logToggles {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 12px;
 }
 
 .logToggle {
@@ -275,4 +338,91 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.chatSection {
+  background: #1a1d2e;
+  border-radius: 10px;
+  border: 1px solid #2d3148;
+  padding: 18px 20px;
+  margin-top: 4px;
+}
+
+.chatTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f0b429;
+  margin: 0;
+}
+
+.chatHint {
+  margin: 4px 0 14px;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.chatMessages {
+  max-height: 320px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 2px 12px;
+}
+
+.chatBubble {
+  max-width: 85%;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.chatBubbleUser {
+  align-self: flex-end;
+  background: #4f5b99;
+  color: #f8fafc;
+}
+
+.chatBubbleAi {
+  align-self: flex-start;
+  background: #252a3d;
+  color: #e2e8f0;
+  border: 1px solid #2d3148;
+}
+
+.chatLoading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.chatInputRow {
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid #2d3148;
+  padding-top: 14px;
+}
+
+.chatInput {
+  flex: 1;
+  background: #0f1117;
+  border: 1px solid #2d3148;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.chatInput:focus {
+  border-color: #4f5b99;
+}
+
+.chatInput:disabled {
+  opacity: 0.6;
 }

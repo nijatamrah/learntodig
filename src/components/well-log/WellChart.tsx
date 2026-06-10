@@ -1,18 +1,30 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import type { LogData, ZoneType } from "@/lib/well-log-types";
+import { zoneLabel } from "@/lib/well-log-explain";
 import styles from "./well-log.module.css";
 
 const ZONE_COLORS: Record<ZoneType, string> = {
-  oil: "rgba(234, 179, 8,  0.25)",
-  gas: "rgba(239, 68, 68, 0.22)",
-  water: "rgba(59, 130, 246, 0.22)",
-  shale: "rgba(107, 114, 128, 0.15)",
-  unknown: "rgba(0,0,0,0)",
+  oil: "rgba(202, 138, 4, 0.32)",
+  gas: "rgba(239, 68, 68, 0.28)",
+  water: "rgba(37, 99, 235, 0.28)",
+  shale: "rgba(100, 116, 139, 0.2)",
+  unknown: "rgba(0, 0, 0, 0)",
 };
 
-const LOG_PALETTE = ["#818cf8", "#fb923c", "#34d399", "#f472b6", "#60a5fa"];
+const ZONE_BORDER: Record<ZoneType, string> = {
+  oil: "rgba(202, 138, 4, 0.5)",
+  gas: "rgba(239, 68, 68, 0.45)",
+  water: "rgba(37, 99, 235, 0.45)",
+  shale: "rgba(100, 116, 139, 0.35)",
+  unknown: "transparent",
+};
+
+const LOG_PALETTE = ["#a5b4fc", "#fb923c", "#34d399", "#f472b6", "#38bdf8"];
+
+const PAD = { top: 28, bottom: 24, left: 76, right: 24 };
+const GRID_LINES = 8;
 
 interface WellChartProps {
   logData: LogData;
@@ -28,14 +40,21 @@ interface TooltipState {
   y: number;
 }
 
+function clampIndex(idx: number, n: number): number {
+  if (n <= 1) return 0;
+  return Math.max(0, Math.min(n - 1, idx));
+}
+
 export default function WellChart({ logData, onDepthSelect, selectedDepth }: WellChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
 
   const { curves, depth_key, curve_names, zones } = logData;
-  const depths = curves[depth_key] || [];
+  const depths = useMemo(
+    () => curves[depth_key] ?? [],
+    [curves, depth_key],
+  );
 
   useEffect(() => {
     const priority = ["GR", "RESD", "RT", "ILD", "DT", "SP"];
@@ -76,6 +95,25 @@ export default function WellChart({ logData, onDepthSelect, selectedDepth }: Wel
     [curves],
   );
 
+  const indexToY = useCallback(
+    (i: number, chartH: number) => {
+      const n = depths.length;
+      if (n <= 1) return PAD.top;
+      return PAD.top + (i / (n - 1)) * chartH;
+    },
+    [depths.length],
+  );
+
+  const yToIndex = useCallback(
+    (y: number, chartH: number) => {
+      const n = depths.length;
+      if (n <= 1) return 0;
+      const t = (y - PAD.top) / chartH;
+      return clampIndex(Math.round(t * (n - 1)), n);
+    },
+    [depths.length],
+  );
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || depths.length === 0) return;
@@ -84,58 +122,75 @@ export default function WellChart({ logData, onDepthSelect, selectedDepth }: Wel
 
     const W = canvas.width;
     const H = canvas.height;
-    const PAD = { top: 20, bottom: 20, left: 60, right: 20 };
     const chartH = H - PAD.top - PAD.bottom;
     const chartW = W - PAD.left - PAD.right;
+    const n = depths.length;
 
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = "#1a1d2e";
+
+    ctx.fillStyle = "#141824";
     ctx.fillRect(0, 0, W, H);
 
-    const n = depths.length;
-    const depthToY = (d: number) => {
-      const minD = depths[0] ?? 0;
-      const maxD = depths[n - 1] ?? 1;
-      return PAD.top + ((d - minD) / (maxD - minD)) * chartH;
-    };
+    ctx.fillStyle = "#0f1117";
+    ctx.fillRect(0, PAD.top, PAD.left - 4, chartH);
 
-    let prevZone: ZoneType | null = null;
-    let zoneStart = depths[0] ?? 0;
     for (let i = 0; i < n; i++) {
       const z = zones[i];
-      if (z !== prevZone || i === n - 1) {
-        if (prevZone !== null) {
-          const y1 = depthToY(zoneStart);
-          const y2 = depthToY(depths[i] ?? 0);
-          ctx.fillStyle = ZONE_COLORS[prevZone] ?? ZONE_COLORS.unknown;
-          ctx.fillRect(PAD.left, y1, chartW, y2 - y1);
-        }
-        prevZone = z;
-        zoneStart = depths[i] ?? 0;
+      const y1 = indexToY(i, chartH);
+      const y2 = i < n - 1 ? indexToY(i + 1, chartH) : y1 + 1;
+      ctx.fillStyle = ZONE_COLORS[z] ?? ZONE_COLORS.unknown;
+      ctx.fillRect(PAD.left, y1, chartW, Math.max(1, y2 - y1));
+    }
+
+    let bandStart = 0;
+    for (let i = 1; i <= n; i++) {
+      if (i === n || zones[i] !== zones[bandStart]) {
+        const z = zones[bandStart];
+        const y1 = indexToY(bandStart, chartH);
+        const y2 = indexToY(i - 1, chartH);
+        ctx.strokeStyle = ZONE_BORDER[z] ?? "transparent";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(PAD.left, y1, chartW, Math.max(1, y2 - y1 + 1));
+        bandStart = i;
       }
     }
 
-    ctx.strokeStyle = "#2d3148";
-    ctx.lineWidth = 0.5;
-    for (let i = 0; i <= 5; i++) {
-      const y = PAD.top + (i / 5) * chartH;
+    ctx.strokeStyle = "#252a3d";
+    ctx.lineWidth = 1;
+    for (let g = 0; g <= GRID_LINES; g++) {
+      const idx = clampIndex(Math.round((g / GRID_LINES) * (n - 1)), n);
+      const y = indexToY(idx, chartH);
       ctx.beginPath();
       ctx.moveTo(PAD.left, y);
       ctx.lineTo(W - PAD.right, y);
       ctx.stroke();
-      const d = (depths[0] ?? 0) + (i / 5) * ((depths[n - 1] ?? 0) - (depths[0] ?? 0));
-      ctx.fillStyle = "#64748b";
-      ctx.font = "11px system-ui";
-      ctx.textAlign = "right";
-      ctx.fillText(d.toFixed(0), PAD.left - 4, y + 4);
+
+      const depthVal = depths[idx];
+      if (depthVal != null) {
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "11px ui-monospace, monospace";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+        ctx.fillText(depthVal.toFixed(1), PAD.left - 10, y);
+      }
     }
+
+    ctx.fillStyle = "#64748b";
+    ctx.font = "10px system-ui";
+    ctx.textAlign = "center";
+    ctx.save();
+    ctx.translate(14, PAD.top + chartH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText(depth_key, 0, 0);
+    ctx.restore();
 
     activeKeys.forEach((key) => {
       if (!curves[key]) return;
       const { norm } = normalise(key);
       const color = getColor(key);
       ctx.strokeStyle = color;
-      ctx.lineWidth = 1.8;
+      ctx.lineWidth = 2;
+      ctx.lineJoin = "round";
       ctx.beginPath();
       let started = false;
       for (let i = 0; i < n; i++) {
@@ -145,7 +200,7 @@ export default function WellChart({ logData, onDepthSelect, selectedDepth }: Wel
           continue;
         }
         const x = PAD.left + v * chartW;
-        const y = depthToY(depths[i] ?? 0);
+        const y = indexToY(i, chartH);
         if (!started) {
           ctx.moveTo(x, y);
           started = true;
@@ -157,10 +212,17 @@ export default function WellChart({ logData, onDepthSelect, selectedDepth }: Wel
     });
 
     if (selectedDepth !== null) {
-      const y = depthToY(selectedDepth);
+      const selIdx = depths.reduce<number>(
+        (best, d, i) =>
+          Math.abs((d ?? 0) - selectedDepth) < Math.abs((depths[best] ?? 0) - selectedDepth)
+            ? i
+            : best,
+        0,
+      );
+      const y = indexToY(selIdx, chartH);
       ctx.strokeStyle = "#f0b429";
       ctx.lineWidth = 1.5;
-      ctx.setLineDash([4, 3]);
+      ctx.setLineDash([5, 4]);
       ctx.beginPath();
       ctx.moveTo(PAD.left, y);
       ctx.lineTo(W - PAD.right, y);
@@ -168,30 +230,20 @@ export default function WellChart({ logData, onDepthSelect, selectedDepth }: Wel
       ctx.setLineDash([]);
     }
 
-    ctx.fillStyle = "#94a3b8";
-    ctx.font = "11px system-ui";
-    ctx.textAlign = "left";
-    ctx.fillText("ft", 4, PAD.top + chartH / 2);
-  }, [depths, zones, activeKeys, normalise, selectedDepth, curves, getColor]);
+    ctx.strokeStyle = "#2d3148";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(PAD.left, PAD.top, chartW, chartH);
+  }, [depths, zones, activeKeys, normalise, selectedDepth, curves, getColor, indexToY, depth_key]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
       const canvas = canvasRef.current;
       if (!canvas || depths.length === 0) return;
       const rect = canvas.getBoundingClientRect();
-      const y = e.clientY - rect.top;
-      const PAD_TOP = 20;
-      const PAD_BOT = 20;
-      const chartH = canvas.height - PAD_TOP - PAD_BOT;
-      const t = Math.max(0, Math.min(1, (y - PAD_TOP) / chartH));
-      const minD = depths[0] ?? 0;
-      const maxD = depths[depths.length - 1] ?? 0;
-      const depth = minD + t * (maxD - minD);
-      const idx = depths.reduce<number>(
-        (best, d, i) =>
-          Math.abs((d ?? 0) - depth) < Math.abs((depths[best] ?? 0) - depth) ? i : best,
-        0,
-      );
+      const scaleY = canvas.height / rect.height;
+      const y = (e.clientY - rect.top) * scaleY;
+      const chartH = canvas.height - PAD.top - PAD.bottom;
+      const idx = yToIndex(y, chartH);
 
       const vals: Record<string, number | null> = {};
       activeKeys.forEach((k) => {
@@ -205,7 +257,7 @@ export default function WellChart({ logData, onDepthSelect, selectedDepth }: Wel
         y: e.clientY - rect.top,
       });
     },
-    [depths, zones, activeKeys, curves],
+    [depths, zones, activeKeys, curves, yToIndex],
   );
 
   const handleClick = useCallback(
@@ -213,95 +265,78 @@ export default function WellChart({ logData, onDepthSelect, selectedDepth }: Wel
       const canvas = canvasRef.current;
       if (!canvas || depths.length === 0) return;
       const rect = canvas.getBoundingClientRect();
-      const y = e.clientY - rect.top;
-      const PAD_TOP = 20;
-      const PAD_BOT = 20;
-      const chartH = canvas.height - PAD_TOP - PAD_BOT;
-      const t = Math.max(0, Math.min(1, (y - PAD_TOP) / chartH));
-      const minD = depths[0] ?? 0;
-      const maxD = depths[depths.length - 1] ?? 0;
-      const depth = minD + t * (maxD - minD);
-      const idx = depths.reduce<number>(
-        (best, d, i) =>
-          Math.abs((d ?? 0) - depth) < Math.abs((depths[best] ?? 0) - depth) ? i : best,
-        0,
-      );
+      const scaleY = canvas.height / rect.height;
+      const y = (e.clientY - rect.top) * scaleY;
+      const chartH = canvas.height - PAD.top - PAD.bottom;
+      const idx = yToIndex(y, chartH);
       const selected = depths[idx];
       if (selected != null) onDepthSelect(selected);
     },
-    [depths, onDepthSelect],
+    [depths, onDepthSelect, yToIndex],
   );
 
   return (
-    <div>
-      <div className={styles.logToggles}>
-        {curve_names.map((key, i) => (
-          <button
-            key={key}
-            type="button"
-            className={`${styles.logToggle} ${activeKeys.includes(key) ? styles.logToggleActive : ""}`}
-            style={{
-              borderColor: LOG_PALETTE[i % LOG_PALETTE.length],
-              color: LOG_PALETTE[i % LOG_PALETTE.length],
-            }}
-            onClick={() => toggleKey(key)}
-          >
-            {key}
-          </button>
-        ))}
+    <div className={styles.chartWrap}>
+      <div className={styles.chartToolbar}>
+        <div className={styles.logToggles}>
+          {curve_names.map((key, i) => (
+            <button
+              key={key}
+              type="button"
+              className={`${styles.logToggle} ${activeKeys.includes(key) ? styles.logToggleActive : ""}`}
+              style={{
+                borderColor: LOG_PALETTE[i % LOG_PALETTE.length],
+                color: LOG_PALETTE[i % LOG_PALETTE.length],
+              }}
+              onClick={() => toggleKey(key)}
+            >
+              {key}
+            </button>
+          ))}
+        </div>
+        <div className={styles.legend}>
+          {(
+            Object.entries({
+              oil: "#ca8a04",
+              gas: "#ef4444",
+              water: "#2563eb",
+              shale: "#64748b",
+            }) as [ZoneType, string][]
+          ).map(([z, c]) => (
+            <div key={z} className={styles.legendItem}>
+              <div className={styles.legendDot} style={{ background: c }} />
+              {zoneLabel(z)}
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className={styles.legend}>
-        {(
-          Object.entries({
-            oil: "#ca8a04",
-            gas: "#dc2626",
-            water: "#2563eb",
-            shale: "#6b7280",
-          }) as [ZoneType, string][]
-        ).map(([z, c]) => (
-          <div key={z} className={styles.legendItem}>
-            <div className={styles.legendDot} style={{ background: c }} />
-            {z === "oil" ? "Neft" : z === "gas" ? "Qaz" : z === "water" ? "Su" : "Şal"}
-          </div>
-        ))}
-      </div>
-
-      <div ref={containerRef} style={{ position: "relative" }}>
+      <div className={styles.canvasWrap}>
         <canvas
           ref={canvasRef}
-          width={700}
-          height={600}
-          style={{ width: "100%", cursor: "crosshair", borderRadius: 8 }}
+          width={760}
+          height={640}
+          className={styles.chartCanvas}
           onMouseMove={handleMouseMove}
           onMouseLeave={() => setTooltip(null)}
           onClick={handleClick}
         />
         {tooltip && (
           <div
-            style={{
-              position: "absolute",
-              left: tooltip.x + 12,
-              top: tooltip.y - 20,
-              background: "#0f1117cc",
-              border: "1px solid #2d3148",
-              borderRadius: 8,
-              padding: "8px 12px",
-              fontSize: "0.78rem",
-              pointerEvents: "none",
-              backdropFilter: "blur(4px)",
-            }}
+            className={styles.chartTooltip}
+            style={{ left: tooltip.x + 14, top: tooltip.y - 12 }}
           >
-            <div style={{ color: "#f0b429", fontWeight: 700 }}>{tooltip.depth} ft</div>
-            <div style={{ color: "#94a3b8", marginBottom: 4 }}>{tooltip.zone}</div>
+            <div className={styles.chartTooltipDepth}>
+              {tooltip.depth} {depth_key}
+            </div>
+            <div className={styles.chartTooltipZone}>{zoneLabel(tooltip.zone)}</div>
             {Object.entries(tooltip.vals).map(([k, v]) => (
-              <div key={k}>
-                {k}: <strong>{v?.toFixed(2) ?? "N/A"}</strong>
+              <div key={k} className={styles.chartTooltipRow}>
+                <span>{k}</span>
+                <strong>{v?.toFixed(2) ?? "N/A"}</strong>
               </div>
             ))}
-            <div style={{ color: "#64748b", marginTop: 4, fontSize: "0.72rem" }}>
-              Klik et → AI izah etsin
-            </div>
+            <div className={styles.chartTooltipHint}>Klik → dərinliyi seç</div>
           </div>
         )}
       </div>

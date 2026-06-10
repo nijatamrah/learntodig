@@ -106,3 +106,104 @@ export function buildWellLogExplainPayload(
     selectedDepth: selectedDepth ?? null,
   };
 }
+
+export function findNearestDepthIndex(
+  logData: LogData,
+  depth: number,
+): number {
+  const depths = logData.curves[logData.depth_key] ?? [];
+  if (depths.length === 0) return 0;
+
+  return depths.reduce<number>(
+    (best, d, i) =>
+      Math.abs((d ?? 0) - depth) < Math.abs((depths[best] ?? 0) - depth) ? i : best,
+    0,
+  );
+}
+
+export function getDepthSnapshot(
+  logData: LogData,
+  depth: number,
+): { depth: number; zone: ZoneType; values: Record<string, number | null> } | null {
+  const idx = findNearestDepthIndex(logData, depth);
+  const depths = logData.curves[logData.depth_key] ?? [];
+  const actualDepth = depths[idx];
+  if (actualDepth == null) return null;
+
+  const values: Record<string, number | null> = {};
+  for (const key of [logData.depth_key, ...logData.curve_names]) {
+    values[key] = logData.curves[key]?.[idx] ?? null;
+  }
+
+  return {
+    depth: actualDepth,
+    zone: logData.zones[idx] ?? "unknown",
+    values,
+  };
+}
+
+function buildDenseSampleTable(logData: LogData, maxRows = 100): string {
+  const { curves, depth_key, curve_names } = logData;
+  const depths = curves[depth_key] ?? [];
+  const keys = [depth_key, ...curve_names.slice(0, 6)];
+  const n = depths.length;
+  const step = Math.max(1, Math.floor(n / maxRows));
+  const indices = Array.from({ length: Math.min(maxRows, n) }, (_, j) => j * step).filter(
+    (i) => i < n,
+  );
+
+  const header = keys.join("\t");
+  const rows = indices.map((i) => {
+    const zone = logData.zones[i] ?? "unknown";
+    const vals = keys
+      .map((k) => {
+        const v = curves[k]?.[i];
+        return v == null ? "N/A" : Number(v).toFixed(2);
+      })
+      .join("\t");
+    return `${vals}\tzone=${zone}`;
+  });
+
+  return `${header}\tzona\n${rows.join("\n")}`;
+}
+
+export interface WellLogChatContext extends WellLogExplainPayload {
+  denseSampleTable: string;
+  depthSnapshots: {
+    depth: number;
+    zone: ZoneType;
+    values: Record<string, number | null>;
+  }[];
+}
+
+function extractDepthsFromText(text: string): number[] {
+  const matches = text.match(/\d+(?:\.\d+)?\s*(?:ft|feet|m|metr)?/gi) ?? [];
+  return matches
+    .map((m) => parseFloat(m))
+    .filter((n) => Number.isFinite(n) && n > 0);
+}
+
+export function buildWellLogChatContext(
+  logData: LogData,
+  question: string,
+  selectedDepth?: number | null,
+): WellLogChatContext {
+  const base = buildWellLogExplainPayload(logData, selectedDepth);
+  const depthCandidates = new Set<number>();
+
+  if (selectedDepth != null) depthCandidates.add(selectedDepth);
+  for (const d of extractDepthsFromText(question)) {
+    depthCandidates.add(d);
+  }
+
+  const depthSnapshots = [...depthCandidates]
+    .slice(0, 5)
+    .map((d) => getDepthSnapshot(logData, d))
+    .filter((s): s is NonNullable<typeof s> => s != null);
+
+  return {
+    ...base,
+    denseSampleTable: buildDenseSampleTable(logData),
+    depthSnapshots,
+  };
+}
