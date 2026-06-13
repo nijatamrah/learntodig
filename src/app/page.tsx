@@ -46,10 +46,23 @@ export default function Home() {
                 className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-green-400 hover:shadow-md"
               >
                 <span className="font-medium text-slate-900">
-                  🪨 Geologiya modulu
+                 🪨 Geologiya modulu
                 </span>
                 <span className="mt-1 block text-sm text-slate-600">
                   Litologiya, stratigrafiya, neft tələsi · AI chat · Quiz
+                </span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/learn/petrel"
+                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-green-400 hover:shadow-md"
+              >
+                <span className="font-medium text-slate-900">
+                 ⛏️ Geologiya modulu
+                </span>
+                <span className="mt-1 block text-sm text-slate-600">
+                  Petrel proqramı, rezervuar modelləməsi · AI chat · Quiz 
                 </span>
               </Link>
             </li>
