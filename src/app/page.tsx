@@ -16,67 +16,40 @@ export default function Home() {
             Modullar
           </h2>
           <ul className="mt-4 space-y-3">
-          <li>
-              <Link
-                href="/learn/eclipse"
-                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-orange-400 hover:shadow-md"
-              >
-                <span className="font-medium text-slate-900">
-                  ⚡ Eclipse simulyatoru
-                </span>
-                <span className="mt-1 block text-sm text-slate-600">
-                  Rezervuar simulyasiyası, hasilat proqnozu, ssenari müqayisəsi · AI chat · Quiz
-                </span>
-              </Link>
-            </li>
             <li>
-            <Link
-                href="/learn/petrel"
-                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-green-400 hover:shadow-md"
-              >
-                <span className="font-medium text-slate-900">
-                 ⛏️ Petrel modulu
-                </span>
-                <span className="mt-1 block text-sm text-slate-600">
-                  Petrel proqramı, rezervuar modelləməsi · AI chat · Quiz 
-                </span>
-              </Link>
-            </li>
-            <li>
-            <Link
-                href="/learn/geology"
-                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-green-400 hover:shadow-md"
-              >
-                <span className="font-medium text-slate-900">
-                 🪨 Geologiya modulu
-                </span>
-                <span className="mt-1 block text-sm text-slate-600">
-                  Litologiya, stratigrafiya, neft tələsi · AI chat · Quiz
-                </span>
-              </Link>
-            </li>
-            <li>
-            <Link
-                href="/learn/prosper"
-                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-amber-400 hover:shadow-md"
-              >
-                <span className="font-medium text-slate-900">
-                  🛢️ Prosper simulyatoru
-                </span>
-                <span className="mt-1 block text-sm text-slate-600">
-                  Quyu parametrlərini dəyişdir, məhsuldarlıq və axın rejimini izlə
-                </span>
-              </Link>
-            </li>
-            <li>
-            <Link
-                href="/learn/well-log"
-                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-amber-400 hover:shadow-md"
-              >
+              <Link href="/learn/well-log" className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-amber-400 hover:shadow-md">
                 <span className="font-medium text-slate-900">⛽ Loq analizi (WellLogAI)</span>
-                <span className="mt-1 block text-sm text-slate-600">
-                  LAS faylı yüklə, quyu loqlarını vizuallaşdır və AI ilə sual-cavab et
-                </span>
+                <span className="mt-1 block text-sm text-slate-600">LAS faylı yüklə, quyu loqlarını vizuallaşdır və AI ilə sual-cavab et</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/learn/prosper" className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-amber-400 hover:shadow-md">
+                <span className="font-medium text-slate-900">🛢️ Prosper simulyatoru</span>
+                <span className="mt-1 block text-sm text-slate-600">Quyu parametrlərini dəyişdir, məhsuldarlıq və axın rejimini izlə</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/learn/geology" className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-green-400 hover:shadow-md">
+                <span className="font-medium text-slate-900">🪨 Geologiya modulu</span>
+                <span className="mt-1 block text-sm text-slate-600">Litologiya, stratigrafiya, neft tələsi · AI chat · Quiz</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/learn/petrel" className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-blue-400 hover:shadow-md">
+                <span className="font-medium text-slate-900">🗺️ Petrel simulyatoru</span>
+                <span className="mt-1 block text-sm text-slate-600">Rezervuar modelləməsi, məsaməlilik, keçiricilik · AI chat · Quiz</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/learn/eclipse" className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-orange-400 hover:shadow-md">
+                <span className="font-medium text-slate-900">⚡ Eclipse simulyatoru</span>
+                <span className="mt-1 block text-sm text-slate-600">Rezervuar simulyasiyası, hasilat proqnozu, ssenari müqayisəsi · AI chat · Quiz</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/learn/drilling" className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-yellow-400 hover:shadow-md">
+                <span className="font-medium text-slate-900">🔩 Drilling simulyatoru</span>
+                <span className="mt-1 block text-sm text-slate-600">Qazıma parametrləri, ROP optimizasiyası, problem ssenarileri · AI chat · Quiz</span>
               </Link>
             </li>
           </ul>
