@@ -16,6 +16,19 @@ export default function Home() {
             Modullar
           </h2>
           <ul className="mt-4 space-y-3">
+          <li>
+              <Link
+                href="/learn/eclipse"
+                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-orange-400 hover:shadow-md"
+              >
+                <span className="font-medium text-slate-900">
+                  ⚡ Eclipse simulyatoru
+                </span>
+                <span className="mt-1 block text-sm text-slate-600">
+                  Rezervuar simulyasiyası, hasilat proqnozu, ssenari müqayisəsi · AI chat · Quiz
+                </span>
+              </Link>
+            </li>
             <li>
             <Link
                 href="/learn/petrel"
