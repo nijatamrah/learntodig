@@ -17,31 +17,20 @@ export default function Home() {
           </h2>
           <ul className="mt-4 space-y-3">
             <li>
-              <Link
-                href="/learn/prosper"
-                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-amber-400 hover:shadow-md"
+            <Link
+                href="/learn/petrel"
+                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-green-400 hover:shadow-md"
               >
                 <span className="font-medium text-slate-900">
-                  🛢️ Prosper simulyatoru
+                 ⛏️ Petrel modulu
                 </span>
                 <span className="mt-1 block text-sm text-slate-600">
-                  Quyu parametrlərini dəyişdir, məhsuldarlıq və axın rejimini izlə
+                  Petrel proqramı, rezervuar modelləməsi · AI chat · Quiz 
                 </span>
               </Link>
             </li>
             <li>
-              <Link
-                href="/learn/well-log"
-                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-amber-400 hover:shadow-md"
-              >
-                <span className="font-medium text-slate-900">⛽ Loq analizi (WellLogAI)</span>
-                <span className="mt-1 block text-sm text-slate-600">
-                  LAS faylı yüklə, quyu loqlarını vizuallaşdır və AI ilə sual-cavab et
-                </span>
-              </Link>
-            </li>
-            <li>
-              <Link
+            <Link
                 href="/learn/geology"
                 className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-green-400 hover:shadow-md"
               >
@@ -54,15 +43,26 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link
-                href="/learn/petrel"
-                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-green-400 hover:shadow-md"
+            <Link
+                href="/learn/prosper"
+                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-amber-400 hover:shadow-md"
               >
                 <span className="font-medium text-slate-900">
-                 ⛏️ Geologiya modulu
+                  🛢️ Prosper simulyatoru
                 </span>
                 <span className="mt-1 block text-sm text-slate-600">
-                  Petrel proqramı, rezervuar modelləməsi · AI chat · Quiz 
+                  Quyu parametrlərini dəyişdir, məhsuldarlıq və axın rejimini izlə
+                </span>
+              </Link>
+            </li>
+            <li>
+            <Link
+                href="/learn/well-log"
+                className="block rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-amber-400 hover:shadow-md"
+              >
+                <span className="font-medium text-slate-900">⛽ Loq analizi (WellLogAI)</span>
+                <span className="mt-1 block text-sm text-slate-600">
+                  LAS faylı yüklə, quyu loqlarını vizuallaşdır və AI ilə sual-cavab et
                 </span>
               </Link>
             </li>
