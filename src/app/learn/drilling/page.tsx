@@ -246,7 +246,7 @@ export default function DrillingPage() {
                 <div style={{ marginBottom: 24 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                     <span style={{ color: '#a0aec0', fontSize: 13 }}>Bit ölçüsü (inch)</span>
-                    <span style={{ color: '#ef4444', fontWeight: 700 }}>{bitSize}"</span>
+                    <span style={{ color: '#ef4444', fontWeight: 700 }}>{bitSize}&quot;</span>
                   </div>
                   <input type="range" min={6} max={26} step={0.5} value={bitSize} onChange={e => setBitSize(+e.target.value)} style={{ width: '100%' }} />
                 </div>

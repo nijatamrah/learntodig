@@ -91,7 +91,7 @@ export default function EclipsePage() {
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
 
-  const selectedConcept = eclipseConcepts.find((c) => c.id === activeConcept);
+
   const score = quizAnswers.filter((a, i) => a === quizQuestions[i].correct).length;
 
   const baseData = generateProduction(wells, porosity, recovery);
