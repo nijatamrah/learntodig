@@ -1,6 +1,7 @@
 "use client";
 import { useState, use } from "react";
 import Link from "next/link";
+import ModuleBridge from "@/components/ModuleBridge";
 
 const lessonData: Record<string, {
   title: string;
@@ -587,6 +588,9 @@ export default function LessonPage({ params, searchParams }: {
             </div>
           )}
         </div>
+
+        {/* ModuleBridge — praktika modulu keçidi */}
+        <ModuleBridge topic={topic} />
 
       </div>
     </main>
