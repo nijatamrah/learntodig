@@ -68,8 +68,8 @@ const TOPIC_TO_MODULE: Record<string, ModuleInfo> = {
 };
 
 export default function ModuleBridge({ topic }: { topic: string }) {
-  const module = TOPIC_TO_MODULE[topic];
-  if (!module) return null;
+  const moduleInfo = TOPIC_TO_MODULE[topic];
+  if (!moduleInfo) return null;
 
   return (
     <div className="mt-12 mb-6">
@@ -84,17 +84,17 @@ export default function ModuleBridge({ topic }: { topic: string }) {
       <div className="rounded-xl border-2 border-teal-400 bg-teal-50 p-6">
         <div className="flex items-start justify-between gap-4 mb-3">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">{module.icon}</span>
+            <span className="text-2xl">{moduleInfo.icon}</span>
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-teal-600 mb-0.5">
                 Praktika modulu
               </p>
-              <p className="text-base font-semibold text-slate-900">{module.name}</p>
+              <p className="text-base font-semibold text-slate-900">{moduleInfo.name}</p>
             </div>
           </div>
 
           <Link
-            href={module.url}
+            href={moduleInfo.url}
             className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 transition"
           >
             Açıq et
@@ -104,10 +104,10 @@ export default function ModuleBridge({ topic }: { topic: string }) {
           </Link>
         </div>
 
-        <p className="text-sm text-slate-600 mb-3">{module.tagline}</p>
+        <p className="text-sm text-slate-600 mb-3">{moduleInfo.tagline}</p>
 
         <ul className="space-y-1.5">
-          {module.bullets.map((bullet, i) => (
+          {moduleInfo.bullets.map((bullet, i) => (
             <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
               <span className="text-teal-500 mt-0.5">✓</span>
               {bullet}
