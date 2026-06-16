@@ -1,23 +1,50 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname();
+
+  const links = [
+    { href: "/modules", label: "Modullar" },
+    { href: "/lessons", label: "Dərslər" },
+    { href: "/about", label: "Haqqında" },
+  ];
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-slate-100 bg-white/80 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
-        <Link href="/" className="text-lg font-semibold text-slate-900 hover:text-slate-700 transition">
-          LearntoDig
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[rgba(10,15,30,0.85)] backdrop-blur-md">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 h-16">
+
+        {/* Logo */}
+        <Link href="/" className="font-['Space_Grotesk'] text-[1.1rem] font-bold text-[#F0F4FF] hover:opacity-80 transition">
+          Learn<span className="text-[#FF6B2B]">to</span>Dig
         </Link>
-        <div className="flex items-center gap-6">
-          <Link href="/modules" className="text-sm text-slate-500 hover:text-slate-900 transition">
-            Modullar
-          </Link>
-          <Link href="/lessons" className="text-sm text-slate-500 hover:text-slate-900 transition">
-            Dərslər
-          </Link>
-          <Link href="/about" className="text-sm text-slate-500 hover:text-slate-900 transition">
-            Haqqında
+
+        {/* Links */}
+        <div className="flex items-center gap-8">
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className={`text-[14px] transition-colors ${
+                pathname.startsWith(l.href)
+                  ? "text-[#F0F4FF] font-medium"
+                  : "text-[#6B7DA3] hover:text-[#F0F4FF]"
+              }`}
+            >
+              {l.label}
+            </Link>
+          ))}
+
+          {/* CTA */}
+          <Link href="/lessons">
+            <button className="bg-[#FF6B2B] text-white px-5 py-2 rounded-lg font-['Space_Grotesk'] font-semibold text-[14px] hover:-translate-y-px hover:shadow-[0_4px_20px_rgba(255,107,43,0.35)] transition-all">
+              Başla →
+            </button>
           </Link>
         </div>
+
       </div>
     </nav>
   );
