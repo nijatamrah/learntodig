@@ -22,7 +22,7 @@ export default function Navbar() {
         </Link>
 
         {/* Links */}
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-6">
           {links.map((l) => (
             <Link
               key={l.href}
@@ -36,6 +36,14 @@ export default function Navbar() {
               {l.label}
             </Link>
           ))}
+
+          {/* Termin Lüğəti */}
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent("open-glossary"))}
+            className="text-[#00D4FF] border border-[rgba(0,212,255,0.25)] px-4 py-2 rounded-lg font-['Space_Grotesk'] font-medium text-[14px] hover:border-[rgba(0,212,255,0.5)] hover:bg-[rgba(0,212,255,0.05)] transition-all"
+          >
+            📖 Lüğət
+          </button>
 
           {/* CTA */}
           <Link href="/lessons">

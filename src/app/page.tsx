@@ -11,6 +11,12 @@ export default function HomePage() {
   const [glossaryOpen, setGlossaryOpen] = useState(false);
 
   useEffect(() => {
+    const handler = () => setGlossaryOpen(true);
+    window.addEventListener("open-glossary", handler);
+    return () => window.removeEventListener("open-glossary", handler);
+  }, []);
+
+  useEffect(() => {
     let t = 0;
     const pts = 120;
 
