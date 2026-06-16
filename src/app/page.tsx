@@ -280,7 +280,7 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-
+      
       {/* ── CTA BANNER ── */}
       <section className="max-w-[1100px] mx-auto px-6 pb-24">
         <div className="bg-gradient-to-br from-[#1A2744] to-[#0F1A3A] border border-[rgba(0,212,255,0.2)] rounded-[20px] p-16 text-center">
