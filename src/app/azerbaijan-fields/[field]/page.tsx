@@ -2,14 +2,16 @@
 
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { use } from "react";
 import { AZERBAIJAN_FIELDS } from "@/components/azerbaijan-fields/FieldData";
 
 interface PageProps {
-  params: { field: string };
+  params: Promise<{ field: string }>;
 }
 
 export default function FieldPage({ params }: PageProps) {
-  const field = AZERBAIJAN_FIELDS.find((f) => f.id === params.field);
+  const { field: fieldId } = use(params);
+  const field = AZERBAIJAN_FIELDS.find((f) => f.id === fieldId);
   if (!field) notFound();
 
   const accent = field.accentColor;
@@ -28,7 +30,6 @@ export default function FieldPage({ params }: PageProps) {
         </Link>
       </div>
 
-      {/* Hero */}
       <div className="border-b border-white/10 mb-10">
         <div className="max-w-4xl mx-auto px-6 pb-10">
           <div
@@ -55,7 +56,6 @@ export default function FieldPage({ params }: PageProps) {
 
       <div className="max-w-4xl mx-auto px-6 pb-16 space-y-10">
 
-        {/* Location */}
         <Section title="Coğrafi mövqe" icon="📍" accent={accent}>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <InfoCard label="Təsvir" value={field.location.description} />
@@ -64,7 +64,6 @@ export default function FieldPage({ params }: PageProps) {
           </div>
         </Section>
 
-        {/* Geology */}
         <Section title="Geoloji xüsusiyyətlər" icon="🪨" accent={accent}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InfoCard label="Lay (Formasiya)" value={field.geology.formation} />
@@ -77,7 +76,6 @@ export default function FieldPage({ params }: PageProps) {
           </div>
         </Section>
 
-        {/* History */}
         <Section title="İstehsal tarixi" icon="📅" accent={accent}>
           <div className="relative">
             <div className="absolute left-16 top-0 bottom-0 w-px bg-white/10" />
@@ -104,7 +102,6 @@ export default function FieldPage({ params }: PageProps) {
           </div>
         </Section>
 
-        {/* Technical */}
         <Section title="Texniki məlumatlar" icon="⚙️" accent={accent}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <InfoCard label="Operator" value={field.technical.operator} />
@@ -135,7 +132,6 @@ export default function FieldPage({ params }: PageProps) {
           </div>
         </Section>
 
-        {/* Fun facts */}
         <Section title="Bilirdinizmi?" icon="💡" accent={accent}>
           <div className="space-y-3">
             {field.funFacts.map((fact, i) => (
@@ -152,7 +148,6 @@ export default function FieldPage({ params }: PageProps) {
           </div>
         </Section>
 
-        {/* Other fields */}
         <div className="border-t border-white/10 pt-8">
           <div className="text-xs text-gray-500 uppercase tracking-wide mb-4">Digər yataqlar</div>
           <div className="flex flex-wrap gap-2">
@@ -172,9 +167,7 @@ export default function FieldPage({ params }: PageProps) {
   );
 }
 
-function Section({
-  title, icon, accent, children,
-}: {
+function Section({ title, icon, accent, children }: {
   title: string; icon: string; accent: string; children: React.ReactNode;
 }) {
   return (
