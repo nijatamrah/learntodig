@@ -3,17 +3,17 @@ import { useState } from "react";
 import Link from "next/link";
 
 const levels = [
-  { id: "baslangic", label: "Başlanğıc", color: "hover:border-green-400", active: "border-green-400 bg-green-50", dot: "bg-green-400" },
-  { id: "orta", label: "Orta", color: "hover:border-amber-400", active: "border-amber-400 bg-amber-50", dot: "bg-amber-400" },
-  { id: "ireli", label: "İrəli", color: "hover:border-red-400", active: "border-red-400 bg-red-50", dot: "bg-red-400" },
+  { id: "baslangic", label: "Başlanğıc", accent: "#22C55E" },
+  { id: "orta",      label: "Orta",      accent: "#F59E0B" },
+  { id: "ireli",     label: "İrəli",     accent: "#EF4444" },
 ];
 
 const topics = [
-  { id: "geology", label: "Geologiya", icon: "🪨", levels: ["baslangic", "orta", "ireli"] },
-  { id: "drilling", label: "Drilling", icon: "🔩", levels: ["baslangic", "orta", "ireli"] },
-  { id: "reservoir", label: "Rezervuar", icon: "🛢️", levels: ["baslangic", "orta"] },
-  { id: "well-log", label: "Quyu loqları", icon: "⛽", levels: ["baslangic", "orta"] },
-  { id: "production", label: "Hasilat", icon: "⚡", levels: ["orta", "ireli"] },
+  { id: "geology",    label: "Geologiya",     icon: "🪨", levels: ["baslangic", "orta", "ireli"] },
+  { id: "drilling",   label: "Drilling",      icon: "🔩", levels: ["baslangic", "orta", "ireli"] },
+  { id: "reservoir",  label: "Rezervuar",     icon: "🛢️", levels: ["baslangic", "orta"] },
+  { id: "well-log",   label: "Quyu loqları",  icon: "⛽", levels: ["baslangic", "orta"] },
+  { id: "production", label: "Hasilat",       icon: "⚡", levels: ["orta", "ireli"] },
 ];
 
 export default function LessonsPage() {
@@ -24,11 +24,12 @@ export default function LessonsPage() {
     : topics;
 
   return (
-    <main className="flex min-h-screen flex-col items-center px-6 py-16">
-      <div className="max-w-2xl w-full">
+    <main className="min-h-screen bg-gray-950 text-white px-6 py-16">
+      <div className="max-w-2xl mx-auto">
+
         <Link
           href="/"
-          className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-slate-600 transition mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-300 transition mb-10"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -36,64 +37,89 @@ export default function LessonsPage() {
           Ana səhifə
         </Link>
 
-        <h1 className="text-3xl font-semibold tracking-tight text-slate-900">Dərslər</h1>
-        <p className="mt-2 text-slate-500">Səviyyə seç, mövzu tap, öyrən</p>
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-sm mb-6">
+          <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
+          Dərslər
+        </div>
 
-        <div className="mt-8">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">Səviyyə</p>
-          <div className="flex gap-3">
-            {levels.map((level) => (
-              <button
-                key={level.id}
-                onClick={() => setSelectedLevel(selectedLevel === level.id ? null : level.id)}
-                className={`flex items-center gap-2 rounded-xl border px-5 py-3 text-sm font-medium text-slate-700 transition-all ${
-                  selectedLevel === level.id
-                    ? level.active + " border-2"
-                    : "border-slate-200 bg-white " + level.color
-                }`}
-              >
-                <span className={`h-2 w-2 rounded-full ${level.dot}`} />
-                {level.label}
-              </button>
-            ))}
+        <h1 className="text-4xl font-bold tracking-tight mb-3">Dərslər</h1>
+        <p className="text-gray-400 text-lg mb-10">Səviyyə seç, mövzu tap, öyrən</p>
+
+        {/* Level selector */}
+        <div className="mb-8">
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-600 mb-3">Səviyyə</p>
+          <div className="flex gap-2">
+            {levels.map((level) => {
+              const active = selectedLevel === level.id;
+              return (
+                <button
+                  key={level.id}
+                  onClick={() => setSelectedLevel(active ? null : level.id)}
+                  className="flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-medium transition-all"
+                  style={{
+                    borderColor: active ? level.accent : "rgba(255,255,255,0.1)",
+                    backgroundColor: active ? level.accent + "18" : "rgba(255,255,255,0.04)",
+                    color: active ? level.accent : "#9ca3af",
+                  }}
+                >
+                  <span
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: level.accent }}
+                  />
+                  {level.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        <div className="mt-8">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">
-            Mövzular {selectedLevel && <span className="normal-case font-normal text-slate-400">— filtrləndı</span>}
+        {/* Topics */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-600 mb-3">
+            Mövzular
+            {selectedLevel && (
+              <span className="normal-case font-normal text-gray-600 ml-1">— filtrləndı</span>
+            )}
           </p>
           <ul className="space-y-3">
             {filteredTopics.map((topic) => (
               <li key={topic.id}>
                 <Link
                   href={`/lessons/${topic.id}${selectedLevel ? `?level=${selectedLevel}` : ""}`}
-                  className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-teal-400 hover:shadow-md"
+                  className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-5 py-4 hover:bg-white/8 hover:border-white/20 transition-all"
                 >
                   <div>
-                    <span className="font-medium text-slate-900">
+                    <span className="font-semibold text-white text-sm">
                       {topic.icon} {topic.label}
                     </span>
-                    <div className="mt-1 flex gap-2">
+                    <div className="mt-2 flex gap-1.5">
                       {topic.levels.map((l) => {
                         const lv = levels.find((x) => x.id === l)!;
+                        const isActive = selectedLevel === l;
                         return (
                           <span
                             key={l}
-                            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${
-                              selectedLevel === l
-                                ? "bg-teal-100 text-teal-700 font-medium"
-                                : "bg-slate-100 text-slate-500"
-                            }`}
+                            className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs border"
+                            style={{
+                              backgroundColor: isActive ? lv.accent + "20" : "rgba(255,255,255,0.05)",
+                              color: isActive ? lv.accent : "#6b7280",
+                              borderColor: isActive ? lv.accent + "40" : "rgba(255,255,255,0.08)",
+                            }}
                           >
-                            <span className={`h-1.5 w-1.5 rounded-full ${lv.dot}`} />
+                            <span
+                              className="h-1.5 w-1.5 rounded-full"
+                              style={{ backgroundColor: lv.accent }}
+                            />
                             {lv.label}
                           </span>
                         );
                       })}
                     </div>
                   </div>
-                  <svg className="h-4 w-4 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg
+                    className="h-4 w-4 text-gray-600 group-hover:text-gray-400 group-hover:translate-x-0.5 transition-all shrink-0"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                  >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
@@ -101,6 +127,7 @@ export default function LessonsPage() {
             ))}
           </ul>
         </div>
+
       </div>
     </main>
   );
