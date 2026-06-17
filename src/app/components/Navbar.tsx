@@ -9,6 +9,7 @@ export default function Navbar() {
   const links = [
     { href: "/modules", label: "Modullar" },
     { href: "/lessons", label: "Dərslər" },
+    { href: "/azerbaijan-fields", label: "AZ Yataqları" },
     { href: "/about", label: "Haqqında" },
   ];
 
