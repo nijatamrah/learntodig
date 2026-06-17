@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
+import GlossaryWrapper from "./components/GlossaryWrapper";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,6 +29,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} antialiased bg-[#0A0F1E]`}>
         <Navbar />
+        <GlossaryWrapper />
         <div className="pt-16">{children}</div>
       </body>
     </html>

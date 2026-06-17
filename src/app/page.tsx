@@ -1,20 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
-import GlossaryModal from "@/components/GlossaryModal";
 
 export default function HomePage() {
   const grLineRef = useRef<SVGPolylineElement>(null);
   const resLineRef = useRef<SVGPolylineElement>(null);
   const animRef = useRef<number>(0);
-  const [glossaryOpen, setGlossaryOpen] = useState(false);
-
-  useEffect(() => {
-    const handler = () => setGlossaryOpen(true);
-    window.addEventListener("open-glossary", handler);
-    return () => window.removeEventListener("open-glossary", handler);
-  }, []);
 
   useEffect(() => {
     let t = 0;
@@ -99,200 +91,196 @@ export default function HomePage() {
   ];
 
   return (
-    <>
-      <main className="bg-[#0A0F1E] text-[#F0F4FF] overflow-x-hidden">
+    <main className="bg-[#0A0F1E] text-[#F0F4FF] overflow-x-hidden">
 
-        {/* ── HERO ── */}
-        <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden">
-          <div className="absolute inset-0 z-0 pointer-events-none">
-            <svg width="100%" height="100%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
-              <defs>
-                <radialGradient id="glow1" cx="30%" cy="50%" r="40%">
-                  <stop offset="0%" stopColor="rgba(255,107,43,0.12)" />
-                  <stop offset="100%" stopColor="transparent" />
-                </radialGradient>
-                <radialGradient id="glow2" cx="75%" cy="40%" r="35%">
-                  <stop offset="0%" stopColor="rgba(0,212,255,0.1)" />
-                  <stop offset="100%" stopColor="transparent" />
-                </radialGradient>
-              </defs>
-              <rect width="1400" height="900" fill="url(#glow1)" />
-              <rect width="1400" height="900" fill="url(#glow2)" />
-              <g opacity="0.55">
-                <polyline ref={grLineRef} fill="none" stroke="#FF6B2B" strokeWidth="1.5" opacity="0.7" />
-                <polyline ref={resLineRef} fill="none" stroke="#00D4FF" strokeWidth="1.5" opacity="0.6" />
-              </g>
-              <g opacity="0.06" stroke="#8B9DC3" strokeWidth="0.5">
-                {[150, 300, 450, 600, 750].map((y) => (
-                  <line key={y} x1="0" y1={y} x2="1400" y2={y} />
-                ))}
-                {[200, 400, 600, 800, 1000, 1200].map((x) => (
-                  <line key={x} x1={x} y1="0" x2={x} y2="900" />
-                ))}
-              </g>
-            </svg>
-          </div>
-
-          <div className="relative z-10 max-w-3xl">
-            <div className="inline-block bg-[rgba(255,107,43,0.15)] text-[#FF6B2B] border border-[rgba(255,107,43,0.3)] rounded-full px-4 py-1.5 text-[13px] font-['Space_Grotesk'] font-medium tracking-widest uppercase mb-6">
-              🛢 Neft-Qaz Mühəndisliyi
-            </div>
-
-            <h1 className="font-['Space_Grotesk'] text-[clamp(2.4rem,6vw,4.2rem)] font-bold leading-[1.1] tracking-tight mb-5 text-[#F0F4FF]">
-              Öyrən.<br />
-              <span className="text-[#FF6B2B]">Praktika et.</span><br />
-              Mühəndis ol.
-            </h1>
-
-            <p className="text-[#8B9DC3] text-[clamp(1rem,2vw,1.15rem)] leading-relaxed max-w-[540px] mx-auto mb-10">
-              Well Log analizi, rezervuar modelləmə, qazıma simulyatoru — real alətlərlə interaktiv öyrənmə platforması.
-            </p>
-
-            <div className="flex gap-3 flex-wrap justify-center mb-14">
-              <Link href="/lessons">
-                <button className="bg-[#FF6B2B] text-white px-8 py-3.5 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[15px] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(255,107,43,0.35)] transition-all">
-                  Haradan başlayım? →
-                </button>
-              </Link>
-              <Link href="/modules">
-                <button className="bg-transparent text-[#F0F4FF] border border-[rgba(240,244,255,0.2)] px-8 py-3.5 rounded-[10px] font-['Space_Grotesk'] font-medium text-[15px] hover:border-[rgba(240,244,255,0.45)] hover:bg-[rgba(240,244,255,0.05)] transition-all">
-                  Modulları gör
-                </button>
-              </Link>
-              <button
-                onClick={() => setGlossaryOpen(true)}
-                className="bg-transparent text-[#00D4FF] border border-[rgba(0,212,255,0.25)] px-8 py-3.5 rounded-[10px] font-['Space_Grotesk'] font-medium text-[15px] hover:border-[rgba(0,212,255,0.5)] hover:bg-[rgba(0,212,255,0.05)] transition-all"
-              >
-                📖 Termin Lüğəti
-              </button>
-            </div>
-
-            <div className="flex gap-10 flex-wrap justify-center">
-              {[
-                { num: "6", label: "Praktika modulu" },
-                { num: "5", label: "Dərs tematikası" },
-                { num: "100+", label: "Quiz sualı" },
-                { num: "AI", label: "Chat hər dərsdə" },
-              ].map((s) => (
-                <div key={s.label} className="text-center">
-                  <div className="font-['Space_Grotesk'] text-[1.8rem] font-bold text-[#00D4FF]">{s.num}</div>
-                  <div className="text-[13px] text-[#6B7DA3] mt-0.5">{s.label}</div>
-                </div>
+      {/* ── HERO ── */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <svg width="100%" height="100%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <radialGradient id="glow1" cx="30%" cy="50%" r="40%">
+                <stop offset="0%" stopColor="rgba(255,107,43,0.12)" />
+                <stop offset="100%" stopColor="transparent" />
+              </radialGradient>
+              <radialGradient id="glow2" cx="75%" cy="40%" r="35%">
+                <stop offset="0%" stopColor="rgba(0,212,255,0.1)" />
+                <stop offset="100%" stopColor="transparent" />
+              </radialGradient>
+            </defs>
+            <rect width="1400" height="900" fill="url(#glow1)" />
+            <rect width="1400" height="900" fill="url(#glow2)" />
+            <g opacity="0.55">
+              <polyline ref={grLineRef} fill="none" stroke="#FF6B2B" strokeWidth="1.5" opacity="0.7" />
+              <polyline ref={resLineRef} fill="none" stroke="#00D4FF" strokeWidth="1.5" opacity="0.6" />
+            </g>
+            <g opacity="0.06" stroke="#8B9DC3" strokeWidth="0.5">
+              {[150, 300, 450, 600, 750].map((y) => (
+                <line key={y} x1="0" y1={y} x2="1400" y2={y} />
               ))}
-            </div>
-          </div>
-        </section>
-
-        <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
-
-        {/* ── NIYƏ ── */}
-        <section className="max-w-[1100px] mx-auto px-6 py-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div>
-              <p className="font-['Space_Grotesk'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#FF6B2B] mb-3">
-                Niyə LearntoDig?
-              </p>
-              <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.4rem)] font-bold leading-[1.2] tracking-tight mb-4 text-[#F0F4FF]">
-                Kitab oxumaq deyil,<br />
-                <span className="text-[#FF6B2B]">əl işi</span> var burada
-              </h2>
-              <p className="text-[#8B9DC3] text-[1rem] leading-relaxed">
-                Universitetdə nəzəriyyə öyrənirsən, amma real proqramları necə işlətmək lazım? LearntoDig tam olaraq bu boşluğu doldurur.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              {features.map((f) => (
-                <div key={f.title} className="bg-[#111827] border border-[rgba(255,255,255,0.06)] rounded-[14px] p-5">
-                  <div className="w-10 h-10 rounded-[10px] bg-[rgba(255,107,43,0.1)] flex items-center justify-center mb-4">
-                    {f.icon}
-                  </div>
-                  <div className="font-['Space_Grotesk'] font-semibold text-[0.9rem] mb-1.5 text-[#F0F4FF]">{f.title}</div>
-                  <div className="text-[0.82rem] text-[#6B7DA3] leading-relaxed">{f.desc}</div>
-                </div>
+              {[200, 400, 600, 800, 1000, 1200].map((x) => (
+                <line key={x} x1={x} y1="0" x2={x} y2="900" />
               ))}
-            </div>
+            </g>
+          </svg>
+        </div>
+
+        <div className="relative z-10 max-w-3xl">
+          <div className="inline-block bg-[rgba(255,107,43,0.15)] text-[#FF6B2B] border border-[rgba(255,107,43,0.3)] rounded-full px-4 py-1.5 text-[13px] font-['Space_Grotesk'] font-medium tracking-widest uppercase mb-6">
+            🛢 Neft-Qaz Mühəndisliyi
           </div>
-        </section>
 
-        <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
+          <h1 className="font-['Space_Grotesk'] text-[clamp(2.4rem,6vw,4.2rem)] font-bold leading-[1.1] tracking-tight mb-5 text-[#F0F4FF]">
+            Öyrən.<br />
+            <span className="text-[#FF6B2B]">Praktika et.</span><br />
+            Mühəndis ol.
+          </h1>
 
-        {/* ── 3 ADDIM ── */}
-        <section className="bg-[#060B17] px-6 py-20">
-          <div className="max-w-[1100px] mx-auto">
-            <p className="font-['Space_Grotesk'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#FF6B2B] mb-2 text-center">
-              Öyrənmə yolu
-            </p>
-            <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.4rem)] font-bold leading-[1.2] tracking-tight text-center text-[#F0F4FF]">
-              3 addımda başla
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 mt-12">
-              {[
-                { n: "01", title: "Dərs seç", text: "Geologiya, Drilling, Quyu Loqları, Rezervuar ya Hasilat — maraqlandığın mövzudan başla" },
-                { n: "02", title: "Oxu + Quizlər", text: "5 bölmə, hər bölmədən sonra quiz. Anlamadığını AI-dan sor" },
-                { n: "03", title: "Praktika et", text: "Dərs bitəndə müvafiq modul açılır — öyrəndiyini real simulyatorda tətbiq et" },
-              ].map((s, i) => (
-                <div key={s.n} className={`px-6 py-8 text-center ${i < 2 ? "md:border-r border-[rgba(255,255,255,0.06)]" : ""}`}>
-                  <div className="font-['Space_Grotesk'] text-[3rem] font-bold text-[rgba(0,212,255,0.15)] leading-none mb-3">{s.n}</div>
-                  <div className="font-['Space_Grotesk'] font-semibold text-[1rem] mb-2 text-[#F0F4FF]">{s.title}</div>
-                  <div className="text-[0.88rem] text-[#6B7DA3] leading-relaxed">{s.text}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
-
-        {/* ── MODULLAR ── */}
-        <section className="max-w-[1100px] mx-auto px-6 py-20">
-          <p className="font-['Space_Grotesk'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#FF6B2B] mb-3">
-            Praktika Modulları
+          <p className="text-[#8B9DC3] text-[clamp(1rem,2vw,1.15rem)] leading-relaxed max-w-[540px] mx-auto mb-10">
+            Well Log analizi, rezervuar modelləmə, qazıma simulyatoru — real alətlərlə interaktiv öyrənmə platforması.
           </p>
-          <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.4rem)] font-bold leading-[1.2] tracking-tight mb-8 text-[#F0F4FF]">
-            6 real alət, bir platformada
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {modules.map((m) => (
-              <Link key={m.name} href={m.href}>
-                <div className="bg-[#111827] border border-[rgba(255,255,255,0.06)] rounded-[14px] p-5 flex gap-3 items-start cursor-pointer hover:border-[rgba(255,107,43,0.3)] hover:-translate-y-0.5 transition-all h-full">
-                  <div className="w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: m.color }} />
-                  <div>
-                    <div className="font-['Space_Grotesk'] font-semibold text-[0.9rem] mb-1 text-[#F0F4FF]">{m.name}</div>
-                    <div className="text-[0.82rem] text-[#6B7DA3] leading-relaxed mb-2">{m.desc}</div>
-                    <span className="text-[11px] font-medium px-2 py-0.5 rounded" style={{ background: m.bg, color: m.color }}>Hazır</span>
-                  </div>
-                </div>
-              </Link>
+
+          <div className="flex gap-3 flex-wrap justify-center mb-14">
+            <Link href="/lessons">
+              <button className="bg-[#FF6B2B] text-white px-8 py-3.5 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[15px] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(255,107,43,0.35)] transition-all">
+                Haradan başlayım? →
+              </button>
+            </Link>
+            <Link href="/modules">
+              <button className="bg-transparent text-[#F0F4FF] border border-[rgba(240,244,255,0.2)] px-8 py-3.5 rounded-[10px] font-['Space_Grotesk'] font-medium text-[15px] hover:border-[rgba(240,244,255,0.45)] hover:bg-[rgba(240,244,255,0.05)] transition-all">
+                Modulları gör
+              </button>
+            </Link>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-glossary"))}
+              className="bg-transparent text-[#00D4FF] border border-[rgba(0,212,255,0.25)] px-8 py-3.5 rounded-[10px] font-['Space_Grotesk'] font-medium text-[15px] hover:border-[rgba(0,212,255,0.5)] hover:bg-[rgba(0,212,255,0.05)] transition-all"
+            >
+              📖 Termin Lüğəti
+            </button>
+          </div>
+
+          <div className="flex gap-10 flex-wrap justify-center">
+            {[
+              { num: "6", label: "Praktika modulu" },
+              { num: "5", label: "Dərs tematikası" },
+              { num: "100+", label: "Quiz sualı" },
+              { num: "AI", label: "Chat hər dərsdə" },
+            ].map((s) => (
+              <div key={s.label} className="text-center">
+                <div className="font-['Space_Grotesk'] text-[1.8rem] font-bold text-[#00D4FF]">{s.num}</div>
+                <div className="text-[13px] text-[#6B7DA3] mt-0.5">{s.label}</div>
+              </div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── CTA ── */}
-        <section className="max-w-[1100px] mx-auto px-6 pb-24">
-          <div className="bg-gradient-to-br from-[#1A2744] to-[#0F1A3A] border border-[rgba(0,212,255,0.2)] rounded-[20px] p-16 text-center">
-            <h2 className="font-['Space_Grotesk'] text-[clamp(1.6rem,3.5vw,2.2rem)] font-bold mb-3 text-[#F0F4FF]">
-              Hazırsan? Birinci dərsdən başla.
+      <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
+
+      {/* ── NIYƏ ── */}
+      <section className="max-w-[1100px] mx-auto px-6 py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+          <div>
+            <p className="font-['Space_Grotesk'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#FF6B2B] mb-3">
+              Niyə LearntoDig?
+            </p>
+            <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.4rem)] font-bold leading-[1.2] tracking-tight mb-4 text-[#F0F4FF]">
+              Kitab oxumaq deyil,<br />
+              <span className="text-[#FF6B2B]">əl işi</span> var burada
             </h2>
-            <p className="text-[#8B9DC3] mb-8 text-[1rem]">Qeydiyyat yoxdur, ödəniş yoxdur — sadəcə öyrən.</p>
-            <div className="flex gap-3 justify-center flex-wrap">
-              <Link href="/lessons">
-                <button className="bg-[#FF6B2B] text-white px-10 py-4 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[16px] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(255,107,43,0.35)] transition-all">
-                  Haradan başlayım? →
-                </button>
-              </Link>
-              <button
-                onClick={() => setGlossaryOpen(true)}
-                className="bg-transparent text-[#00D4FF] border border-[rgba(0,212,255,0.3)] px-10 py-4 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[16px] hover:bg-[rgba(0,212,255,0.05)] transition-all"
-              >
-                📖 Termin Lüğəti
-              </button>
-            </div>
+            <p className="text-[#8B9DC3] text-[1rem] leading-relaxed">
+              Universitetdə nəzəriyyə öyrənirsən, amma real proqramları necə işlətmək lazım? LearntoDig tam olaraq bu boşluğu doldurur.
+            </p>
           </div>
-        </section>
+          <div className="grid grid-cols-2 gap-4">
+            {features.map((f) => (
+              <div key={f.title} className="bg-[#111827] border border-[rgba(255,255,255,0.06)] rounded-[14px] p-5">
+                <div className="w-10 h-10 rounded-[10px] bg-[rgba(255,107,43,0.1)] flex items-center justify-center mb-4">
+                  {f.icon}
+                </div>
+                <div className="font-['Space_Grotesk'] font-semibold text-[0.9rem] mb-1.5 text-[#F0F4FF]">{f.title}</div>
+                <div className="text-[0.82rem] text-[#6B7DA3] leading-relaxed">{f.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      </main>
+      <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
 
-      <GlossaryModal isOpen={glossaryOpen} onClose={() => setGlossaryOpen(false)} />
-    </>
+      {/* ── 3 ADDIM ── */}
+      <section className="bg-[#060B17] px-6 py-20">
+        <div className="max-w-[1100px] mx-auto">
+          <p className="font-['Space_Grotesk'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#FF6B2B] mb-2 text-center">
+            Öyrənmə yolu
+          </p>
+          <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.4rem)] font-bold leading-[1.2] tracking-tight text-center text-[#F0F4FF]">
+            3 addımda başla
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 mt-12">
+            {[
+              { n: "01", title: "Dərs seç", text: "Geologiya, Drilling, Quyu Loqları, Rezervuar ya Hasilat — maraqlandığın mövzudan başla" },
+              { n: "02", title: "Oxu + Quizlər", text: "5 bölmə, hər bölmədən sonra quiz. Anlamadığını AI-dan sor" },
+              { n: "03", title: "Praktika et", text: "Dərs bitəndə müvafiq modul açılır — öyrəndiyini real simulyatorda tətbiq et" },
+            ].map((s, i) => (
+              <div key={s.n} className={`px-6 py-8 text-center ${i < 2 ? "md:border-r border-[rgba(255,255,255,0.06)]" : ""}`}>
+                <div className="font-['Space_Grotesk'] text-[3rem] font-bold text-[rgba(0,212,255,0.15)] leading-none mb-3">{s.n}</div>
+                <div className="font-['Space_Grotesk'] font-semibold text-[1rem] mb-2 text-[#F0F4FF]">{s.title}</div>
+                <div className="text-[0.88rem] text-[#6B7DA3] leading-relaxed">{s.text}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
+
+      {/* ── MODULLAR ── */}
+      <section className="max-w-[1100px] mx-auto px-6 py-20">
+        <p className="font-['Space_Grotesk'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#FF6B2B] mb-3">
+          Praktika Modulları
+        </p>
+        <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.4rem)] font-bold leading-[1.2] tracking-tight mb-8 text-[#F0F4FF]">
+          6 real alət, bir platformada
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {modules.map((m) => (
+            <Link key={m.name} href={m.href}>
+              <div className="bg-[#111827] border border-[rgba(255,255,255,0.06)] rounded-[14px] p-5 flex gap-3 items-start cursor-pointer hover:border-[rgba(255,107,43,0.3)] hover:-translate-y-0.5 transition-all h-full">
+                <div className="w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: m.color }} />
+                <div>
+                  <div className="font-['Space_Grotesk'] font-semibold text-[0.9rem] mb-1 text-[#F0F4FF]">{m.name}</div>
+                  <div className="text-[0.82rem] text-[#6B7DA3] leading-relaxed mb-2">{m.desc}</div>
+                  <span className="text-[11px] font-medium px-2 py-0.5 rounded" style={{ background: m.bg, color: m.color }}>Hazır</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="max-w-[1100px] mx-auto px-6 pb-24">
+        <div className="bg-gradient-to-br from-[#1A2744] to-[#0F1A3A] border border-[rgba(0,212,255,0.2)] rounded-[20px] p-16 text-center">
+          <h2 className="font-['Space_Grotesk'] text-[clamp(1.6rem,3.5vw,2.2rem)] font-bold mb-3 text-[#F0F4FF]">
+            Hazırsan? Birinci dərsdən başla.
+          </h2>
+          <p className="text-[#8B9DC3] mb-8 text-[1rem]">Qeydiyyat yoxdur, ödəniş yoxdur — sadəcə öyrən.</p>
+          <div className="flex gap-3 justify-center flex-wrap">
+            <Link href="/lessons">
+              <button className="bg-[#FF6B2B] text-white px-10 py-4 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[16px] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(255,107,43,0.35)] transition-all">
+                Haradan başlayım? →
+              </button>
+            </Link>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-glossary"))}
+              className="bg-transparent text-[#00D4FF] border border-[rgba(0,212,255,0.3)] px-10 py-4 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[16px] hover:bg-[rgba(0,212,255,0.05)] transition-all"
+            >
+              📖 Termin Lüğəti
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
   );
 }
