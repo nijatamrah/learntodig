@@ -178,32 +178,17 @@ const lessonData: Record<string, {
       },
       {
         question: "Keçiriciliyin ölçü vahidi nədir?",
-        options: [
-          "Faiz (%)",
-          "Metr (m)",
-          "Milidarcy (mD)",
-          "Bar (bar)",
-        ],
+        options: ["Faiz (%)", "Metr (m)", "Milidarcy (mD)", "Bar (bar)"],
         answer: 2,
       },
       {
         question: "Sw + So + Sg = ?",
-        options: [
-          "0",
-          "1 (100%)",
-          "50%",
-          "Dəyişkəndir",
-        ],
+        options: ["0", "1 (100%)", "50%", "Dəyişkəndir"],
         answer: 1,
       },
       {
         question: "Recovery Factor adətən hansı aralıqdadır?",
-        options: [
-          "1-5%",
-          "50-80%",
-          "20-50%",
-          "80-100%",
-        ],
+        options: ["1-5%", "50-80%", "20-50%", "80-100%"],
         answer: 2,
       },
     ],
@@ -246,22 +231,12 @@ const lessonData: Record<string, {
       },
       {
         question: "Yüksək Resistivity dəyəri nəyin əlamətidir?",
-        options: [
-          "Duzlu su",
-          "Gil süxur",
-          "Neft və ya qaz",
-          "Yüksək məsaməlilik",
-        ],
+        options: ["Duzlu su", "Gil süxur", "Neft və ya qaz", "Yüksək məsaməlilik"],
         answer: 2,
       },
       {
         question: "Neutron-Density loqlarında ayrılma (separation) nəyi göstərir?",
-        options: [
-          "Neft varlığını",
-          "Su varlığını",
-          "Qaz varlığını",
-          "Gil varlığını",
-        ],
+        options: ["Neft varlığını", "Su varlığını", "Qaz varlığını", "Gil varlığını"],
         answer: 2,
       },
       {
@@ -346,14 +321,26 @@ const lessonData: Record<string, {
   },
 };
 
-export default function LessonPage({ params, searchParams }: {
-    params: Promise<{ topic: string }>;
-    searchParams: Promise<{ level?: string }>;
-  }) {
-    const { topic } = use(params);
-    const { level = "baslangic" } = use(searchParams);
-    
-    const lesson = lessonData[topic];
+// ─── Level config ────────────────────────────────────────────────────────────
+
+const levelConfig: Record<string, { label: string; accent: string; bg: string }> = {
+  baslangic: { label: "Başlanğıc", accent: "#22C55E", bg: "rgba(34,197,94,0.12)" },
+  orta:      { label: "Orta",      accent: "#F59E0B", bg: "rgba(245,158,11,0.12)" },
+  ireli:     { label: "İrəli",     accent: "#EF4444", bg: "rgba(239,68,68,0.12)" },
+};
+
+// ─── Page ────────────────────────────────────────────────────────────────────
+
+export default function LessonPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ topic: string }>;
+  searchParams: Promise<{ level?: string }>;
+}) {
+  const { topic } = use(params);
+  const { level = "baslangic" } = use(searchParams);
+  const lesson = lessonData[topic];
 
   const [quizStarted, setQuizStarted] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -364,27 +351,16 @@ export default function LessonPage({ params, searchParams }: {
   const [aiAnswer, setAiAnswer] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
 
-  const levelLabel: Record<string, string> = {
-    baslangic: "Başlanğıc",
-    orta: "Orta",
-    ireli: "İrəli",
-  };
-
-  const levelColor: Record<string, string> = {
-    baslangic: "bg-green-100 text-green-700",
-    orta: "bg-amber-100 text-amber-700",
-    ireli: "bg-red-100 text-red-700",
-  };
-
   if (!lesson) {
     return (
-      <main className="flex min-h-screen items-center justify-center">
-        <p className="text-slate-500">Dərs tapılmadı.</p>
+      <main className="flex min-h-screen items-center justify-center bg-gray-950">
+        <p className="text-gray-500">Dərs tapılmadı.</p>
       </main>
     );
   }
 
   const q = lesson.quiz[current];
+  const lv = levelConfig[level] ?? levelConfig.baslangic;
 
   function handleAnswer(i: number) {
     if (selected !== null) return;
@@ -417,10 +393,7 @@ export default function LessonPage({ params, searchParams }: {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          topic: lesson.title,
-          question: aiQuestion,
-        }),
+        body: JSON.stringify({ topic: lesson.title, question: aiQuestion }),
       });
       const data = await res.json();
       setAiAnswer(data.answer ?? "Cavab alınmadı.");
@@ -432,13 +405,13 @@ export default function LessonPage({ params, searchParams }: {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center px-6 py-16">
-      <div className="max-w-2xl w-full">
+    <main className="min-h-screen bg-gray-950 text-white px-6 py-16">
+      <div className="max-w-2xl mx-auto">
 
-        {/* Geri düyməsi */}
+        {/* Geri */}
         <Link
           href="/lessons"
-          className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-slate-600 transition mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-300 transition mb-10"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -447,106 +420,128 @@ export default function LessonPage({ params, searchParams }: {
         </Link>
 
         {/* Başlıq */}
-        <div className="flex items-start justify-between gap-4">
-          <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
+        <div className="flex items-start justify-between gap-4 mb-10">
+          <h1 className="text-3xl font-bold tracking-tight">
             {lesson.icon} {lesson.title}
           </h1>
-          <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${levelColor[level]}`}>
-            {levelLabel[level]}
+          <span
+            className="shrink-0 rounded-full px-3 py-1 text-xs font-semibold border"
+            style={{ color: lv.accent, backgroundColor: lv.bg, borderColor: lv.accent + "40" }}
+          >
+            {lv.label}
           </span>
         </div>
 
         {/* Dərs məzmunu */}
-        <div className="mt-10 space-y-8">
+        <div className="space-y-4">
           {lesson.sections.map((section, i) => (
-            <div key={i}>
-              <h2 className="text-lg font-semibold text-slate-800">{section.heading}</h2>
-              <p className="mt-2 text-slate-600 leading-relaxed">{section.body}</p>
+            <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6">
+              <h2 className="text-base font-semibold text-white mb-2">{section.heading}</h2>
+              <p className="text-sm text-gray-400 leading-relaxed">{section.body}</p>
             </div>
           ))}
         </div>
 
-        {/* Ayırıcı */}
-        <div className="my-12 border-t border-slate-100" />
+        <div className="my-10 border-t border-white/10" />
 
-        {/* Quiz bölməsi */}
+        {/* Quiz */}
         <div>
-          <h2 className="text-xl font-semibold text-slate-900">📝 Quiz</h2>
-          <p className="mt-1 text-sm text-slate-500">Öyrəndiklərini yoxla</p>
+          <h2 className="text-xl font-bold text-white mb-1">📝 Quiz</h2>
+          <p className="text-sm text-gray-500 mb-6">Öyrəndiklərini yoxla</p>
 
           {!quizStarted ? (
             <button
               onClick={() => setQuizStarted(true)}
-              className="mt-6 rounded-xl bg-teal-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-teal-700"
+              className="rounded-xl bg-[#FF6B2B] px-6 py-3 text-sm font-semibold text-white hover:-translate-y-px hover:shadow-[0_4px_20px_rgba(255,107,43,0.35)] transition-all"
             >
-              Quizi başlat
+              Quizi başlat →
             </button>
           ) : finished ? (
-            <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 text-center shadow-sm">
-              <p className="text-2xl font-semibold text-slate-900">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-8 text-center">
+              <p className="text-4xl font-bold text-white mb-2">
                 {score}/{lesson.quiz.length}
               </p>
-              <p className="mt-2 text-slate-500">
+              <p className="text-gray-400 text-sm mb-6">
                 {score === lesson.quiz.length
-                  ? "Mükəmməl! Bütün sualları düzgün cavablandırdın."
+                  ? "🎉 Mükəmməl! Bütün sualları düzgün cavablandırdın."
                   : score >= lesson.quiz.length / 2
-                  ? "Yaxşı nəticə! Bir az daha çalış."
-                  : "Dərsi yenidən oxu, sonra cəhd et."}
+                  ? "👍 Yaxşı nəticə! Bir az daha çalış."
+                  : "📖 Dərsi yenidən oxu, sonra cəhd et."}
               </p>
               <button
                 onClick={resetQuiz}
-                className="mt-4 rounded-xl border border-slate-200 px-5 py-2 text-sm text-slate-600 hover:border-slate-300 transition"
+                className="rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm text-gray-300 hover:bg-white/10 transition"
               >
                 Yenidən cəhd et
               </button>
             </div>
           ) : (
-            <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-xs text-slate-400">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              {/* Progress */}
+              <div className="flex items-center justify-between mb-5">
+                <p className="text-xs text-gray-500">
                   Sual {current + 1} / {lesson.quiz.length}
                 </p>
                 <div className="flex gap-1">
                   {lesson.quiz.map((_, i) => (
                     <span
                       key={i}
-                      className={`h-1.5 w-6 rounded-full ${
-                        i < current ? "bg-teal-400" : i === current ? "bg-teal-600" : "bg-slate-200"
-                      }`}
+                      className="h-1.5 w-6 rounded-full transition-colors"
+                      style={{
+                        backgroundColor:
+                          i < current
+                            ? "#22C55E"
+                            : i === current
+                            ? "#FF6B2B"
+                            : "rgba(255,255,255,0.1)",
+                      }}
                     />
                   ))}
                 </div>
               </div>
 
-              <p className="text-slate-800 font-medium">{q.question}</p>
+              <p className="text-white font-medium mb-4">{q.question}</p>
 
-              <div className="mt-4 space-y-2">
-                {q.options.map((opt, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleAnswer(i)}
-                    className={`w-full text-left rounded-lg border px-4 py-3 text-sm transition ${
-                      selected === null
-                        ? "border-slate-200 hover:border-teal-400 hover:bg-teal-50"
-                        : i === q.answer
-                        ? "border-green-400 bg-green-50 text-green-800"
-                        : selected === i
-                        ? "border-red-400 bg-red-50 text-red-800"
-                        : "border-slate-200 text-slate-400"
-                    }`}
-                  >
-                    {opt}
-                  </button>
-                ))}
+              <div className="space-y-2">
+                {q.options.map((opt, i) => {
+                  let borderColor = "rgba(255,255,255,0.1)";
+                  let bgColor = "rgba(255,255,255,0.03)";
+                  let textColor = "#d1d5db";
+
+                  if (selected !== null) {
+                    if (i === q.answer) {
+                      borderColor = "#22C55E";
+                      bgColor = "rgba(34,197,94,0.1)";
+                      textColor = "#86efac";
+                    } else if (selected === i) {
+                      borderColor = "#EF4444";
+                      bgColor = "rgba(239,68,68,0.1)";
+                      textColor = "#fca5a5";
+                    } else {
+                      textColor = "#4b5563";
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => handleAnswer(i)}
+                      className="w-full text-left rounded-xl border px-4 py-3 text-sm transition-all"
+                      style={{ borderColor, backgroundColor: bgColor, color: textColor }}
+                    >
+                      {opt}
+                    </button>
+                  );
+                })}
               </div>
 
               {selected !== null && (
-                <div className="mt-4 flex justify-end">
+                <div className="mt-5 flex justify-end">
                   <button
                     onClick={handleNext}
-                    className="rounded-xl bg-teal-600 px-5 py-2 text-sm font-medium text-white hover:bg-teal-700 transition"
+                    className="rounded-xl bg-[#FF6B2B] px-5 py-2.5 text-sm font-semibold text-white hover:-translate-y-px hover:shadow-[0_4px_20px_rgba(255,107,43,0.3)] transition-all"
                   >
-                    {current + 1 < lesson.quiz.length ? "Növbəti sual" : "Nəticəni gör"}
+                    {current + 1 < lesson.quiz.length ? "Növbəti sual →" : "Nəticəni gör →"}
                   </button>
                 </div>
               )}
@@ -554,42 +549,39 @@ export default function LessonPage({ params, searchParams }: {
           )}
         </div>
 
-        {/* Ayırıcı */}
-        <div className="my-12 border-t border-slate-100" />
+        <div className="my-10 border-t border-white/10" />
 
         {/* AI Chat */}
         <div>
-          <h2 className="text-xl font-semibold text-slate-900">🤖 AI ilə sual-cavab</h2>
-          <p className="mt-1 text-sm text-slate-500">
-            Bu mövzu ilə bağlı hər şeyi sor
-          </p>
+          <h2 className="text-xl font-bold text-white mb-1">🤖 AI ilə sual-cavab</h2>
+          <p className="text-sm text-gray-500 mb-5">Bu mövzu ilə bağlı hər şeyi sor</p>
 
-          <div className="mt-4 flex gap-2">
+          <div className="flex gap-2">
             <input
               type="text"
               value={aiQuestion}
               onChange={(e) => setAiQuestion(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && askAI()}
               placeholder="Məs: Sandstone ilə shale arasındakı fərq nədir?"
-              className="flex-1 rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-teal-400 transition"
+              className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-600 outline-none focus:border-[#FF6B2B]/50 transition"
             />
             <button
               onClick={askAI}
               disabled={aiLoading}
-              className="rounded-xl bg-teal-600 px-5 py-3 text-sm font-medium text-white hover:bg-teal-700 transition disabled:opacity-50"
+              className="rounded-xl bg-[#FF6B2B] px-5 py-3 text-sm font-semibold text-white hover:-translate-y-px hover:shadow-[0_4px_20px_rgba(255,107,43,0.35)] transition-all disabled:opacity-40"
             >
               {aiLoading ? "..." : "Sor"}
             </button>
           </div>
 
           {aiAnswer && (
-            <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-700 leading-relaxed">
+            <div className="mt-4 rounded-xl border border-white/10 bg-white/5 px-5 py-4 text-sm text-gray-300 leading-relaxed">
               {aiAnswer}
             </div>
           )}
         </div>
 
-        {/* ModuleBridge — praktika modulu keçidi */}
+        {/* ModuleBridge */}
         <ModuleBridge topic={topic} />
 
       </div>
