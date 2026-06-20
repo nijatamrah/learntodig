@@ -1,5 +1,8 @@
-"use client";
+// faylın əvvəlinə əlavə et:
+export const metadata = { title: "FETP — From Exploration To Production" };
+
  
+
 import BlackGoldGame from "@/components/BlackGoldGame";
  
 export default function GamePage() {

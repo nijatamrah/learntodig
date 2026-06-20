@@ -724,11 +724,11 @@ export default function BlackGoldGame() {
   if (screen === "intro") return (
     <div className="max-w-2xl mx-auto py-10 px-4 text-center">
       <div className="text-5xl mb-4">🛢️</div>
-      <h1 className="text-2xl font-medium mb-2">Black Gold</h1>
-      <p className="text-sm text-gray-400 mb-8 leading-relaxed">
-        Exploration-dan abandonment-ə — tam neft sahəsi həyat dövrü simulyatoru<br />
-        23 scene · 40+ qərar · 7 chapter
-      </p>
+      <h1 className="text-3xl font-medium mb-2">FETP</h1>
+      <p className="text-xl text-gray-900 font-bold mb-2"> From Exploration To Production</p>
+      <p className="text-s text-gray-600 mb-2">Exploration-dan Abandonment-ə qədər tam neft sahəsi həyat dövrü simulyatoru</p>
+      <p className="text-s text-gray-600 mb-2">23 scene · 40+ qərar · 7 chapter</p>
+
       <div className="grid grid-cols-2 gap-3 mb-8 text-left">
         {[["🗺️", "7 Chapter", "Exploration → Abandonment"], ["⚡", "40+ Qərar", "Hər seçim nəticə verir"], ["🏆", "Leaderboard", "Digərlərlə müqayisə"], ["📚", "Real Texnologiya", "DST, MPD, ICD, EOR, P&A"]].map(([ic, t, s]) => (
           <div key={t} className="rounded-xl border border-white/8 bg-white/4 p-4">
