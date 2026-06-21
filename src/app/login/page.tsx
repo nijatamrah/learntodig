@@ -1,18 +1,22 @@
 'use client'
  
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/client'
  
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
  
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+ 
+  const redirectTo = searchParams.get('redirect') || '/'
+  const cameFromProtected = searchParams.get('redirect') !== null
  
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -28,7 +32,7 @@ export default function LoginPage() {
       return
     }
  
-    router.push('/')
+    router.push(redirectTo)
     router.refresh()
   }
  
@@ -37,6 +41,12 @@ export default function LoginPage() {
       <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
         <h1 className="text-xl font-semibold text-zinc-50">Daxil ol</h1>
         <p className="mt-1 text-sm text-zinc-400">LearntoDig hesabınıza giriş edin</p>
+ 
+        {cameFromProtected && (
+          <p className="mt-4 rounded-lg bg-amber-500/10 px-3 py-2 text-sm text-amber-400">
+            Bu bölməyə daxil olmaq üçün əvvəlcə hesabınıza giriş etməlisiniz.
+          </p>
+        )}
  
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
@@ -90,6 +100,14 @@ export default function LoginPage() {
         </p>
       </div>
     </main>
+  )
+}
+ 
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   )
 }
  
