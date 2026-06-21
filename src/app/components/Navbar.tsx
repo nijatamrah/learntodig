@@ -24,6 +24,43 @@ const links = [
   { href: "/game", label: "Oyun", icon: Gamepad2 },
   { href: "/about", label: "Haqqında", icon: Info },
 ];
+
+// LearntoDig Logo SVG
+function LDLogo({ size = 32 }: { size?: number }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 200 200"
+      width={size}
+      height={size}
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id="ldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FF6B2B" />
+          <stop offset="100%" stopColor="#FF8F5C" />
+        </linearGradient>
+      </defs>
+      {/* Upper triangle */}
+      <polygon points="100,18 68,105 132,105" fill="url(#ldGrad)" opacity="0.95" />
+      {/* Lower left wing */}
+      <polygon points="68,105 28,175 100,128" fill="url(#ldGrad)" opacity="0.8" />
+      {/* Lower right wing */}
+      <polygon points="132,105 100,128 172,175" fill="url(#ldGrad)" opacity="0.8" />
+      {/* Center diamond - dark */}
+      <polygon points="100,128 68,105 100,92 132,105" fill="#0A0F1E" />
+      {/* Outline strokes */}
+      <line x1="100" y1="18" x2="28" y2="175" stroke="#0A0F1E" strokeWidth="2" strokeLinecap="round" />
+      <line x1="100" y1="18" x2="172" y2="175" stroke="#0A0F1E" strokeWidth="2" strokeLinecap="round" />
+      <line x1="68" y1="105" x2="172" y2="175" stroke="#0A0F1E" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="132" y1="105" x2="28" y2="175" stroke="#0A0F1E" strokeWidth="1.5" strokeLinecap="round" />
+      {/* L - white */}
+      <text x="96" y="90" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontSize="36" fill="#FFFFFF" textAnchor="middle" dominantBaseline="middle">L</text>
+      {/* D - orange */}
+      <text x="100" y="150" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontSize="28" fill="#FF6B2B" textAnchor="middle" dominantBaseline="middle">D</text>
+    </svg>
+  );
+}
  
 export default function Navbar() {
   const pathname = usePathname();
@@ -76,9 +113,12 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="shrink-0 font-['Space_Grotesk'] text-[1.1rem] font-bold text-[#F0F4FF] transition hover:opacity-80"
+          className="shrink-0 flex items-center gap-2 transition hover:opacity-80"
         >
-          Learn<span className="text-[#FF6B2B]">to</span>Dig
+          <LDLogo size={34} />
+          <span className="font-['Space_Grotesk'] text-[1.1rem] font-bold text-[#F0F4FF]">
+            Learn<span className="text-[#FF6B2B]">to</span>Dig
+          </span>
         </Link>
  
         {/* Desktop nav links */}
@@ -246,4 +286,3 @@ export default function Navbar() {
     </nav>
   );
 }
- 

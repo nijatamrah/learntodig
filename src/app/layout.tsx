@@ -10,8 +10,22 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "LearntoDig",
+  title: {
+    default: "LearntoDig",
+    template: "%s | LearntoDig",
+  },
   description: "Neft-qaz sahəsi üçün interaktiv öyrənmə platformu",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    shortcut: "/favicon.ico",
+  },
+  manifest: "/manifest.json",
+  metadataBase: new URL("https://learntodig.vercel.app"),
 };
 
 export default function RootLayout({
