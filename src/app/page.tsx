@@ -88,6 +88,8 @@ export default function HomePage() {
     { name: "Petrel — Rezervuar", desc: "3D rezervuar modeli, porosity/permeability xəritələri", color: "#34D399", bg: "rgba(52,211,153,0.1)", href: "/learn/petrel" },
     { name: "Eclipse — Simulyasiya", desc: "Rezervuar simulyasiyası, müxtəlif inkişaf ssenarisi müqayisəsi", color: "#FBBF24", bg: "rgba(251,191,36,0.1)", href: "/learn/eclipse" },
     { name: "Drilling", desc: "ROP simulyatoru, WOB/RPM optimizasiya, qazıma problemi ssenariləri", color: "#F87171", bg: "rgba(248,113,113,0.1)", href: "/learn/drilling" },
+    { name: "Azərbaycan Yataqları", desc: "Azərbaycanın əsas neft-qaz yataqları, xəritə və tarixi məlumat", color: "#34D399", bg: "rgba(52,211,153,0.1)", href: "/azerbaijan-fields" },
+    { name: "Oyun", desc: "Neft-qaz biliklərinlə yarış, sualları cavablandır, səviyyə qazanın", color: "#A78BFA", bg: "rgba(167,139,250,0.1)", href: "/game" },
   ];
 
   return (
@@ -164,6 +166,7 @@ export default function HomePage() {
               { num: "5", label: "Dərs tematikası" },
               { num: "100+", label: "Quiz sualı" },
               { num: "AI", label: "Chat hər dərsdə" },
+              { num: "1", label: "İnteraktiv oyun" },
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <div className="font-['Space_Grotesk'] text-[1.8rem] font-bold text-[#00D4FF]">{s.num}</div>
@@ -176,7 +179,7 @@ export default function HomePage() {
 
       <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
 
-      {/* ── NIYƏ ── */}
+      {/* ── NİYƏ ── */}
       <section className="max-w-[1100px] mx-auto px-6 py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div>
@@ -188,7 +191,7 @@ export default function HomePage() {
               <span className="text-[#FF6B2B]">əl işi</span> var burada
             </h2>
             <p className="text-[#8B9DC3] text-[1rem] leading-relaxed">
-              Universitetdə nəzəriyyə öyrənirsən, amma real proqramları necə işlətmək lazım? LearntoDig tam olaraq bu boşluğu doldurur.
+              Nəzəriyyədən praktikaya — dərslər, simulyatorlar, Azərbaycan yataqlarının xəritəsi, 400+ terminlik lüğət və bilikləri yoxlamaq üçün interaktiv oyun. Hamısı bir platformada, pulsuz.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -234,13 +237,13 @@ export default function HomePage() {
 
       <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
 
-      {/* ── MODULLAR ── */}
+      {/* ── MODULLAR + YATAQLAR + OYUN ── */}
       <section className="max-w-[1100px] mx-auto px-6 py-20">
         <p className="font-['Space_Grotesk'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#FF6B2B] mb-3">
-          Praktika Modulları
+          Platforma
         </p>
         <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.4rem)] font-bold leading-[1.2] tracking-tight mb-8 text-[#F0F4FF]">
-          6 real alət, bir platformada
+          Hər şey bir yerdə
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {modules.map((m) => (
@@ -260,23 +263,39 @@ export default function HomePage() {
 
       {/* ── CTA ── */}
       <section className="max-w-[1100px] mx-auto px-6 pb-24">
-        <div className="bg-gradient-to-br from-[#1A2744] to-[#0F1A3A] border border-[rgba(0,212,255,0.2)] rounded-[20px] p-16 text-center">
-          <h2 className="font-['Space_Grotesk'] text-[clamp(1.6rem,3.5vw,2.2rem)] font-bold mb-3 text-[#F0F4FF]">
-            Hazırsan? Birinci dərsdən başla.
-          </h2>
-          <p className="text-[#8B9DC3] mb-8 text-[1rem]">Qeydiyyat yoxdur, ödəniş yoxdur — sadəcə öyrən.</p>
-          <div className="flex gap-3 justify-center flex-wrap">
-            <Link href="/lessons">
-              <button className="bg-[#FF6B2B] text-white px-10 py-4 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[16px] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(255,107,43,0.35)] transition-all">
-                Haradan başlayım? →
+        <div className="relative bg-gradient-to-br from-[#1A2744] to-[#0F1A3A] border border-[rgba(0,212,255,0.2)] rounded-[20px] p-14 text-center overflow-hidden">
+          {/* Subtle glow accents */}
+          <div className="absolute top-0 left-1/4 w-64 h-32 rounded-full pointer-events-none"
+            style={{ background: "radial-gradient(ellipse, rgba(255,107,43,0.08), transparent 70%)" }} />
+          <div className="absolute bottom-0 right-1/4 w-64 h-32 rounded-full pointer-events-none"
+            style={{ background: "radial-gradient(ellipse, rgba(0,212,255,0.07), transparent 70%)" }} />
+
+          <div className="relative">
+            <div className="inline-block text-[2rem] mb-4">🛢️</div>
+            <h2 className="font-['Space_Grotesk'] text-[clamp(1.6rem,3.5vw,2.2rem)] font-bold mb-3 text-[#F0F4FF]">
+              Mühəndis olmaq bir addım uzaqlıqdadır.
+            </h2>
+            <p className="text-[#6B7DA3] text-[0.95rem] mb-8 max-w-[420px] mx-auto leading-relaxed">
+              Dərs seç, simulyatoru aç, oyunu oyna — öyrənmənin bu qədər maraqlı olacağını bilmirdin.
+            </p>
+            <div className="flex gap-3 justify-center flex-wrap">
+              <Link href="/lessons">
+                <button className="bg-[#FF6B2B] text-white px-10 py-4 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[16px] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(255,107,43,0.4)] transition-all">
+                  Haradan başlayım? →
+                </button>
+              </Link>
+              <Link href="/game">
+                <button className="bg-transparent text-[#A78BFA] border border-[rgba(167,139,250,0.3)] px-10 py-4 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[16px] hover:bg-[rgba(167,139,250,0.07)] transition-all">
+                  🎮 Oyunu sına
+                </button>
+              </Link>
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent("open-glossary"))}
+                className="bg-transparent text-[#00D4FF] border border-[rgba(0,212,255,0.3)] px-10 py-4 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[16px] hover:bg-[rgba(0,212,255,0.05)] transition-all"
+              >
+                📖 Lüğət
               </button>
-            </Link>
-            <button
-              onClick={() => window.dispatchEvent(new CustomEvent("open-glossary"))}
-              className="bg-transparent text-[#00D4FF] border border-[rgba(0,212,255,0.3)] px-10 py-4 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[16px] hover:bg-[rgba(0,212,255,0.05)] transition-all"
-            >
-              📖 Termin Lüğəti
-            </button>
+            </div>
           </div>
         </div>
       </section>
