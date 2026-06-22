@@ -15,6 +15,7 @@ import {
   LogOut,
   Menu,
   X,
+  Newspaper,
 } from "lucide-react";
  
 const links = [
@@ -22,6 +23,7 @@ const links = [
   { href: "/lessons", label: "Dərslər", icon: BookOpen },
   { href: "/azerbaijan-fields", label: "Yataqlar", icon: MapPin },
   { href: "/game", label: "Oyun", icon: Gamepad2 },
+  { href: "/news", label: "Xəbərlər", icon: Newspaper },
   { href: "/about", label: "Haqqında", icon: Info },
 ];
  
@@ -138,7 +140,6 @@ export default function Navbar() {
                   }
                 />
                 {l.label}
-                {/* Animated underline */}
                 <span
                   className={`absolute bottom-0 h-[2.5px] rounded-t-sm bg-[#FF6B2B] transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
                     active
@@ -289,4 +290,3 @@ export default function Navbar() {
     </nav>
   );
 }
- 
