@@ -24,8 +24,7 @@ const links = [
   { href: "/game", label: "Oyun", icon: Gamepad2 },
   { href: "/about", label: "Haqqında", icon: Info },
 ];
-
-// LearntoDig Logo SVG
+ 
 function LDLogo({ size = 32 }: { size?: number }) {
   return (
     <svg
@@ -41,22 +40,15 @@ function LDLogo({ size = 32 }: { size?: number }) {
           <stop offset="100%" stopColor="#FF8F5C" />
         </linearGradient>
       </defs>
-      {/* Upper triangle */}
       <polygon points="100,18 68,105 132,105" fill="url(#ldGrad)" opacity="0.95" />
-      {/* Lower left wing */}
       <polygon points="68,105 28,175 100,128" fill="url(#ldGrad)" opacity="0.8" />
-      {/* Lower right wing */}
       <polygon points="132,105 100,128 172,175" fill="url(#ldGrad)" opacity="0.8" />
-      {/* Center diamond - dark */}
       <polygon points="100,128 68,105 100,92 132,105" fill="#0A0F1E" />
-      {/* Outline strokes */}
       <line x1="100" y1="18" x2="28" y2="175" stroke="#0A0F1E" strokeWidth="2" strokeLinecap="round" />
       <line x1="100" y1="18" x2="172" y2="175" stroke="#0A0F1E" strokeWidth="2" strokeLinecap="round" />
       <line x1="68" y1="105" x2="172" y2="175" stroke="#0A0F1E" strokeWidth="1.5" strokeLinecap="round" />
       <line x1="132" y1="105" x2="28" y2="175" stroke="#0A0F1E" strokeWidth="1.5" strokeLinecap="round" />
-      {/* L - white */}
       <text x="96" y="90" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontSize="36" fill="#FFFFFF" textAnchor="middle" dominantBaseline="middle">L</text>
-      {/* D - orange */}
       <text x="100" y="150" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontSize="28" fill="#FF6B2B" textAnchor="middle" dominantBaseline="middle">D</text>
     </svg>
   );
@@ -108,21 +100,22 @@ export default function Navbar() {
     .toUpperCase();
  
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[rgba(10,15,30,0.85)] backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 h-16">
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.07] bg-[rgba(10,15,30,0.97)] backdrop-blur-md">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-7 h-16">
+ 
         {/* Logo */}
         <Link
           href="/"
-          className="shrink-0 flex items-center gap-2 transition hover:opacity-80"
+          className="shrink-0 min-w-[170px] flex items-center gap-2.5 transition hover:opacity-80"
         >
           <LDLogo size={34} />
-          <span className="font-['Space_Grotesk'] text-[1.1rem] font-bold text-[#F0F4FF]">
+          <span className="font-['Space_Grotesk'] text-[1.1rem] font-bold tracking-tight text-[#F0F4FF]">
             Learn<span className="text-[#FF6B2B]">to</span>Dig
           </span>
         </Link>
  
         {/* Desktop nav links */}
-        <div className="hidden items-center gap-1 lg:flex">
+        <div className="hidden items-center lg:flex">
           {links.map((l) => {
             const active = pathname.startsWith(l.href);
             const Icon = l.icon;
@@ -130,24 +123,29 @@ export default function Navbar() {
               <Link
                 key={l.href}
                 href={l.href}
-                className={`group relative flex items-center gap-2 rounded-lg px-3 py-2 text-[13.5px] transition-colors ${
+                className={`group relative flex items-center gap-[7px] px-[14px] py-[10px] text-[11.5px] font-semibold uppercase tracking-[0.06em] transition-colors duration-200 ${
                   active
-                    ? "bg-white/[0.06] text-[#F0F4FF]"
-                    : "text-[#6B7DA3] hover:bg-white/[0.04] hover:text-[#F0F4FF]"
+                    ? "text-white"
+                    : "text-white/[0.68] hover:text-white/[0.92]"
                 }`}
               >
                 <Icon
-                  size={16}
+                  size={15}
                   className={
                     active
                       ? "text-[#FF6B2B]"
-                      : "text-[#6B7DA3] transition-colors group-hover:text-[#FF6B2B]"
+                      : "text-white/[0.50] transition-colors duration-200 group-hover:text-white/[0.75]"
                   }
                 />
                 {l.label}
-                {active && (
-                  <span className="absolute -bottom-[1px] left-3 right-3 h-[2px] rounded-full bg-[#FF6B2B]" />
-                )}
+                {/* Animated underline */}
+                <span
+                  className={`absolute bottom-0 h-[2.5px] rounded-t-sm bg-[#FF6B2B] transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                    active
+                      ? "left-[8%] right-[8%]"
+                      : "left-1/2 right-1/2 group-hover:left-[10%] group-hover:right-[10%]"
+                  }`}
+                />
               </Link>
             );
           })}
@@ -157,7 +155,7 @@ export default function Navbar() {
         <div className="hidden items-center gap-3 lg:flex">
           <button
             onClick={() => window.dispatchEvent(new CustomEvent("open-glossary"))}
-            className="flex items-center gap-1.5 rounded-lg border border-[rgba(0,212,255,0.25)] px-3.5 py-2 text-[13.5px] font-medium text-[#00D4FF] transition-all hover:border-[rgba(0,212,255,0.5)] hover:bg-[rgba(0,212,255,0.05)]"
+            className="flex items-center gap-1.5 rounded-lg border border-[rgba(0,212,255,0.3)] bg-[rgba(0,212,255,0.06)] px-3.5 py-[7px] text-[13px] font-semibold text-[#00D4FF] transition-all hover:border-[rgba(0,212,255,0.6)] hover:bg-[rgba(0,212,255,0.12)]"
           >
             <BookText size={15} />
             Lüğət
@@ -178,7 +176,7 @@ export default function Navbar() {
                   <button
                     onClick={handleSignOut}
                     title="Çıxış"
-                    className="text-[#6B7DA3] transition-colors hover:text-[#FF6B2B]"
+                    className="text-white/[0.45] transition-colors hover:text-[#FF6B2B]"
                   >
                     <LogOut size={17} />
                   </button>
@@ -187,12 +185,12 @@ export default function Navbar() {
                 <>
                   <Link
                     href="/login"
-                    className="px-2 text-[13.5px] text-[#6B7DA3] transition-colors hover:text-[#F0F4FF]"
+                    className="px-2 text-[13px] font-medium text-white/[0.55] transition-colors hover:text-[#F0F4FF]"
                   >
                     Daxil ol
                   </Link>
                   <Link href="/register">
-                    <button className="rounded-lg bg-[#FF6B2B] px-4 py-2 font-['Space_Grotesk'] text-[13.5px] font-semibold text-white transition-all hover:-translate-y-px hover:shadow-[0_4px_20px_rgba(255,107,43,0.35)]">
+                    <button className="rounded-lg bg-[#FF6B2B] px-4 py-2 font-['Space_Grotesk'] text-[13px] font-bold tracking-wide text-white transition-all hover:-translate-y-px hover:bg-[#FF7D45] hover:shadow-[0_4px_20px_rgba(255,107,43,0.35)]">
                       Qeydiyyat
                     </button>
                   </Link>
@@ -213,7 +211,7 @@ export default function Navbar() {
  
       {/* Mobile panel */}
       {mobileOpen && (
-        <div className="space-y-1 border-t border-white/[0.06] bg-[rgba(10,15,30,0.97)] px-6 py-4 lg:hidden">
+        <div className="space-y-1 border-t border-white/[0.06] bg-[rgba(10,15,30,0.98)] px-6 py-4 lg:hidden">
           {links.map((l) => {
             const active = pathname.startsWith(l.href);
             const Icon = l.icon;
@@ -222,11 +220,16 @@ export default function Navbar() {
                 key={l.href}
                 href={l.href}
                 onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] ${
-                  active ? "bg-white/[0.06] text-[#F0F4FF]" : "text-[#6B7DA3]"
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-semibold uppercase tracking-[0.05em] ${
+                  active
+                    ? "text-white"
+                    : "text-white/[0.68]"
                 }`}
               >
-                <Icon size={17} className={active ? "text-[#FF6B2B]" : "text-[#6B7DA3]"} />
+                <Icon
+                  size={17}
+                  className={active ? "text-[#FF6B2B]" : "text-white/[0.45]"}
+                />
                 {l.label}
               </Link>
             );
@@ -237,7 +240,7 @@ export default function Navbar() {
               window.dispatchEvent(new CustomEvent("open-glossary"));
               setMobileOpen(false);
             }}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] text-[#00D4FF]"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-semibold text-[#00D4FF]"
           >
             <BookText size={17} />
             Lüğət
@@ -257,7 +260,7 @@ export default function Navbar() {
                   </div>
                   <button
                     onClick={handleSignOut}
-                    className="text-[13.5px] text-[#6B7DA3] hover:text-[#FF6B2B]"
+                    className="text-[13px] text-white/[0.45] hover:text-[#FF6B2B]"
                   >
                     Çıxış
                   </button>
@@ -274,7 +277,7 @@ export default function Navbar() {
                   <Link
                     href="/register"
                     onClick={() => setMobileOpen(false)}
-                    className="rounded-lg bg-[#FF6B2B] py-2.5 text-center text-[14px] font-semibold text-white"
+                    className="rounded-lg bg-[#FF6B2B] py-2.5 text-center text-[14px] font-bold text-white"
                   >
                     Qeydiyyat
                   </Link>
@@ -286,3 +289,4 @@ export default function Navbar() {
     </nav>
   );
 }
+ 
