@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Newspaper, ExternalLink, Clock } from "lucide-react";
+import { Newspaper, ExternalLink, Clock, TrendingUp, TrendingDown } from "lucide-react";
 
 interface NewsItem {
   title: string;
@@ -9,6 +9,13 @@ interface NewsItem {
   link: string;
   pubDate: string;
   source: string;
+}
+
+interface OilPrice {
+  name: string;
+  price: number;
+  change: number;
+  changePct: number;
 }
 
 function timeAgo(dateStr: string): string {
@@ -20,10 +27,30 @@ function timeAgo(dateStr: string): string {
   return Math.floor(diff / 1440) + " gün əvvəl";
 }
 
+function PriceCard({ item }: { item: OilPrice }) {
+  const isUp = item.change >= 0;
+  return (
+    <div className="flex flex-col gap-1 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 min-w-[140px]">
+      <span className="text-[11px] font-semibold uppercase tracking-wider text-white/40">
+        {item.name}
+      </span>
+      <span className="text-[18px] font-bold text-white">
+        ${item.price.toFixed(2)}
+      </span>
+      <span className={`flex items-center gap-1 text-[12px] font-semibold ${isUp ? "text-emerald-400" : "text-red-400"}`}>
+        {isUp ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+        {isUp ? "+" : ""}{item.change.toFixed(2)} ({isUp ? "+" : ""}{item.changePct.toFixed(2)}%)
+      </span>
+    </div>
+  );
+}
+
 export default function NewsPage() {
   const [items, setItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [prices, setPrices] = useState<OilPrice[]>([]);
+  const [pricesLoading, setPricesLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/news")
@@ -38,11 +65,24 @@ export default function NewsPage() {
       });
   }, []);
 
+  useEffect(() => {
+    fetch("/api/prices")
+      .then((r) => r.json())
+      .then((data) => {
+        setPrices(data.prices || []);
+        setPricesLoading(false);
+      })
+      .catch(() => {
+        setPricesLoading(false);
+      });
+  }, []);
+
   return (
     <main className="min-h-screen bg-[#0A0F1E] pt-24 pb-16 px-4">
       <div className="mx-auto max-w-4xl">
 
-        <div className="mb-10">
+        {/* Header */}
+        <div className="mb-6">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#FF6B2B]/30 bg-[#FF6B2B]/10 px-3 py-1">
             <Newspaper size={13} className="text-[#FF6B2B]" />
             <span className="text-[11px] font-semibold uppercase tracking-widest text-[#FF6B2B]">
@@ -57,6 +97,24 @@ export default function NewsPage() {
           </p>
         </div>
 
+        {/* Price ticker */}
+        <div className="mb-8">
+          {pricesLoading ? (
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              {[0,1,2,3].map((i) => (
+                <div key={i} className="h-[76px] w-[140px] shrink-0 animate-pulse rounded-xl bg-white/[0.04]" />
+              ))}
+            </div>
+          ) : prices.length > 0 ? (
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              {prices.map((p) => (
+                <PriceCard key={p.name} item={p} />
+              ))}
+            </div>
+          ) : null}
+        </div>
+
+        {/* Loading */}
         {loading && (
           <div className="space-y-4">
             {[0,1,2,3,4,5].map((i) => (
@@ -65,12 +123,14 @@ export default function NewsPage() {
           </div>
         )}
 
+        {/* Error */}
         {error && (
           <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-center text-red-400">
             Xeberler yuklenмedi. Bir az sonra yeniden cehd edin.
           </div>
         )}
 
+        {/* News list */}
         {!loading && !error && (
           <div className="space-y-3">
             {items.map((item, i) => (
