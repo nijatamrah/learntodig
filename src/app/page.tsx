@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import DailyDriller from "@/components/DailyDriller";
 
 export default function HomePage() {
   const grLineRef = useRef<SVGPolylineElement>(null);
@@ -167,7 +168,6 @@ export default function HomePage() {
               { num: "100+", label: "Quiz sualı" },
               { num: "AI", label: "Chat hər dərsdə" },
               { num: "1", label: "İnteraktiv oyun" },
-              
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <div className="font-['Space_Grotesk'] text-[1.8rem] font-bold text-[#00D4FF]">{s.num}</div>
@@ -175,6 +175,52 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
+
+      {/* ── DAİLY DRILLER + XƏBƏRLƏR ── */}
+      <section className="max-w-[1100px] mx-auto px-6 py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          {/* Daily Driller */}
+          <DailyDriller />
+
+          {/* Xəbərlər kartı */}
+          <Link href="/news">
+            <div className="h-full rounded-2xl border border-[#00D4FF]/20 bg-gradient-to-br from-[#081520] to-[#0A0F1E] p-6 cursor-pointer hover:border-[#00D4FF]/40 transition-all group">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#00D4FF]">Canlı Xəbərlər</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00D4FF] animate-pulse" />
+              </div>
+              <h3 className="text-white font-bold text-[15px] mb-2">Neft-Qaz Xəbərləri</h3>
+              <p className="text-white/40 text-[13px] leading-relaxed mb-6">
+                Rigzone, OilPrice, World Oil, OGJ və daha çox mənbədən — dünya neft-qaz sənayesinin ən son xəbərləri.
+              </p>
+
+              {/* Preview lines */}
+              <div className="space-y-3 mb-6">
+                {[
+                  { source: "oilprice.com", text: "Brent crude qiymətləri dəyişir..." },
+                  { source: "rigzone.com", text: "Yeni offshore layihə elan edildi..." },
+                  { source: "worldoil.com", text: "Drilling texnologiyasında yeniliklər..." },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-2 opacity-60">
+                    <span className="rounded px-1.5 py-0.5 text-[9px] font-bold uppercase bg-[#00D4FF]/10 text-[#00D4FF] shrink-0 mt-0.5">
+                      {item.source}
+                    </span>
+                    <span className="text-[12px] text-white/50 leading-snug">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2 text-[#00D4FF] text-[13px] font-semibold group-hover:gap-3 transition-all">
+                Bütün xəbərlərə bax
+                <span>→</span>
+              </div>
+            </div>
+          </Link>
         </div>
       </section>
 
@@ -238,7 +284,7 @@ export default function HomePage() {
 
       <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
 
-      {/* ── MODULLAR + YATAQLAR + OYUN ── */}
+      {/* ── MODULLAR ── */}
       <section className="max-w-[1100px] mx-auto px-6 py-20">
         <p className="font-['Space_Grotesk'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#FF6B2B] mb-3">
           Platforma
@@ -265,12 +311,10 @@ export default function HomePage() {
       {/* ── CTA ── */}
       <section className="max-w-[1100px] mx-auto px-6 pb-24">
         <div className="relative bg-gradient-to-br from-[#1A2744] to-[#0F1A3A] border border-[rgba(0,212,255,0.2)] rounded-[20px] p-14 text-center overflow-hidden">
-          {/* Subtle glow accents */}
           <div className="absolute top-0 left-1/4 w-64 h-32 rounded-full pointer-events-none"
             style={{ background: "radial-gradient(ellipse, rgba(255,107,43,0.08), transparent 70%)" }} />
           <div className="absolute bottom-0 right-1/4 w-64 h-32 rounded-full pointer-events-none"
             style={{ background: "radial-gradient(ellipse, rgba(0,212,255,0.07), transparent 70%)" }} />
-
           <div className="relative">
             <div className="inline-block text-[2rem] mb-4">🛢️</div>
             <h2 className="font-['Space_Grotesk'] text-[clamp(1.6rem,3.5vw,2.2rem)] font-bold mb-3 text-[#F0F4FF]">
