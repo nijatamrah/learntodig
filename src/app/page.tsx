@@ -167,6 +167,7 @@ export default function HomePage() {
               { num: "100+", label: "Quiz sualı" },
               { num: "AI", label: "Chat hər dərsdə" },
               { num: "1", label: "İnteraktiv oyun" },
+              
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <div className="font-['Space_Grotesk'] text-[1.8rem] font-bold text-[#00D4FF]">{s.num}</div>
