@@ -1,46 +1,75 @@
 import { NextResponse } from "next/server";
 
-const AI_ENABLED = process.env.NEWS_AI_ENABLED === "true";
+export const revalidate = 1800; // 30 dəq cache
 
 const RSS_FEEDS = [
-  "https://www.rigzone.com/news/rss/rigzone_news.aspx",
+  // ── Ən aktiv / çox xəbər verən ────────────────────────
   "https://oilprice.com/rss/main",
+  "https://www.rigzone.com/news/rss/rigzone_news.aspx",
+  "https://www.offshore-technology.com/feed/",
   "https://www.worldoil.com/rss",
+
+  // ── OGJ — upstream + drilling + refining ──────────────
+  "https://www.ogj.com/__rss/website-scheduled-articles.xml/section=DRILLING_PRODUCTION",
+  "https://www.ogj.com/__rss/website-scheduled-articles.xml/section=EXPLORATION_DEVELOPMENT",
+  "https://www.ogj.com/__rss/website-scheduled-articles.xml/section=GENERAL_INTEREST",
+
+  // ── Reuters Energy — ən böyük xəbər agentliyi ─────────
+  "https://feeds.reuters.com/reuters/businessNews",
+
+  // ── Hydrocarbon Processing — downstream/refining ──────
+  "https://www.hydrocarbonprocessing.com/rss/news",
+
+  // ── EIA — rəsmi enerji statistikası ───────────────────
+  "https://www.eia.gov/rss/todayinenergy.xml",
+
+  // ── Drilling focused ──────────────────────────────────
+  "https://drillingformulas.com/feed",
+  "https://drillers.com/feed",
+
+  // ── Qiymət / natural gas ──────────────────────────────
+  "https://www.naturalgasintel.com/rss/",
+  "https://energynews.us/feed/",
 ];
 
 interface NewsItem {
   title: string;
+  titleOriginal: string;
   link: string;
   pubDate: string;
   source: string;
-  summary?: string;
-  tags?: string[];
 }
 
 async function fetchRSS(url: string): Promise<NewsItem[]> {
   try {
     const res = await fetch(url, {
-      next: { revalidate: 3600 }, // 1 saat cache
+      next: { revalidate: 1800 },
       headers: { "User-Agent": "LearntoDig/1.0" },
+      signal: AbortSignal.timeout(8000),
     });
-    const text = await res.text();
 
+    if (!res.ok) return [];
+
+    const text = await res.text();
     const items: NewsItem[] = [];
     const itemMatches = text.matchAll(/<item>([\s\S]*?)<\/item>/g);
 
     for (const match of itemMatches) {
       const item = match[1];
-      const title = item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)?.[1]
-        || item.match(/<title>(.*?)<\/title>/)?.[1]
-        || "";
-      const link = item.match(/<link>(.*?)<\/link>/)?.[1]
-        || item.match(/<guid>(.*?)<\/guid>/)?.[1]
-        || "";
+      const title =
+        item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)?.[1] ||
+        item.match(/<title>(.*?)<\/title>/)?.[1] ||
+        "";
+      const link =
+        item.match(/<link>(.*?)<\/link>/)?.[1] ||
+        item.match(/<guid>(.*?)<\/guid>/)?.[1] ||
+        "";
       const pubDate = item.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] || "";
 
       if (title && link) {
         items.push({
           title: title.trim(),
+          titleOriginal: title.trim(),
           link: link.trim(),
           pubDate: pubDate.trim(),
           source: new URL(url).hostname.replace("www.", ""),
@@ -48,87 +77,45 @@ async function fetchRSS(url: string): Promise<NewsItem[]> {
       }
     }
 
-    return items.slice(0, 8); // Hər mənbədən max 8 xəbər
+    return items.slice(0, 8);
   } catch {
     return [];
   }
 }
 
-async function processWithAI(items: NewsItem[]): Promise<NewsItem[]> {
-  if (!AI_ENABLED) return items;
-
-  const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-  if (!ANTHROPIC_API_KEY) return items;
-
-  const processed: NewsItem[] = [];
-
-  for (const item of items) {
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": ANTHROPIC_API_KEY,
-          "anthropic-version": "2023-06-01",
-        },
-        body: JSON.stringify({
-          model: "claude-haiku-4-5-20251001",
-          max_tokens: 200,
-          messages: [
-            {
-              role: "user",
-              content: `Bu neft-qaz xəbərini Azərbaycan dilində 2 cümlə ilə xülasə et və mövzuya uyğun 2-3 Azərbaycan dilində teq ver. 
-              
-Xəbər başlığı: "${item.title}"
-
-Cavabı YALNIZ bu JSON formatında ver, başqa heç nə yazma:
-{"summary": "...", "tags": ["...", "..."]}`,
-            },
-          ],
-        }),
-      });
-
-      const data = await res.json();
-      const text = data.content?.[0]?.text || "";
-      const clean = text.replace(/```json|```/g, "").trim();
-      const parsed = JSON.parse(clean);
-
-      processed.push({
-        ...item,
-        summary: parsed.summary,
-        tags: parsed.tags,
-      });
-    } catch {
-      processed.push(item); // AI xəta versə orijinalı göstər
-    }
-  }
-
-  return processed;
-}
-
 export async function GET() {
   try {
-    // Bütün RSS feed-ləri paralel çək
-    const results = await Promise.all(RSS_FEEDS.map(fetchRSS));
-    const allItems = results.flat();
+    const results = await Promise.allSettled(RSS_FEEDS.map(fetchRSS));
+    const allItems = results
+      .filter((r) => r.status === "fulfilled")
+      .flatMap((r) => (r as PromiseFulfilledResult<NewsItem[]>).value);
 
-    // Tarixi sıraya düz
-    allItems.sort((a, b) => {
+    // Duplicate silmə
+    const seen = new Set<string>();
+    const unique = allItems.filter((item) => {
+      const key = item.title.toLowerCase().slice(0, 60);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Tarixə görə sırala
+    unique.sort((a, b) => {
       const dateA = new Date(a.pubDate).getTime() || 0;
       const dateB = new Date(b.pubDate).getTime() || 0;
       return dateB - dateA;
     });
 
-    // Yalnız ilk 15 xəbəri AI-a göndər
-    const top15 = allItems.slice(0, 15);
-    const processed = await processWithAI(top15);
+    const top30 = unique.slice(0, 30);
 
     return NextResponse.json({
-      items: processed,
-      aiEnabled: AI_ENABLED,
+      items: top30,
       fetchedAt: new Date().toISOString(),
     });
   } catch {
-    return NextResponse.json({ error: "Xəbərlər yüklənmədi" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Xeberler yuklenмedi" },
+      { status: 500 }
+    );
   }
 }
