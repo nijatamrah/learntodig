@@ -186,10 +186,10 @@ export default function DailyDriller() {
       {/* Fact */}
       {phase === "revealed" && data && (
         <div className="rounded-xl border border-[#FF6B2B]/30 bg-[#FF6B2B]/5 p-4 mb-4">
-          <div className="flex items-start gap-2">
-            <span className="text-lg mt-0.5">🛢️</span>
-            <p className="text-[13.5px] text-white/80 leading-relaxed">{data.fact}</p>
-          </div>
+          <p className="text-[11px] font-bold uppercase tracking-widest text-[#FF6B2B] mb-2">
+            Bu günün fakti:
+          </p>
+          <p className="text-[13.5px] text-white/80 leading-relaxed">{data.fact}</p>
         </div>
       )}
 
