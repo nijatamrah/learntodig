@@ -25,7 +25,7 @@ async function generateFact(dateStr: string): Promise<string> {
       messages: [
         {
           role: "user",
-          content: `Tarix: ${dateStr}. Neft-qaz muhendisligi haqqinda 1 maraqli fakt yaz. Azerbaycan dilinde, 2-3 cumle, texniki amma maraqli olsun. Drilling, well log, reservoir, production, geology movzularindan birini sec. YALNIZ fakti yaz, basqa hec ne yazma.`,
+          content: `Tarix: ${dateStr}. Neft-qaz muhendisligi haqqinda 1 maraqli fakt yaz. Azerbaycan dilinde, 2-3 cumle, texniki amma maraqli olsun. Drilling, well log, reservoir, production, geology movzularindan birini sec. Hec bir bashliq yazma, birdasha faktle basla.`,
         },
       ],
     }),
@@ -33,7 +33,6 @@ async function generateFact(dateStr: string): Promise<string> {
   });
 
   if (!res.ok) throw new Error(`Anthropic error: ${res.status}`);
-
   const data = await res.json();
   const text = data.content?.[0]?.text?.trim();
   if (!text) throw new Error("Empty response from AI");
@@ -56,10 +55,7 @@ export async function GET(req: Request) {
   let factText = existing?.fact_text;
 
   if (!factText) {
-    // Yeni fakt generate et
     factText = await generateFact(today);
-
-    // DB-yə yaz (upsert — eyni tarix varsa üzərinə yaz)
     await supabase
       .from("daily_facts")
       .upsert(
@@ -70,33 +66,44 @@ export async function GET(req: Request) {
 
   // Streak yenilə
   let streak = 1;
+
   if (userId) {
-    const { data: userStreak } = await supabase
+    const { data: userStreak, error: selectError } = await supabase
       .from("user_streaks")
       .select("*")
       .eq("user_id", userId)
       .single();
 
+    console.log("userStreak:", userStreak, "selectError:", selectError);
+
     if (!userStreak) {
-      await supabase.from("user_streaks").insert({
-        user_id: userId,
-        last_visit: today,
-        streak_count: 1,
-        total_visits: 1,
-      });
+      // İlk dəfə — insert
+      const { error: insertError } = await supabase
+        .from("user_streaks")
+        .insert({
+          user_id: userId,
+          last_visit: today,
+          streak_count: 1,
+          total_visits: 1,
+        });
+      console.log("insert error:", insertError);
       streak = 1;
     } else {
-      const lastVisit = new Date(userStreak.last_visit);
-      const todayDate = new Date(today);
+      const lastVisit = userStreak.last_visit; // "2026-06-22" format
       const diffDays = Math.floor(
-        (todayDate.getTime() - lastVisit.getTime()) / (1000 * 60 * 60 * 24)
+        (new Date(today).getTime() - new Date(lastVisit).getTime()) /
+          (1000 * 60 * 60 * 24)
       );
 
+      console.log("lastVisit:", lastVisit, "today:", today, "diffDays:", diffDays);
+
       if (diffDays === 0) {
+        // Eyni gün — streak dəyişmir
         streak = userStreak.streak_count;
       } else if (diffDays === 1) {
+        // Ardıcıl gün — streak artır
         streak = userStreak.streak_count + 1;
-        await supabase
+        const { error: updateError } = await supabase
           .from("user_streaks")
           .update({
             last_visit: today,
@@ -105,9 +112,11 @@ export async function GET(req: Request) {
             updated_at: new Date().toISOString(),
           })
           .eq("user_id", userId);
+        console.log("update error:", updateError);
       } else {
+        // Fasilə — streak sıfırlanır
         streak = 1;
-        await supabase
+        const { error: resetError } = await supabase
           .from("user_streaks")
           .update({
             last_visit: today,
@@ -116,6 +125,7 @@ export async function GET(req: Request) {
             updated_at: new Date().toISOString(),
           })
           .eq("user_id", userId);
+        console.log("reset error:", resetError);
       }
     }
   }
