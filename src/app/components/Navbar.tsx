@@ -17,16 +17,18 @@ import {
   X,
   Newspaper,
   Map,
+  Wrench,
 } from "lucide-react";
  
 const links = [
-  { href: "/modules", label: "Modullar", icon: LayoutGrid },
-  { href: "/lessons", label: "Dərslər", icon: BookOpen },
-  { href: "/azerbaijan-fields", label: "Yataqlar", icon: MapPin },
-  { href: "/game", label: "Oyun", icon: Gamepad2 },
-  { href: "/learn/industry-map", label: "Industry Map", icon: Map },
-  { href: "/news", label: "Xəbərlər", icon: Newspaper },
-  { href: "/about", label: "Haqqında", icon: Info },
+  { href: "/modules",            label: "Modullar",          icon: LayoutGrid },
+  { href: "/lessons",            label: "Dərslər",           icon: BookOpen   },
+  { href: "/equipment",          label: "Tools & Equipment", icon: Wrench     },
+  { href: "/azerbaijan-fields",  label: "Yataqlar",          icon: MapPin     },
+  { href: "/game",               label: "Oyun",              icon: Gamepad2   },
+  { href: "/learn/industry-map", label: "Industry Map",      icon: Map        },
+  { href: "/news",               label: "Xəbərlər",          icon: Newspaper  },
+  { href: "/about",              label: "Haqqında",          icon: Info       },
 ];
  
 function LDLogo({ size = 32 }: { size?: number }) {
