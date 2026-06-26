@@ -65,9 +65,17 @@ function LoginForm() {
           </div>
  
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-zinc-300">
-              Şifrə
-            </label>
+            <div className="flex items-center justify-between">
+              <label htmlFor="password" className="block text-sm font-medium text-zinc-300">
+                Şifrə
+              </label>
+              <Link
+                href="/forgot-password"
+                className="text-xs text-amber-500 hover:text-amber-400 transition-colors"
+              >
+                Şifrəni unutdun?
+              </Link>
+            </div>
             <input
               id="password"
               type="password"
@@ -110,4 +118,3 @@ export default function LoginPage() {
     </Suspense>
   )
 }
- 
