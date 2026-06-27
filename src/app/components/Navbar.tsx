@@ -59,8 +59,8 @@ function LDLogo({ size = 32 }: { size?: number }) {
     </svg>
   );
 }
- 
-export default function Navbar() {
+
+function NavbarInner() {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
@@ -293,4 +293,10 @@ export default function Navbar() {
       )}
     </nav>
   );
+}
+
+export default function Navbar() {
+  const pathname = usePathname();
+  if (pathname === "/") return null;
+  return <NavbarInner />;
 }

@@ -44,8 +44,12 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased bg-[#0A0F1E]`}>
         <Navbar />
         <GlossaryWrapper />
-        <div className="pt-16">{children}</div>
+        <NavContent>{children}</NavContent>
       </body>
     </html>
   );
+}
+
+function NavContent({ children }: { children: React.ReactNode }) {
+  return <div>{children}</div>;
 }
