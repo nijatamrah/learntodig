@@ -109,6 +109,7 @@ export default function DailyDrill() {
   }
 
   const currentStreak = phase === "done" ? (newStreak || streak?.streak_count || 0) : (streak?.streak_count || 0);
+  const streakLoaded = streak !== null || drilledToday;
 
   return (
     <div className="rounded-2xl border border-[rgba(255,107,43,0.2)] overflow-hidden" style={{ background: "#0D1220" }}>
@@ -123,7 +124,7 @@ export default function DailyDrill() {
             className="font-['Space_Grotesk'] font-bold text-[#FF6B2B] leading-none transition-all duration-500"
             style={{ fontSize: phase === "done" ? "2.2rem" : "1.8rem" }}
           >
-            {currentStreak}
+            {streakLoaded ? currentStreak : <span className="opacity-0">0</span>}
           </div>
           <div className="text-[10px] text-[#3D4F6A] uppercase tracking-wider mt-0.5">gün streak</div>
         </div>
@@ -306,14 +307,7 @@ export default function DailyDrill() {
               </g>
             </g>
 
-            {/* İdle vəziyyəti — buton */}
-            {phase === "idle" && (
-              <g>
-                <circle cx="100" cy="80" r="28" fill="rgba(255,107,43,0.1)" stroke="rgba(255,107,43,0.3)" strokeWidth="1.5" />
-                <text x="100" y="76" textAnchor="middle" fill="#FF6B2B" fontSize="16">⛏</text>
-                <text x="100" y="92" textAnchor="middle" fill="#FF6B2B" fontSize="8" fontFamily="Space Grotesk" fontWeight="600">QAZI</text>
-              </g>
-            )}
+
 
             {/* Done — checkmark */}
             {phase === "done" && (
