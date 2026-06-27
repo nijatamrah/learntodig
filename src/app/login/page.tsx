@@ -32,7 +32,7 @@ function LoginForm() {
       return
     }
  
-    router.push(redirectTo)
+    router.push(redirectTo === "/" ? "/dashboard" : redirectTo)
     router.refresh()
   }
  

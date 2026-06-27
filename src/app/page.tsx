@@ -2,305 +2,225 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import DailyDriller from "@/components/DailyDriller";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 
 export default function HomePage() {
-  const grLineRef = useRef<SVGPolylineElement>(null);
-  const resLineRef = useRef<SVGPolylineElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
+  const router = useRouter();
+  const supabase = createClient();
 
   useEffect(() => {
-    let t = 0;
-    const pts = 120;
-
-    function genPoints(offset: number, amp: number, freq: number, yBase: number) {
-      const points: string[] = [];
-      for (let i = 0; i < pts; i++) {
-        const x = (i / pts) * 1400;
-        const y =
-          yBase +
-          Math.sin(i * freq + offset) * amp +
-          Math.sin(i * freq * 2.3 + offset * 1.4) * (amp * 0.4) +
-          Math.sin(i * freq * 0.5 + offset * 0.7) * (amp * 0.6);
-        points.push(`${x.toFixed(1)},${y.toFixed(1)}`);
-      }
-      return points.join(" ");
-    }
-
-    function animate() {
-      t += 0.018;
-      grLineRef.current?.setAttribute("points", genPoints(t, 55, 0.18, 420));
-      resLineRef.current?.setAttribute("points", genPoints(t * 0.7 + 2, 40, 0.22, 480));
-      animRef.current = requestAnimationFrame(animate);
-    }
-
-    animRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animRef.current);
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) router.push("/dashboard");
+    });
   }, []);
 
-  const features = [
-    {
-      title: "Real LAS fayl analizi",
-      desc: "Öz LAS faylını yüklə, AI ilə birlikdə analiz et",
-      icon: (
-        <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#FF6B2B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-        </svg>
-      ),
-    },
-    {
-      title: "AI Müəllim",
-      desc: "Hər mövzuda sual ver, Claude sənə izah etsin",
-      icon: (
-        <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#FF6B2B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-          <line x1="12" y1="17" x2="12.01" y2="17" />
-        </svg>
-      ),
-    },
-    {
-      title: "Simulyatorlar",
-      desc: "ROP, IPR, Eclipse ssenariləri — canlı simulyasiya",
-      icon: (
-        <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#FF6B2B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="3" width="20" height="14" rx="2" />
-          <line x1="8" y1="21" x2="16" y2="21" />
-          <line x1="12" y1="17" x2="12" y2="21" />
-        </svg>
-      ),
-    },
-    {
-      title: "Quiz & Qiymət",
-      desc: "Hər dərsdən sonra biliyi yoxla, səviyyəni izlə",
-      icon: (
-        <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#FF6B2B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="9 11 12 14 22 4" />
-          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-        </svg>
-      ),
-    },
-  ];
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-  const modules = [
-    { name: "Well Log AI", desc: "LAS fayl yüklə, GR, Resistivity, Neutron-Density analizi, AI chat", color: "#FF6B2B", bg: "rgba(255,107,43,0.1)", href: "/learn/well-log" },
-    { name: "Prosper — Hasilat", desc: "IPR əyriləri, Nodal Analysis, quyu məhsuldarlıq simulyatoru", color: "#00D4FF", bg: "rgba(0,212,255,0.1)", href: "/learn/prosper" },
-    { name: "Geologiya", desc: "Litologiya, stratigrafiya, neft tələsi tipləri, 3D vizualizasiya", color: "#A78BFA", bg: "rgba(167,139,250,0.1)", href: "/learn/geology" },
-    { name: "Petrel — Rezervuar", desc: "3D rezervuar modeli, porosity/permeability xəritələri", color: "#34D399", bg: "rgba(52,211,153,0.1)", href: "/learn/petrel" },
-    { name: "Eclipse — Simulyasiya", desc: "Rezervuar simulyasiyası, müxtəlif inkişaf ssenarisi müqayisəsi", color: "#FBBF24", bg: "rgba(251,191,36,0.1)", href: "/learn/eclipse" },
-    { name: "Drilling", desc: "ROP simulyatoru, WOB/RPM optimizasiya, qazıma problemi ssenariləri", color: "#F87171", bg: "rgba(248,113,113,0.1)", href: "/learn/drilling" },
-    { name: "Azərbaycan Yataqları", desc: "Azərbaycanın əsas neft-qaz yataqları, xəritə və tarixi məlumat", color: "#34D399", bg: "rgba(52,211,153,0.1)", href: "/azerbaijan-fields" },
-    { name: "Oyun", desc: "Neft-qaz biliklərinlə yarış, sualları cavablandır, səviyyə qazanın", color: "#A78BFA", bg: "rgba(167,139,250,0.1)", href: "/game" },
-  ];
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    let t = 0;
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const W = canvas.width;
+      const H = canvas.height;
+
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(255,107,43,0.2)";
+      ctx.lineWidth = 1.5;
+      for (let i = 0; i <= W; i += 2) {
+        const y = H * 0.52 + Math.sin(i * 0.012 + t) * 60 + Math.sin(i * 0.027 + t * 1.3) * 25 + Math.sin(i * 0.005 + t * 0.6) * 40;
+        i === 0 ? ctx.moveTo(i, y) : ctx.lineTo(i, y);
+      }
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(0,212,255,0.15)";
+      ctx.lineWidth = 1.5;
+      for (let i = 0; i <= W; i += 2) {
+        const y = H * 0.58 + Math.sin(i * 0.009 + t * 0.7 + 2) * 45 + Math.sin(i * 0.02 + t * 1.1) * 20;
+        i === 0 ? ctx.moveTo(i, y) : ctx.lineTo(i, y);
+      }
+      ctx.stroke();
+
+      t += 0.012;
+      animRef.current = requestAnimationFrame(draw);
+    };
+
+    animRef.current = requestAnimationFrame(draw);
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
 
   return (
-    <main className="bg-[#0A0F1E] text-[#F0F4FF] overflow-x-hidden">
+    <main className="bg-[#080C18] text-[#F0F4FF] overflow-x-hidden">
 
-      {/* ── HERO ── */}
+      {/* HERO */}
       <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden">
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <svg width="100%" height="100%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <radialGradient id="glow1" cx="30%" cy="50%" r="40%">
-                <stop offset="0%" stopColor="rgba(255,107,43,0.12)" />
-                <stop offset="100%" stopColor="transparent" />
-              </radialGradient>
-              <radialGradient id="glow2" cx="75%" cy="40%" r="35%">
-                <stop offset="0%" stopColor="rgba(0,212,255,0.1)" />
-                <stop offset="100%" stopColor="transparent" />
-              </radialGradient>
-            </defs>
-            <rect width="1400" height="900" fill="url(#glow1)" />
-            <rect width="1400" height="900" fill="url(#glow2)" />
-            <g opacity="0.55">
-              <polyline ref={grLineRef} fill="none" stroke="#FF6B2B" strokeWidth="1.5" opacity="0.7" />
-              <polyline ref={resLineRef} fill="none" stroke="#00D4FF" strokeWidth="1.5" opacity="0.6" />
-            </g>
-            <g opacity="0.06" stroke="#8B9DC3" strokeWidth="0.5">
-              {[150, 300, 450, 600, 750].map((y) => (
-                <line key={y} x1="0" y1={y} x2="1400" y2={y} />
-              ))}
-              {[200, 400, 600, 800, 1000, 1200].map((x) => (
-                <line key={x} x1={x} y1="0" x2={x} y2="900" />
-              ))}
-            </g>
-          </svg>
-        </div>
+        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 55%, rgba(255,107,43,0.06) 0%, transparent 70%)" }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 100% 100% at 50% 50%, transparent 35%, #080C18 100%)" }} />
 
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-block bg-[rgba(255,107,43,0.15)] text-[#FF6B2B] border border-[rgba(255,107,43,0.3)] rounded-full px-4 py-1.5 text-[13px] font-['Space_Grotesk'] font-medium tracking-widest uppercase mb-6">
-            🛢 Neft-Qaz Mühəndisliyi
+        <div className="relative z-10 max-w-[680px]">
+          <div className="inline-flex items-center gap-2 border border-[rgba(255,107,43,0.25)] rounded-full px-4 py-1.5 mb-8" style={{ background: "rgba(255,107,43,0.08)" }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B2B] animate-pulse" />
+            <span className="text-[#FF6B2B] text-[11px] font-semibold tracking-[0.12em] uppercase font-['Space_Grotesk']">
+              Petroleum Engineering · Azərbaycan
+            </span>
           </div>
 
-          <h1 className="font-['Space_Grotesk'] text-[clamp(2.4rem,6vw,4.2rem)] font-bold leading-[1.1] tracking-tight mb-5 text-[#F0F4FF]">
-            Öyrən.<br />
-            <span className="text-[#FF6B2B]">Praktika et.</span><br />
-            Mühəndis ol.
+          <h1 className="font-['Space_Grotesk'] text-[clamp(2.8rem,7vw,5rem)] font-bold leading-[1.06] tracking-tight mb-6">
+            Neft-qaz sənayesini<br />
+            <span className="text-[#FF6B2B]">içəridən öyrən.</span>
           </h1>
 
-          <p className="text-[#8B9DC3] text-[clamp(1rem,2vw,1.15rem)] leading-relaxed max-w-[540px] mx-auto mb-10">
-            Well Log analizi, rezervuar modelləmə, qazıma simulyatoru — real alətlərlə interaktiv öyrənmə platforması.
+          <p className="text-[#6B7DA3] text-[clamp(1rem,2vw,1.15rem)] leading-relaxed max-w-[520px] mx-auto mb-10">
+            Tələbəsən, mühəndissən, ya sadəcə maraqlanırsan — bu sahənin nədən ibarət olduğunu, karyera yollarını, real alətləri və simulyatorları bir yerdə tap.
           </p>
 
-          <div className="flex gap-3 flex-wrap justify-center mb-14">
-            <Link href="/lessons">
-              <button className="bg-[#FF6B2B] text-white px-8 py-3.5 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[15px] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(255,107,43,0.35)] transition-all">
-                Haradan başlayım? →
+          <div className="flex gap-3 flex-wrap justify-center">
+            <Link href="/register">
+              <button className="bg-[#FF6B2B] text-white px-9 py-3.5 rounded-xl font-['Space_Grotesk'] font-bold text-[15px] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(255,107,43,0.35)] transition-all">
+                Qazımağa başla →
               </button>
             </Link>
-            <Link href="/modules">
-              <button className="bg-transparent text-[#F0F4FF] border border-[rgba(240,244,255,0.2)] px-8 py-3.5 rounded-[10px] font-['Space_Grotesk'] font-medium text-[15px] hover:border-[rgba(240,244,255,0.45)] hover:bg-[rgba(240,244,255,0.05)] transition-all">
-                Modulları gör
+            <Link href="/learn/well-log">
+              <button className="text-[#F0F4FF] border border-[rgba(255,255,255,0.12)] px-9 py-3.5 rounded-xl font-['Space_Grotesk'] font-medium text-[15px] hover:border-[rgba(255,255,255,0.28)] transition-all" style={{ background: "rgba(255,255,255,0.04)" }}>
+                Demo gör
               </button>
             </Link>
-            <button
-              onClick={() => window.dispatchEvent(new CustomEvent("open-glossary"))}
-              className="bg-transparent text-[#00D4FF] border border-[rgba(0,212,255,0.25)] px-8 py-3.5 rounded-[10px] font-['Space_Grotesk'] font-medium text-[15px] hover:border-[rgba(0,212,255,0.5)] hover:bg-[rgba(0,212,255,0.05)] transition-all"
-            >
-              📖 Termin Lüğəti
-            </button>
           </div>
 
-          <div className="flex gap-10 flex-wrap justify-center">
+          <div className="flex gap-10 flex-wrap justify-center mt-14">
             {[
               { num: "6", label: "Praktika modulu" },
-              { num: "5", label: "Dərs tematikası" },
+              { num: "5", label: "Dərs bloku" },
               { num: "100+", label: "Quiz sualı" },
-              { num: "AI", label: "Chat hər dərsdə" },
-              { num: "1", label: "İnteraktiv oyun" },
+              { num: "AI", label: "Hər dərsdə" },
             ].map((s) => (
               <div key={s.label} className="text-center">
-                <div className="font-['Space_Grotesk'] text-[1.8rem] font-bold text-[#00D4FF]">{s.num}</div>
-                <div className="text-[13px] text-[#6B7DA3] mt-0.5">{s.label}</div>
+                <div className="font-['Space_Grotesk'] text-[1.8rem] font-bold text-[#00D4FF] leading-none">{s.num}</div>
+                <div className="text-[11px] text-[#3D4F6A] mt-1.5 uppercase tracking-wider">{s.label}</div>
               </div>
             ))}
           </div>
         </div>
+
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 opacity-25">
+          <span className="text-[10px] text-white uppercase tracking-widest">Scroll</span>
+          <svg className="w-4 h-4 text-white animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
       </section>
 
-      <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
+      {/* PROBLEM */}
+      <section className="max-w-[900px] mx-auto px-6 py-28 text-center">
+        <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[#FF6B2B] font-['Space_Grotesk'] mb-5">Məsələ nədir?</p>
+        <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-[1.15] mb-6 text-[#F0F4FF]">
+          "Petroleum Engineering" deyəndə<br />
+          <span className="text-[#6B7DA3]">nə başa düşürsən?</span>
+        </h2>
+        <p className="text-[#5A6A8A] text-[1.05rem] leading-relaxed max-w-[600px] mx-auto mb-14">
+          Çoxu bilir ki, neft çıxarılır. Amma quyu necə qazılır, log nədir, rezervuar necə modelləşdirilir, mühəndis gündə nə edir — bunları öyrənmək üçün real bir yer yox idi. İndi var.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { icon: "📚", title: "Kitablar sıxıcıdır", desc: "500 səhifəlik nəzəriyyə, sıfır praktika. Oxuyursan, anlayırsan ki başa düşməmisən." },
+            { icon: "🎬", title: "YouTube çatışmır", desc: "Pərakəndə videolar, Azərbaycan konteksti yox, ardıcıllıq yox." },
+            { icon: "🏢", title: "Şirkətə girməmiş", desc: "Real alətlərə — Petrel, Eclipse, LAS analizi — yalnız işə girəndən sonra çıxış var." },
+          ].map((item) => (
+            <div key={item.title} className="rounded-2xl border border-[rgba(255,255,255,0.06)] p-6 text-left" style={{ background: "#0D1220" }}>
+              <div className="text-2xl mb-4">{item.icon}</div>
+              <h3 className="font-['Space_Grotesk'] font-semibold text-[0.95rem] text-[#F0F4FF] mb-2">{item.title}</h3>
+              <p className="text-[0.83rem] text-[#4A5A72] leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-      {/* ── DAİLY DRILLER + XƏBƏRLƏR ── */}
-      <section className="max-w-[1100px] mx-auto px-6 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          {/* Daily Driller */}
-          <DailyDriller />
-
-          {/* Xəbərlər kartı */}
-          <Link href="/news">
-            <div className="h-full rounded-2xl border border-[#00D4FF]/20 bg-gradient-to-br from-[#081520] to-[#0A0F1E] p-6 cursor-pointer hover:border-[#00D4FF]/40 transition-all group">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#00D4FF]">Canlı Xəbərlər</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00D4FF] animate-pulse" />
-              </div>
-              <h3 className="text-white font-bold text-[15px] mb-2">Neft-Qaz Xəbərləri</h3>
-              <p className="text-white/40 text-[13px] leading-relaxed mb-6">
-                Rigzone, OilPrice, World Oil, OGJ və daha çox mənbədən — dünya neft-qaz sənayesinin ən son xəbərləri.
+      {/* INDUSTRY MAP */}
+      <section className="border-y border-[rgba(255,255,255,0.05)]" style={{ background: "#060A15" }}>
+        <div className="max-w-[1060px] mx-auto px-6 py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[#00D4FF] font-['Space_Grotesk'] mb-4">Industry Map</p>
+              <h2 className="font-['Space_Grotesk'] text-[clamp(1.7rem,3.5vw,2.4rem)] font-bold leading-[1.15] mb-5 text-[#F0F4FF]">
+                Sahənin xəritəsini gör,<br />istiqaməti seç.
+              </h2>
+              <p className="text-[#5A6A8A] text-[1rem] leading-relaxed mb-8">
+                Drilling mühəndisi, rezervuar mütəxəssisi, petrophysicist — kim nə edir, maaşlar necədir, hansı bacarıqlar lazımdır? Karyeranı qurmadan əvvəl sahəni tanı.
               </p>
-
-              {/* Preview lines */}
-              <div className="space-y-3 mb-6">
+              <Link href="/register">
+                <button className="inline-flex items-center gap-2 text-[#00D4FF] border border-[rgba(0,212,255,0.25)] px-6 py-3 rounded-xl font-['Space_Grotesk'] font-medium text-[14px] hover:border-[rgba(0,212,255,0.5)] transition-all" style={{ background: "rgba(0,212,255,0.05)" }}>
+                  Xəritəyə bax →
+                </button>
+              </Link>
+            </div>
+            <div className="rounded-2xl border border-[rgba(0,212,255,0.15)] p-6 relative overflow-hidden" style={{ background: "#0A1628" }}>
+              <div className="absolute top-0 right-0 w-40 h-40 pointer-events-none" style={{ background: "radial-gradient(ellipse, rgba(0,212,255,0.06), transparent 70%)" }} />
+              <p className="text-[11px] text-[#00D4FF] font-semibold uppercase tracking-widest mb-5 font-['Space_Grotesk']">Əsas istiqamətlər</p>
+              <div className="space-y-3">
                 {[
-                  { source: "oilprice.com", text: "Brent crude qiymətləri dəyişir..." },
-                  { source: "rigzone.com", text: "Yeni offshore layihə elan edildi..." },
-                  { source: "worldoil.com", text: "Drilling texnologiyasında yeniliklər..." },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-2 opacity-60">
-                    <span className="rounded px-1.5 py-0.5 text-[9px] font-bold uppercase bg-[#00D4FF]/10 text-[#00D4FF] shrink-0 mt-0.5">
-                      {item.source}
-                    </span>
-                    <span className="text-[12px] text-white/50 leading-snug">{item.text}</span>
+                  { role: "Drilling Engineer", salary: "$80K–$140K", color: "#FF6B2B" },
+                  { role: "Reservoir Engineer", salary: "$90K–$160K", color: "#00D4FF" },
+                  { role: "Petrophysicist", salary: "$85K–$150K", color: "#A78BFA" },
+                  { role: "Production Engineer", salary: "$75K–$130K", color: "#34D399" },
+                  { role: "Geologist", salary: "$70K–$125K", color: "#FBBF24" },
+                ].map((item) => (
+                  <div key={item.role} className="flex items-center justify-between py-2.5 border-b border-[rgba(255,255,255,0.05)] last:border-0">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: item.color }} />
+                      <span className="text-[13px] text-[#C8D4E8] font-['Space_Grotesk']">{item.role}</span>
+                    </div>
+                    <span className="text-[12px] font-semibold font-['Space_Grotesk']" style={{ color: item.color }}>{item.salary}</span>
                   </div>
                 ))}
               </div>
-
-              <div className="flex items-center gap-2 text-[#00D4FF] text-[13px] font-semibold group-hover:gap-3 transition-all">
-                Bütün xəbərlərə bax
-                <span>→</span>
-              </div>
+              <p className="text-[11px] text-[#2A3A52] mt-4 font-['Space_Grotesk']">* Tam məlumat üçün qeydiyyat tələb olunur</p>
             </div>
-          </Link>
-        </div>
-      </section>
-
-      <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
-
-      {/* ── NİYƏ ── */}
-      <section className="max-w-[1100px] mx-auto px-6 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-          <div>
-            <p className="font-['Space_Grotesk'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#FF6B2B] mb-3">
-              Niyə LearntoDig?
-            </p>
-            <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.4rem)] font-bold leading-[1.2] tracking-tight mb-4 text-[#F0F4FF]">
-              Kitab oxumaq deyil,<br />
-              <span className="text-[#FF6B2B]">əl işi</span> var burada
-            </h2>
-            <p className="text-[#8B9DC3] text-[1rem] leading-relaxed">
-              Nəzəriyyədən praktikaya — dərslər, simulyatorlar, Azərbaycan yataqlarının xəritəsi, 400+ terminlik lüğət və bilikləri yoxlamaq üçün interaktiv oyun. Hamısı bir platformada, pulsuz.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            {features.map((f) => (
-              <div key={f.title} className="bg-[#111827] border border-[rgba(255,255,255,0.06)] rounded-[14px] p-5">
-                <div className="w-10 h-10 rounded-[10px] bg-[rgba(255,107,43,0.1)] flex items-center justify-center mb-4">
-                  {f.icon}
-                </div>
-                <div className="font-['Space_Grotesk'] font-semibold text-[0.9rem] mb-1.5 text-[#F0F4FF]">{f.title}</div>
-                <div className="text-[0.82rem] text-[#6B7DA3] leading-relaxed">{f.desc}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
 
-      <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
-
-      {/* ── 3 ADDIM ── */}
-      <section className="bg-[#060B17] px-6 py-20">
-        <div className="max-w-[1100px] mx-auto">
-          <p className="font-['Space_Grotesk'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#FF6B2B] mb-2 text-center">
-            Öyrənmə yolu
-          </p>
-          <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.4rem)] font-bold leading-[1.2] tracking-tight text-center text-[#F0F4FF]">
-            3 addımda başla
+      {/* ÖYRƏNMƏ YOLU */}
+      <section className="max-w-[1060px] mx-auto px-6 py-24">
+        <div className="text-center mb-16">
+          <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[#FF6B2B] font-['Space_Grotesk'] mb-4">Öyrənmə yolu</p>
+          <h2 className="font-['Space_Grotesk'] text-[clamp(1.7rem,3.5vw,2.4rem)] font-bold text-[#F0F4FF] leading-[1.15]">
+            Dərsdən simulyatora,<br />simulyatordan peşəkarlığa.
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 mt-12">
-            {[
-              { n: "01", title: "Dərs seç", text: "Geologiya, Drilling, Quyu Loqları, Rezervuar ya Hasilat — maraqlandığın mövzudan başla" },
-              { n: "02", title: "Oxu + Quizlər", text: "5 bölmə, hər bölmədən sonra quiz. Anlamadığını AI-dan sor" },
-              { n: "03", title: "Praktika et", text: "Dərs bitəndə müvafiq modul açılır — öyrəndiyini real simulyatorda tətbiq et" },
-            ].map((s, i) => (
-              <div key={s.n} className={`px-6 py-8 text-center ${i < 2 ? "md:border-r border-[rgba(255,255,255,0.06)]" : ""}`}>
-                <div className="font-['Space_Grotesk'] text-[3rem] font-bold text-[rgba(0,212,255,0.15)] leading-none mb-3">{s.n}</div>
-                <div className="font-['Space_Grotesk'] font-semibold text-[1rem] mb-2 text-[#F0F4FF]">{s.title}</div>
-                <div className="text-[0.88rem] text-[#6B7DA3] leading-relaxed">{s.text}</div>
-              </div>
-            ))}
-          </div>
         </div>
-      </section>
-
-      <div className="max-w-[1100px] mx-auto h-px bg-[rgba(255,255,255,0.05)]" />
-
-      {/* ── MODULLAR ── */}
-      <section className="max-w-[1100px] mx-auto px-6 py-20">
-        <p className="font-['Space_Grotesk'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#FF6B2B] mb-3">
-          Platforma
-        </p>
-        <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.4rem)] font-bold leading-[1.2] tracking-tight mb-8 text-[#F0F4FF]">
-          Hər şey bir yerdə
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {modules.map((m) => (
-            <Link key={m.name} href={m.href}>
-              <div className="bg-[#111827] border border-[rgba(255,255,255,0.06)] rounded-[14px] p-5 flex gap-3 items-start cursor-pointer hover:border-[rgba(255,107,43,0.3)] hover:-translate-y-0.5 transition-all h-full">
-                <div className="w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: m.color }} />
-                <div>
-                  <div className="font-['Space_Grotesk'] font-semibold text-[0.9rem] mb-1 text-[#F0F4FF]">{m.name}</div>
-                  <div className="text-[0.82rem] text-[#6B7DA3] leading-relaxed mb-2">{m.desc}</div>
-                  <span className="text-[11px] font-medium px-2 py-0.5 rounded" style={{ background: m.bg, color: m.color }}>Hazır</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { step: "01", color: "#FF6B2B", title: "Dərslər", desc: "Geologiya, Drilling, Quyu Loqları, Rezervuar, Hasilat — hər mövzu 5 bölmə + quiz + AI chat ilə.", tags: ["Geologiya", "Drilling", "Rezervuar", "Hasilat"], href: "/lessons" },
+            { step: "02", color: "#00D4FF", title: "Modullar", desc: "Öyrəndiyini real simulyatorda tətbiq et. LAS faylı yüklə, IPR əyrisi qur, Eclipse ssenariləri müqayisə et.", tags: ["Well Log AI", "Prosper", "Petrel", "Eclipse"], href: "/modules" },
+            { step: "03", color: "#A78BFA", title: "Kəşf et", desc: "Azərbaycan yataqlarını kəşf et, Tools & Equipment öyrən, Industry Map ilə karyeranı planla.", tags: ["Yataqlar", "Tools", "Industry Map", "Oyun"], href: "/register" },
+          ].map((item) => (
+            <Link key={item.step} href={item.href}>
+              <div className="rounded-2xl border border-[rgba(255,255,255,0.06)] p-7 h-full hover:border-[rgba(255,255,255,0.14)] hover:-translate-y-1 transition-all cursor-pointer" style={{ background: "#0D1220" }}>
+                <div className="font-['Space_Grotesk'] text-[3.5rem] font-bold leading-none mb-5" style={{ color: `${item.color}20` }}>{item.step}</div>
+                <h3 className="font-['Space_Grotesk'] font-bold text-[1.1rem] mb-3" style={{ color: item.color }}>{item.title}</h3>
+                <p className="text-[0.85rem] text-[#4A5A72] leading-relaxed mb-5">{item.desc}</p>
+                <div className="flex flex-wrap gap-2">
+                  {item.tags.map((tag) => (
+                    <span key={tag} className="text-[11px] px-2.5 py-1 rounded-lg font-['Space_Grotesk'] font-medium" style={{ background: `${item.color}12`, color: item.color }}>
+                      {tag}
+                    </span>
+                  ))}
                 </div>
               </div>
             </Link>
@@ -308,39 +228,54 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="max-w-[1100px] mx-auto px-6 pb-24">
-        <div className="relative bg-gradient-to-br from-[#1A2744] to-[#0F1A3A] border border-[rgba(0,212,255,0.2)] rounded-[20px] p-14 text-center overflow-hidden">
-          <div className="absolute top-0 left-1/4 w-64 h-32 rounded-full pointer-events-none"
-            style={{ background: "radial-gradient(ellipse, rgba(255,107,43,0.08), transparent 70%)" }} />
-          <div className="absolute bottom-0 right-1/4 w-64 h-32 rounded-full pointer-events-none"
-            style={{ background: "radial-gradient(ellipse, rgba(0,212,255,0.07), transparent 70%)" }} />
+      {/* REAL CONTENT */}
+      <section className="border-y border-[rgba(255,255,255,0.05)]" style={{ background: "#060A15" }}>
+        <div className="max-w-[1060px] mx-auto px-6 py-24">
+          <div className="text-center mb-14">
+            <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[#FF6B2B] font-['Space_Grotesk'] mb-4">Platformada nə var?</p>
+            <h2 className="font-['Space_Grotesk'] text-[clamp(1.7rem,3.5vw,2.4rem)] font-bold text-[#F0F4FF]">Hər şey bir yerdə.</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { icon: "🗺️", title: "Azərbaycan Yataqları", desc: "Günəşli, Çıraq, ACG — xəritə, tarixi, istehsal məlumatları.", color: "#34D399", href: "/azerbaijan-fields" },
+              { icon: "📰", title: "Canlı Xəbərlər", desc: "Rigzone, OilPrice — dünya neft-qaz sənayesindən anlıq yeniliklər.", color: "#00D4FF", href: "/news" },
+              { icon: "🎮", title: "Bilik Oyunu", desc: "Quiz sualları ilə öyrəndiyini yoxla, rəqiblərlə yarış.", color: "#A78BFA", href: "/game" },
+              { icon: "🔧", title: "Tools & Equipment", desc: "Sahədə istifadə olunan avadanlıqları spesifik öyrən.", color: "#FBBF24", href: "/tools-equipment" },
+              { icon: "📖", title: "Terminoloji Lüğət", desc: "400+ neft-qaz termini, izahları ilə. Azərbaycan dilində.", color: "#FF6B2B", href: "#" },
+              { icon: "💰", title: "Neftin Qiyməti", desc: "Brent, WTI — real vaxt rejimində qiymət banneri.", color: "#F87171", href: "#" },
+              { icon: "🤖", title: "AI Chat", desc: "Hər dərsdə, hər modulda — Claude ilə istənilən sualı sor.", color: "#00D4FF", href: "/lessons" },
+              { icon: "🏭", title: "Industry Map", desc: "Vəzifə xəritəsi, maaşlar, tələb olunan bacarıqlar.", color: "#A78BFA", href: "/register" },
+            ].map((item) => (
+              <Link key={item.title} href={item.href}>
+                <div className="rounded-2xl border border-[rgba(255,255,255,0.06)] p-5 h-full hover:border-[rgba(255,255,255,0.12)] hover:-translate-y-0.5 transition-all cursor-pointer" style={{ background: "#0D1220" }}>
+                  <div className="text-xl mb-3">{item.icon}</div>
+                  <h3 className="font-['Space_Grotesk'] font-semibold text-[0.88rem] mb-1.5" style={{ color: item.color }}>{item.title}</h3>
+                  <p className="text-[0.78rem] text-[#3A4A62] leading-relaxed">{item.desc}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="max-w-[1060px] mx-auto px-6 py-28">
+        <div className="relative rounded-2xl p-16 text-center overflow-hidden border border-[rgba(255,107,43,0.15)]" style={{ background: "linear-gradient(135deg, #0F1E38 0%, #080C18 60%, #0C1830 100%)" }}>
+          <div className="absolute -top-16 left-1/3 w-72 h-48 pointer-events-none rounded-full" style={{ background: "radial-gradient(ellipse, rgba(255,107,43,0.08), transparent 70%)" }} />
+          <div className="absolute -bottom-16 right-1/3 w-72 h-48 pointer-events-none rounded-full" style={{ background: "radial-gradient(ellipse, rgba(0,212,255,0.06), transparent 70%)" }} />
           <div className="relative">
-            <div className="inline-block text-[2rem] mb-4">🛢️</div>
-            <h2 className="font-['Space_Grotesk'] text-[clamp(1.6rem,3.5vw,2.2rem)] font-bold mb-3 text-[#F0F4FF]">
-              Mühəndis olmaq bir addım uzaqlıqdadır.
+            <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[#FF6B2B] font-['Space_Grotesk'] mb-5">Hazırsan?</p>
+            <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.8rem)] font-bold text-[#F0F4FF] mb-4 leading-[1.15]">
+              Sahəni kəşf etmək<br />bir klik uzaqlıqdadır.
             </h2>
-            <p className="text-[#6B7DA3] text-[0.95rem] mb-8 max-w-[420px] mx-auto leading-relaxed">
-              Dərs seç, simulyatoru aç, oyunu oyna — öyrənmənin bu qədər maraqlı olacağını bilmirdin.
+            <p className="text-[#4A5A72] text-[1rem] mb-10 max-w-[420px] mx-auto leading-relaxed">
+              Qeydiyyat pulsuz, bir dəqiqə çəkir. Industry Map-dən başla, dərslərə keç, simulyatoru aç.
             </p>
-            <div className="flex gap-3 justify-center flex-wrap">
-              <Link href="/lessons">
-                <button className="bg-[#FF6B2B] text-white px-10 py-4 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[16px] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(255,107,43,0.4)] transition-all">
-                  Haradan başlayım? →
-                </button>
-              </Link>
-              <Link href="/game">
-                <button className="bg-transparent text-[#A78BFA] border border-[rgba(167,139,250,0.3)] px-10 py-4 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[16px] hover:bg-[rgba(167,139,250,0.07)] transition-all">
-                  🎮 Oyunu sına
-                </button>
-              </Link>
-              <button
-                onClick={() => window.dispatchEvent(new CustomEvent("open-glossary"))}
-                className="bg-transparent text-[#00D4FF] border border-[rgba(0,212,255,0.3)] px-10 py-4 rounded-[10px] font-['Space_Grotesk'] font-semibold text-[16px] hover:bg-[rgba(0,212,255,0.05)] transition-all"
-              >
-                📖 Lüğət
+            <Link href="/register">
+              <button className="bg-[#FF6B2B] text-white px-12 py-4 rounded-xl font-['Space_Grotesk'] font-bold text-[16px] hover:-translate-y-0.5 hover:shadow-[0_8px_36px_rgba(255,107,43,0.4)] transition-all">
+                Qazımağa başla →
               </button>
-            </div>
+            </Link>
           </div>
         </div>
       </section>

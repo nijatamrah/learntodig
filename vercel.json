@@ -8,5 +8,9 @@
     "enabled": true,
     "silent": false,
     "autoJobCancelation": true
-  }
+  },
+  "crons": [{
+    "path": "/api/cron/generate-facts",
+    "schedule": "0 0 1 * *"
+  }]
 }
