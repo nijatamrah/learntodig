@@ -131,7 +131,7 @@ export default function HomePage() {
       <section className="max-w-[900px] mx-auto px-6 py-28 text-center">
         <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[#FF6B2B] font-['Space_Grotesk'] mb-5">Məsələ nədir?</p>
         <h2 className="font-['Space_Grotesk'] text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-[1.15] mb-6 text-[#F0F4FF]">
-          "Petroleum Engineering" deyəndə<br />
+          &ldquo;Petroleum Engineering&rdquo; deyəndə<br />
           <span className="text-[#6B7DA3]">nə başa düşürsən?</span>
         </h2>
         <p className="text-[#5A6A8A] text-[1.05rem] leading-relaxed max-w-[600px] mx-auto mb-14">
