@@ -31,17 +31,28 @@ export default function DailyDrill() {
     const today = new Date().toISOString().split("T")[0];
     const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
 
-    const { data } = await supabase
+    console.log("=== STREAK DEBUG ===");
+    console.log("today:", today);
+    console.log("yesterday:", yesterday);
+
+    const { data, error } = await supabase
       .from("user_streaks")
       .select("*")
       .eq("user_id", user.id)
       .single();
 
+    console.log("DB data:", JSON.stringify(data));
+    console.log("DB error:", error);
+    console.log("last_drill_date:", data?.last_drill_date);
+    console.log("last_drill_date type:", typeof data?.last_drill_date);
+    console.log("match today?", data?.last_drill_date === today);
+    console.log("match yesterday?", data?.last_drill_date === yesterday);
+
     if (data) {
-      const lastDate = data.last_drill_date; // "2026-06-27" və ya NULL
+      const lastDate = data.last_drill_date;
 
       if (lastDate === today) {
-        // Bu gün artıq qazıyıb — done göstər, streak dəyişmə
+        console.log("→ BRANCH: done (already drilled today)");
         setStreak(data);
         setNewStreak(data.streak_count);
         setDrilledToday(true);
@@ -50,17 +61,16 @@ export default function DailyDrill() {
         await loadFact(user.id);
         setShowFact(true);
       } else if (lastDate === yesterday) {
-        // Dünən qazıyıb — idle göstər, streak davam edə bilər
+        console.log("→ BRANCH: idle (drilled yesterday, streak continues)");
         setStreak(data);
         setPhase("idle");
       } else {
-        // Uzun müddətdir gəlməyib VƏ ya last_drill_date NULL-dur
-        // Streak sıfırla (amma DB-ni yalnız növbəti qazımada yenilə)
+        console.log("→ BRANCH: idle (streak reset, last date was:", lastDate, ")");
         setStreak({ ...data, streak_count: 0 });
         setPhase("idle");
       }
     } else {
-      // Heç vaxt gəlməyib — boş state
+      console.log("→ BRANCH: no row found, first time user");
       setStreak({ streak_count: 0, total_visits: 0, last_drill_date: null });
       setPhase("idle");
     }
@@ -95,15 +105,18 @@ export default function DailyDrill() {
     const today = new Date().toISOString().split("T")[0];
     const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
 
-    // Streak hesabı: yalnız dünən qazıyıbsa +1, yoxsa 1-dən başla
     const streakVal =
       streak?.last_drill_date === yesterday
         ? (streak.streak_count || 0) + 1
         : 1;
 
+    console.log("=== HANDLE DRILL ===");
+    console.log("today:", today);
+    console.log("streak before:", JSON.stringify(streak));
+    console.log("streakVal:", streakVal);
+
     setNewStreak(streakVal);
 
-    // DB-ni yenilə — last_drill_date mütləq bu gün olmalıdır
     const { data: existing } = await supabase
       .from("user_streaks")
       .select("id")
@@ -111,21 +124,23 @@ export default function DailyDrill() {
       .single();
 
     if (existing) {
-      await supabase.from("user_streaks").update({
+      const { error: updateError } = await supabase.from("user_streaks").update({
         streak_count: streakVal,
-        last_drill_date: today,   // ← əsas fix: bu sütun NULL qalmamalıdır
+        last_drill_date: today,
         last_visit: today,
         total_visits: (streak?.total_visits || 0) + 1,
         updated_at: new Date().toISOString(),
       }).eq("user_id", user.id);
+      console.log("update error:", updateError);
     } else {
-      await supabase.from("user_streaks").insert({
+      const { error: insertError } = await supabase.from("user_streaks").insert({
         user_id: user.id,
         streak_count: streakVal,
         last_drill_date: today,
         last_visit: today,
         total_visits: 1,
       });
+      console.log("insert error:", insertError);
     }
 
     await loadFact(user.id);
@@ -147,35 +162,26 @@ export default function DailyDrill() {
 
   if (loading) {
     return (
-      <div
-        className="rounded-2xl border border-[rgba(255,255,255,0.06)] p-6 flex items-center justify-center h-48"
-        style={{ background: "#0D1220" }}
-      >
+      <div className="rounded-2xl border border-[rgba(255,255,255,0.06)] p-6 flex items-center justify-center h-48"
+        style={{ background: "#0D1220" }}>
         <div className="w-5 h-5 border-2 border-[#FF6B2B] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
-  // Göstəriləcək streak sayı
   const currentStreak =
     phase === "done" && newStreak > 0
       ? newStreak
       : streak?.streak_count || 0;
 
   return (
-    <div
-      className="rounded-2xl border border-[rgba(255,107,43,0.2)] overflow-hidden"
-      style={{ background: "#0D1220" }}
-    >
-      {/* Header */}
+    <div className="rounded-2xl border border-[rgba(255,107,43,0.2)] overflow-hidden" style={{ background: "#0D1220" }}>
       <div className="px-6 pt-5 pb-4 flex items-center justify-between border-b border-[rgba(255,255,255,0.05)]">
         <div>
           <p className="text-[10px] font-semibold tracking-[0.15em] uppercase text-[#FF6B2B] font-['Space_Grotesk'] mb-0.5">
             Günlük Qazıma
           </p>
-          <h3 className="font-['Space_Grotesk'] font-bold text-[0.95rem] text-[#F0F4FF]">
-            Bu günü qeyd et
-          </h3>
+          <h3 className="font-['Space_Grotesk'] font-bold text-[0.95rem] text-[#F0F4FF]">Bu günü qeyd et</h3>
         </div>
         <div className="text-center">
           <div
@@ -184,17 +190,13 @@ export default function DailyDrill() {
           >
             {currentStreak}
           </div>
-          <div className="text-[10px] text-[#3D4F6A] uppercase tracking-wider mt-0.5">
-            gün streak
-          </div>
+          <div className="text-[10px] text-[#3D4F6A] uppercase tracking-wider mt-0.5">gün streak</div>
         </div>
       </div>
 
       <div className="p-6">
-        {/* SVG Animasiya */}
         <div className="relative flex items-center justify-center mb-5" style={{ height: 160 }}>
           <svg key={animKey} viewBox="0 0 200 160" className="w-full h-full" style={{ maxWidth: 240 }}>
-
             <ellipse cx="100" cy="130" rx="70" ry="10" fill="#1a1a0a" opacity="0.8" />
             <rect x="30" y="125" width="140" height="35" rx="4" fill="#1a1a0a" opacity="0.6" />
 
@@ -223,13 +225,10 @@ export default function DailyDrill() {
               </g>
             )}
 
-            {/* Qazıma dəsti */}
             <g style={{
-              transform: phase === "drilling"
-                ? "translateY(0px)"
-                : (phase === "cracking" || phase === "gushing" || phase === "done")
-                  ? "translateY(10px)"
-                  : "translateY(-5px)",
+              transform: phase === "drilling" ? "translateY(0px)"
+                : (phase === "cracking" || phase === "gushing" || phase === "done") ? "translateY(10px)"
+                : "translateY(-5px)",
               transition: "transform 0.3s ease",
               animation: phase === "drilling" ? "drill-move 0.15s ease-in-out infinite" : "none"
             }}>
@@ -268,7 +267,6 @@ export default function DailyDrill() {
               </g>
             </g>
 
-            {/* Done checkmark — animKey dəyişəndə yenidən animate olur */}
             {phase === "done" && (
               <g>
                 <circle cx="100" cy="60" r="16"
@@ -282,11 +280,8 @@ export default function DailyDrill() {
           </svg>
 
           <style>{`
-            @keyframes drill-move { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
-            @keyframes gush {
-              from{stroke-dasharray:200;stroke-dashoffset:200;opacity:0}
-              to{stroke-dasharray:200;stroke-dashoffset:0;opacity:1}
-            }
+            @keyframes drill-move{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+            @keyframes gush{from{stroke-dasharray:200;stroke-dashoffset:200;opacity:0}to{stroke-dasharray:200;stroke-dashoffset:0;opacity:1}}
             @keyframes drop1{0%{transform:translateY(0);opacity:1}100%{transform:translateY(30px);opacity:0}}
             @keyframes drop2{0%{transform:translateY(0);opacity:.8}100%{transform:translateY(25px);opacity:0}}
             @keyframes drop3{0%{transform:translateY(0);opacity:.9}100%{transform:translateY(35px);opacity:0}}

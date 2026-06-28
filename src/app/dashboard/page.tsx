@@ -10,8 +10,8 @@ const quickLinks = [
   { title: "Dərslər", desc: "Geologiya, Drilling, Rezervuar və daha çox", icon: "📚", color: "#FF6B2B", href: "/lessons", tag: "5 mövzu" },
   { title: "Modullar", desc: "Real simulyatorlar — LAS, IPR, Eclipse", icon: "⚡", color: "#00D4FF", href: "/modules", tag: "6 modul" },
   { title: "Azərbaycan Yataqları", desc: "Günəşli, ACG, Çıraq — xəritə və tarix", icon: "🗺️", color: "#34D399", href: "/azerbaijan-fields", tag: "İnteraktiv" },
-  { title: "Industry Map", desc: "Karyera yolları, vəzifələr, maaşlar", icon: "🏭", color: "#A78BFA", href: "/industry-map", tag: "Yeni" },
-  { title: "Tools & Equipment", desc: "Sahədəki əsas alətlər və avadanlıqlar", icon: "🔧", color: "#FBBF24", href: "/tools-equipment", tag: "Kataloq" },
+  { title: "Industry Map", desc: "Karyera yolları, vəzifələr, maaşlar", icon: "🏭", color: "#A78BFA", href: "/learn/industry-map", tag: "Yeni" },
+  { title: "Tools & Equipment", desc: "Sahədəki əsas alətlər və avadanlıqlar", icon: "🔧", color: "#FBBF24", href: "/equipment", tag: "Kataloq" },
   { title: "Bilik Oyunu", desc: "Quiz sualları ilə özünü yoxla", icon: "🎮", color: "#F87171", href: "/game", tag: "Oyna" },
 ];
 
@@ -92,12 +92,10 @@ export default function DashboardPage() {
 
         {/* DAİLY DRILL + QUICK LINKS */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-          {/* Daily Drill — sol tərəf, böyük */}
           <div className="lg:col-span-1">
             <DailyDrill />
           </div>
 
-          {/* Quick links — sağ tərəf, 2x3 grid */}
           <div className="lg:col-span-2">
             <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#FF6B2B] font-['Space_Grotesk'] mb-4">
               Sürətli keçid
@@ -137,7 +135,6 @@ export default function DashboardPage() {
         {/* AŞAĞI: Xəbərlər + Stats */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-          {/* Xəbərlər */}
           <div className="lg:col-span-2 rounded-2xl border border-[rgba(255,255,255,0.06)] p-6" style={{ background: "#0D1220" }}>
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2">
@@ -163,7 +160,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Stats + Lüğət */}
           <div className="space-y-4">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-glossary"))}
