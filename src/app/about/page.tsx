@@ -1,111 +1,142 @@
 import Link from "next/link";
 
+const steps = [
+  "Dərslər bölməsindən səviyyəni seç — Başlanğıc, Orta və ya İrəli",
+  "Mövzu seç — Geologiya, Drilling, Rezervuar, Quyu Loqları və ya Hasilat",
+  "Dərsi oxu, quizlə yoxla, anlamadığını AI-dan sor",
+  "Modullar bölməsindən real parametrlərlə simulyasiya et",
+  "Azərbaycan yataqları, Industry Map və Tools bölmələrini kəşf et",
+];
+
+const features = [
+  { icon: "📚", text: "Səviyyə və mövzuya görə strukturlaşdırılmış dərslər" },
+  { icon: "🎯", text: "Hər dərsin sonunda bilikləri yoxlayan quiz" },
+  { icon: "🤖", text: "Mövzu üzrə AI ilə sual-cavab" },
+  { icon: "⚙️", text: "6 simulyator — Well Log, Prosper, Petrel, Eclipse, Drilling, Geologiya" },
+  { icon: "📂", text: "LAS fayl yükləmə və quyu loq analizi" },
+  { icon: "🗺️", text: "Azərbaycan yataqları — Günəşli, Çıraq, Azəri, Şahdəniz" },
+  { icon: "🏭", text: "Industry Map — karyera yolları, vəzifələr, maaşlar" },
+  { icon: "🔥", text: "Günlük qazıma — streak sistemi ilə davamlılıq" },
+];
+
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white px-6 py-16">
-      <div className="max-w-2xl mx-auto">
+    <main className="min-h-screen" style={{ background: "#080C18" }}>
+      <div className="max-w-2xl mx-auto px-6 py-12">
 
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-300 transition mb-10"
-        >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          Ana səhifə
-        </Link>
-
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-sm mb-6">
-          <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
-          Haqqında
+        <div className="mb-10">
+          <p className="text-[10px] font-semibold tracking-[0.18em] uppercase font-mono mb-2" style={{ color: "#FF6B2B" }}>
+            // platforma
+          </p>
+          <h1 className="font-['Space_Grotesk'] text-[2.2rem] font-bold leading-tight mb-2" style={{ color: "#F0F4FF" }}>
+            LearntoDig
+          </h1>
+          <p className="text-[14px] font-['Space_Grotesk']" style={{ color: "#6B82A0" }}>
+            Neft-qaz sahəsi üçün interaktiv öyrənmə platforması
+          </p>
         </div>
 
-        <h1 className="text-4xl font-bold tracking-tight mb-3">LearntoDig</h1>
-        <p className="text-gray-400 text-lg mb-12">Neft-qaz sahəsi üçün interaktiv öyrənmə platforması</p>
+        <div className="space-y-3">
 
-        <div className="space-y-10">
-
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-            <h2 className="text-base font-semibold text-white mb-3">💡 Niyə yarandı?</h2>
-            <p className="text-gray-400 leading-relaxed text-sm">
-              Neft-qaz mühəndisliyini öyrənmək çətindir — mövzular mürəkkəbdir,
-              resurslar ya çox texniki, ya da çox səthi olur. Tələbələr nəzəriyyəni
-              oxuyur, lakin praktiki hiss qazana bilmir. LearntoDig bu boşluğu
-              doldurmaq üçün yaradılıb: simulyatorlar, real ssenari əsaslı dərslər
+          <div
+            className="rounded-2xl p-6"
+            style={{ background: "#0D1525", border: "1px solid rgba(255,255,255,0.07)" }}
+          >
+            <h2 className="text-[14px] font-semibold font-['Space_Grotesk'] mb-3" style={{ color: "#F0F4FF" }}>
+              💡 Niyə yarandı?
+            </h2>
+            <p className="text-[13px] font-['Space_Grotesk'] leading-relaxed" style={{ color: "#6B82A0" }}>
+              Neft-qaz mühəndisliyini öyrənmək çətindir — mövzular mürəkkəbdir, resurslar ya çox texniki,
+              ya da çox səthi olur. Tələbələr nəzəriyyəni oxuyur, lakin praktiki hiss qazana bilmir.
+              LearntoDig bu boşluğu doldurmaq üçün yaradılıb: simulyatorlar, real ssenari əsaslı dərslər
               və AI dəstəyi ilə öyrənmə prosesi daha effektiv və maraqlı olur.
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-            <h2 className="text-base font-semibold text-white mb-3">🎯 Məqsəd nədir?</h2>
-            <p className="text-gray-400 leading-relaxed text-sm">
-              Neft-qaz sahəsinin hər bir tələbəsi və mütəxəssisi üçün — səviyyəsindən
-              asılı olmayaraq — öyrənməyi əlçatan etmək. Başlanğıcdan irəli səviyyəyə
-              qədər strukturlaşdırılmış yol, hər addımda praktiki məşq və anlık AI
-              izahat imkanı.
-            </p>
-          </div>
-
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-            <h2 className="text-base font-semibold text-white mb-4">🚀 Necə istifadə edilir?</h2>
+          <div
+            className="rounded-2xl p-6"
+            style={{ background: "#0D1525", border: "1px solid rgba(255,255,255,0.07)" }}
+          >
+            <h2 className="text-[14px] font-semibold font-['Space_Grotesk'] mb-4" style={{ color: "#F0F4FF" }}>
+              🚀 Necə istifadə edilir?
+            </h2>
             <ul className="space-y-3">
-              {[
-                { step: "1", text: "Dərslər bölməsindən səviyyəni seç — Başlanğıc, Orta və ya İrəli" },
-                { step: "2", text: "Mövzu seç — Geologiya, Drilling, Rezervuar, Quyu Loqları və ya Hasilat" },
-                { step: "3", text: "Dərsi oxu, quizlə yoxla, anlamadığını AI-dan sor" },
-                { step: "4", text: "Modullar bölməsindən real parametrlərlə simulyasiya et" },
-              ].map((item) => (
-                <li key={item.step} className="flex items-start gap-3 text-sm text-gray-400">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-orange-500/20 border border-orange-500/30 text-xs font-semibold text-orange-400">
-                    {item.step}
+              {steps.map((text, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span
+                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold font-mono mt-0.5"
+                    style={{
+                      background: "rgba(255,107,43,0.15)",
+                      border: "1px solid rgba(255,107,43,0.3)",
+                      color: "#FF6B2B",
+                    }}
+                  >
+                    {i + 1}
                   </span>
-                  <span className="mt-0.5">{item.text}</span>
+                  <span className="text-[13px] font-['Space_Grotesk'] leading-relaxed" style={{ color: "#6B82A0" }}>
+                    {text}
+                  </span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-            <h2 className="text-base font-semibold text-white mb-4">⚙️ Nə imkanlar var?</h2>
+          <div
+            className="rounded-2xl p-6"
+            style={{ background: "#0D1525", border: "1px solid rgba(255,255,255,0.07)" }}
+          >
+            <h2 className="text-[14px] font-semibold font-['Space_Grotesk'] mb-4" style={{ color: "#F0F4FF" }}>
+              ⚙️ Nə imkanlar var?
+            </h2>
             <ul className="space-y-2.5">
-              {[
-                { icon: "📚", text: "Səviyyə və mövzuya görə strukturlaşdırılmış dərslər" },
-                { icon: "🎯", text: "Hər dərsin sonunda bilikləri yoxlayan quiz" },
-                { icon: "🤖", text: "Mövzu üzrə AI ilə sual-cavab" },
-                { icon: "⚙️", text: "Well Log, Prosper, Petrel, Eclipse, Drilling simulyatorları" },
-                { icon: "📂", text: "LAS fayl yükləmə və quyu loq analizi" },
-                { icon: "🛢️", text: "Azərbaycan yataqları — Günəşli, Çıraq, Azəri, Neft Daşları, Şahdəniz" },
-              ].map((item, i) => (
-                <li key={i} className="flex items-center gap-2.5 text-sm text-gray-400">
-                  <span className="text-base">{item.icon}</span>
-                  <span>{item.text}</span>
+              {features.map((item, i) => (
+                <li key={i} className="flex items-center gap-3">
+                  <span
+                    className="w-7 h-7 rounded-lg flex items-center justify-center text-[14px] flex-shrink-0"
+                    style={{ background: "rgba(255,255,255,0.05)" }}
+                  >
+                    {item.icon}
+                  </span>
+                  <span className="text-[13px] font-['Space_Grotesk']" style={{ color: "#6B82A0" }}>
+                    {item.text}
+                  </span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-            <h2 className="text-base font-semibold text-white mb-3">🔮 Gələcək perspektivlər</h2>
-            <p className="text-gray-400 leading-relaxed text-sm">
-              Yeni mövzular və dərslər davamlı əlavə ediləcək. Gələcəkdə istifadəçi
-              qeydiyyatı, tərəqqi izləmə, liderlik cədvəli və sertifikat sistemi
-              planlaşdırılır. Məqsəd — neft-qaz sahəsi üçün tam öyrənmə ekosistemi
-              yaratmaqdır.
+          <div
+            className="rounded-2xl p-6"
+            style={{ background: "#0D1525", border: "1px solid rgba(255,107,43,0.12)" }}
+          >
+            <h2 className="text-[14px] font-semibold font-['Space_Grotesk'] mb-3" style={{ color: "#F0F4FF" }}>
+              🔮 Gələcək perspektivlər
+            </h2>
+            <p className="text-[13px] font-['Space_Grotesk'] leading-relaxed" style={{ color: "#6B82A0" }}>
+              Yeni mövzular və dərslər davamlı əlavə ediləcək. Gələcəkdə tərəqqi izləmə,
+              liderlik cədvəli və sertifikat sistemi planlaşdırılır.
+              Məqsəd — neft-qaz sahəsi üçün tam öyrənmə ekosistemi yaratmaqdır.
             </p>
           </div>
 
         </div>
 
-        <div className="mt-10 flex gap-3">
+        <div className="mt-8 flex gap-3">
           <Link
             href="/lessons"
-            className="rounded-xl bg-[#FF6B2B] px-6 py-3 text-sm font-semibold text-white hover:-translate-y-px hover:shadow-[0_4px_20px_rgba(255,107,43,0.35)] transition-all"
+            className="rounded-xl px-6 py-3 text-[13px] font-bold font-['Space_Grotesk'] text-white transition-all hover:-translate-y-0.5"
+            style={{ background: "#FF6B2B" }}
           >
             Dərslərə başla →
           </Link>
           <Link
             href="/modules"
-            className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-gray-300 hover:bg-white/10 hover:border-white/20 transition-all"
+            className="rounded-xl px-6 py-3 text-[13px] font-medium font-['Space_Grotesk'] transition-all hover:-translate-y-0.5"
+            style={{
+              background: "#0D1525",
+              border: "1px solid rgba(255,255,255,0.07)",
+              color: "#6B82A0",
+            }}
           >
             Modullara bax
           </Link>
