@@ -17,7 +17,7 @@ export default function ModulesPage() {
 
         <div className="mb-10">
           <p className="text-[10px] font-semibold tracking-[0.18em] uppercase font-mono mb-2" style={{ color: "#00D4FF" }}>
-            // praktika · simulyatorlar
+            {`// praktika · simulyatorlar`}
           </p>
           <h1 className="font-['Space_Grotesk'] text-[2.2rem] font-bold leading-tight mb-2" style={{ color: "#F0F4FF" }}>
             Modullar

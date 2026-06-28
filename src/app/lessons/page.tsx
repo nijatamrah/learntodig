@@ -29,7 +29,7 @@ export default function LessonsPage() {
 
         <div className="mb-10">
           <p className="text-[10px] font-semibold tracking-[0.18em] uppercase font-mono mb-2" style={{ color: "#FF6B2B" }}>
-            // öyrənmə yolu
+            {`// öyrənmə yolu`}
           </p>
           <h1 className="font-['Space_Grotesk'] text-[2.2rem] font-bold leading-tight mb-2" style={{ color: "#F0F4FF" }}>
             Dərslər
