@@ -1,36 +1,20 @@
 import { NextResponse } from "next/server";
 
-export const revalidate = 1800; // 30 dəq cache
+export const revalidate = 300;
 
 const RSS_FEEDS = [
-  // ── Ən aktiv / çox xəbər verən ────────────────────────
-  "https://oilprice.com/rss/main",
+  "https://feeds.reuters.com/reuters/businessNews",
+  "https://www.eia.gov/rss/todayinenergy.xml",
   "https://www.rigzone.com/news/rss/rigzone_news.aspx",
+  "https://oilprice.com/rss/main",
   "https://www.offshore-technology.com/feed/",
   "https://www.worldoil.com/rss",
-
-  // ── OGJ — upstream + drilling + refining ──────────────
   "https://www.ogj.com/__rss/website-scheduled-articles.xml/section=DRILLING_PRODUCTION",
   "https://www.ogj.com/__rss/website-scheduled-articles.xml/section=EXPLORATION_DEVELOPMENT",
-  "https://www.ogj.com/__rss/website-scheduled-articles.xml/section=GENERAL_INTEREST",
-
-  // ── Reuters Energy — ən böyük xəbər agentliyi ─────────
-  "https://feeds.reuters.com/reuters/businessNews",
-
-  // ── Hydrocarbon Processing — downstream/refining ──────
-  "https://www.hydrocarbonprocessing.com/rss/news",
-
-  // ── EIA — rəsmi enerji statistikası ───────────────────
-  "https://www.eia.gov/rss/todayinenergy.xml",
-
-  // ── Drilling focused ──────────────────────────────────
-  "https://drillingformulas.com/feed",
-  "https://drillers.com/feed",
-
-  // ── Qiymət / natural gas ──────────────────────────────
-  "https://www.naturalgasintel.com/rss/",
   "https://energynews.us/feed/",
 ];
+
+const MAX_AGE_HOURS = 48;
 
 interface NewsItem {
   title: string;
@@ -40,11 +24,21 @@ interface NewsItem {
   source: string;
 }
 
+function decodeEntities(str: string): string {
+  return str
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)));
+}
+
 async function fetchRSS(url: string): Promise<NewsItem[]> {
   try {
     const res = await fetch(url, {
-      next: { revalidate: 1800 },
-      headers: { "User-Agent": "LearntoDig/1.0" },
+      next: { revalidate: 300 },
+      headers: { "User-Agent": "LearntoDig/1.0 RSS Reader" },
       signal: AbortSignal.timeout(8000),
     });
 
@@ -53,31 +47,42 @@ async function fetchRSS(url: string): Promise<NewsItem[]> {
     const text = await res.text();
     const items: NewsItem[] = [];
     const itemMatches = text.matchAll(/<item>([\s\S]*?)<\/item>/g);
+    const cutoff = Date.now() - MAX_AGE_HOURS * 60 * 60 * 1000;
 
     for (const match of itemMatches) {
       const item = match[1];
-      const title =
+
+      const rawTitle =
         item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)?.[1] ||
         item.match(/<title>(.*?)<\/title>/)?.[1] ||
         "";
+
       const link =
         item.match(/<link>(.*?)<\/link>/)?.[1] ||
-        item.match(/<guid>(.*?)<\/guid>/)?.[1] ||
+        item.match(/<guid[^>]*>(https?:\/\/[^<]+)<\/guid>/)?.[1] ||
         "";
-      const pubDate = item.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] || "";
+
+      const pubDate = item.match(/<pubDate>(.*?)<\/pubDate>/)?.[1]?.trim() || "";
+
+      if (pubDate) {
+        const date = new Date(pubDate);
+        if (!isNaN(date.getTime()) && date.getTime() < cutoff) continue;
+      }
+
+      const title = decodeEntities(rawTitle.trim());
 
       if (title && link) {
         items.push({
-          title: title.trim(),
-          titleOriginal: title.trim(),
+          title,
+          titleOriginal: title,
           link: link.trim(),
-          pubDate: pubDate.trim(),
+          pubDate,
           source: new URL(url).hostname.replace("www.", ""),
         });
       }
     }
 
-    return items.slice(0, 8);
+    return items.slice(0, 10);
   } catch {
     return [];
   }
@@ -90,7 +95,6 @@ export async function GET() {
       .filter((r) => r.status === "fulfilled")
       .flatMap((r) => (r as PromiseFulfilledResult<NewsItem[]>).value);
 
-    // Duplicate silmə
     const seen = new Set<string>();
     const unique = allItems.filter((item) => {
       const key = item.title.toLowerCase().slice(0, 60);
@@ -99,23 +103,18 @@ export async function GET() {
       return true;
     });
 
-    // Tarixə görə sırala
     unique.sort((a, b) => {
       const dateA = new Date(a.pubDate).getTime() || 0;
       const dateB = new Date(b.pubDate).getTime() || 0;
       return dateB - dateA;
     });
 
-    const top30 = unique.slice(0, 30);
-
     return NextResponse.json({
-      items: top30,
+      items: unique.slice(0, 40),
       fetchedAt: new Date().toISOString(),
+      total: unique.length,
     });
   } catch {
-    return NextResponse.json(
-      { error: "Xeberler yuklenмedi" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Xəbərlər yüklənmədi" }, { status: 500 });
   }
 }
