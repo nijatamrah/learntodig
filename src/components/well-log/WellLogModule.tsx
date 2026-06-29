@@ -62,7 +62,7 @@ function parseLasPreview(text: string) {
   const lines = text.split("\n");
   const sections: { name: string; lines: string[] }[] = [];
   let current: { name: string; lines: string[] } | null = null;
-  let dataLines: string[] = [];
+  const dataLines: string[] = [];
   let inData = false;
 
   for (const line of lines) {
