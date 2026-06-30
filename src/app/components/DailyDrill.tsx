@@ -179,7 +179,7 @@ export default function DailyDrill() {
       <div className="px-6 pt-5 pb-4 flex items-center justify-between border-b border-[rgba(255,255,255,0.05)]">
         <div>
           <p className="text-[10px] font-semibold tracking-[0.15em] uppercase text-[#FF6B2B] font-['Space_Grotesk'] mb-0.5">
-            Günlük Qazıma
+            Günlük Qazma
           </p>
           <h3 className="font-['Space_Grotesk'] font-bold text-[0.95rem] text-[#F0F4FF]">Bu günü qeyd et</h3>
         </div>
@@ -296,7 +296,7 @@ export default function DailyDrill() {
         {phase === "idle" && (
           <button onClick={handleDrill}
             className="w-full relative overflow-hidden bg-[#FF6B2B] text-white py-3.5 rounded-xl font-['Space_Grotesk'] font-bold text-[14px] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(255,107,43,0.4)] transition-all group">
-            <span className="relative z-10">⛏ Qazımağa başla</span>
+            <span className="relative z-10">⛏ Qazmağa başla</span>
             <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12" />
           </button>
         )}
