@@ -303,7 +303,7 @@ export const productionLesson: Lesson = {
             { az: "Darboğaz", en: "Bottleneck" },
           ],
           caseStudy:
-            "🌍 Dünya nümunəsi: BP-nin Atlantis yatağında IAM modeli 40+ quyunu, 3 platformanı birgə modelləşdirir. Sistem müəyyən etmişdir ki, separator gücü darboğazdır — əlavə qazıma deyil, separator kapasitesi sərfəlidir.",
+            "🌍 Dünya nümunəsi: BP-nin Atlantis yatağında IAM modeli 40+ quyunu, 3 platformanı birgə modelləşdirir. Sistem müəyyən etmişdir ki, separator gücü darboğazdır — əlavə qazma deyil, separator kapasitesi sərfəlidir.",
         },
         {
           heading: "CCUS & Produced Water Management",
@@ -355,7 +355,7 @@ export const productionLesson: Lesson = {
         {
           question: "CCUS-un neft sənayesindəki əsas rolu nədir?",
           options: [
-            "Yeni qazıma texnologiyası",
+            "Yeni qazma texnologiyası",
             "CO₂ tutulması, neft yataqlarına vurulması (EOR + carbon storage)",
             "Produced water treatment metodu",
             "Horizontal drilling texnikası",

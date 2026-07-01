@@ -53,7 +53,7 @@ function generateProduction(wells: number, porosity: number, recovery: number) {
 const quizQuestions = [
   {
     q: 'Eclipse proqramı nə üçün istifadə edilir?',
-    options: ['Quyu qazımaq üçün', 'Rezervuar simulyasiyası üçün', 'Neft satmaq üçün', 'Loq analizi üçün'],
+    options: ['Quyu qazmaq üçün', 'Rezervuar simulyasiyası üçün', 'Neft satmaq üçün', 'Loq analizi üçün'],
     correct: 1,
   },
   {

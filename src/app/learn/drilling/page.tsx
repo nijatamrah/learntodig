@@ -6,18 +6,18 @@ import Link from 'next/link';
 const drillingConcepts = [
   {
     id: 'bit',
-    name: 'Qazıma Biti',
+    name: 'Qazma Biti',
     color: '#F59E0B',
     icon: '⚙️',
     desc: 'Bit quyunun dibini qazıyan alətdir. Süxurun növündən asılı olaraq fərqli bit növləri seçilir.',
-    detail: 'PDC bit: yumşaq-orta süxurlar üçün, sürətli qazıma. Roller cone bit: sərt süxurlar üçün. Diamond bit: çox sərt formasyonlar üçün. Bit seçimi qazıma xərclərini 30-40% azalda bilər.',
+    detail: 'PDC bit: yumşaq-orta süxurlar üçün, sürətli qazma. Roller cone bit: sərt süxurlar üçün. Diamond bit: çox sərt formasyonlar üçün. Bit seçimi qazma xərclərini 30-40% azalda bilər.',
   },
   {
     id: 'mud',
-    name: 'Qazıma Məhlulu (Mud)',
+    name: 'Qazma Məhlulu (Mud)',
     color: '#10B981',
     icon: '🟢',
-    desc: 'Qazıma məhlulu kəsilmiş süxurları səthi qaldırır, quyunu soyudur və təzyiqi tənzimləyir.',
+    desc: 'Qazma məhlulu kəsilmiş süxurları səthi qaldırır, quyunu soyudur və təzyiqi tənzimləyir.',
     detail: 'Su əsaslı, yağ əsaslı və sintетik məhlullar var. Sıxlıq (ppg), viskozitet və filtrасiya xüsusiyyətləri mühümdür. Düzgün məhlul olmadan quyu çökə bilər.',
   },
   {
@@ -25,8 +25,8 @@ const drillingConcepts = [
     name: 'BHA (Bottom Hole Assembly)',
     color: '#8B5CF6',
     icon: '🔧',
-    desc: 'BHA qazıma kəmərinin alt hissəsidir. Bit, stabilizator, MWD/LWD alətləri daxildir.',
-    detail: 'MWD (Measurement While Drilling) qazıma zamanı istiqaməti ölçür. LWD (Logging While Drilling) loq datası toplayır. Directional drilling üçün motor da BHA-ya əlavə edilir.',
+    desc: 'BHA qazma kəmərinin alt hissəsidir. Bit, stabilizator, MWD/LWD alətləri daxildir.',
+    detail: 'MWD (Measurement While Drilling) qazma zamanı istiqaməti ölçür. LWD (Logging While Drilling) loq datası toplayır. Directional drilling üçün motor da BHA-ya əlavə edilir.',
   },
   {
     id: 'casing',
@@ -44,7 +44,7 @@ const drillingProblems = [
     name: 'Stuck Pipe',
     severity: 'Kritik',
     color: '#EF4444',
-    desc: 'Qazıma kəməri quyuda ilişib qalır. Ən bahalı qazıma problemlərindən biridir.',
+    desc: 'Qazma kəməri quyuda ilişib qalır. Ən bahalı qazma problemlərindən biridir.',
     solution: '1. Dərhal əməliyyatı dayandır. 2. Yağ bazlı pill vur. 3. Jarring əməliyyatı həyata keçir. 4. Backoff əməliyyatını planlaşdır. Profilaktika: Düzgün mud çəkisi, müntəzəm quyuyu süpür.',
   },
   {
@@ -52,7 +52,7 @@ const drillingProblems = [
     name: 'Lost Circulation',
     severity: 'Ciddi',
     color: '#F59E0B',
-    desc: 'Qazıma məhlulu formasiyaya axır, dövriyyə itirilir.',
+    desc: 'Qazma məhlulu formasiyaya axır, dövriyyə itirilir.',
     solution: '1. Məhlul axınını azalt. 2. LCM (Lost Circulation Material) vur. 3. Cement squeeze et. 4. Quyunu möhkəmləndir. Profilaktika: Məhlul sıxlığını düzgün tənzimlə.',
   },
   {
@@ -68,7 +68,7 @@ const drillingProblems = [
     name: 'Bit Washout',
     severity: 'Orta',
     color: '#6B7280',
-    desc: 'Bit nozulları aşınır, qazıma sürəti azalır.',
+    desc: 'Bit nozulları aşınır, qazma sürəti azalır.',
     solution: '1. Pump təzyiqini izlə — düşüş washout işarəsidir. 2. Biti dəyişmək üçün POOH et. 3. Yeni bit seç. Profilaktika: Düzgün nozul ölçüsü seç, hidravlika optimizasiya et.',
   },
 ];
@@ -80,23 +80,23 @@ const quizQuestions = [
     correct: 1,
   },
   {
-    q: 'Qazıma məhlulunun əsas funksiyası nədir?',
+    q: 'Qazma məhlulunun əsas funksiyası nədir?',
     options: ['Neft çıxarmaq', 'Süxur kəsintilərini qaldırmaq, soyutmaq və təzyiqi tənzimləmək', 'Quyunu sementləmək', 'Bit seçmək'],
     correct: 1,
   },
   {
     q: 'Kick nədir?',
-    options: ['Qazıma sürətinin artması', 'Formasiya mayesinin quyuya axması', 'Bit dəyişilməsi', 'Casing yeridilməsi'],
+    options: ['Qazma sürətinin artması', 'Formasiya mayesinin quyuya axması', 'Bit dəyişilməsi', 'Casing yeridilməsi'],
     correct: 1,
   },
   {
     q: 'ROP nəyi ifadə edir?',
-    options: ['Rezervuar Optimal Parametri', 'Rate of Penetration — qazıma sürəti', 'Rotasiya sürəti', 'Məhlul sıxlığı'],
+    options: ['Rezervuar Optimal Parametri', 'Rate of Penetration — qazma sürəti', 'Rotasiya sürəti', 'Məhlul sıxlığı'],
     correct: 1,
   },
   {
     q: 'BHA-da MWD nə üçün istifadə edilir?',
-    options: ['Bit seçmək üçün', 'Qazıma zamanı istiqaməti ölçmək üçün', 'Sement vurmaq üçün', 'Qazıma məhlulunu hazırlamaq üçün'],
+    options: ['Bit seçmək üçün', 'Qazma zamanı istiqaməti ölçmək üçün', 'Sement vurmaq üçün', 'Qazma məhlulunu hazırlamaq üçün'],
     correct: 1,
   },
 ];
@@ -171,17 +171,17 @@ export default function DrillingPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ fontSize: 20 }}>🔩</span>
           <span style={{ fontWeight: 700, color: '#fbbf24', fontSize: 18 }}>DrillSim</span>
-          <span style={{ color: '#718096', fontSize: 14 }}>Qazıma mühəndisliyi · AI ilə gücləndirilmiş</span>
+          <span style={{ color: '#718096', fontSize: 14 }}>Qazma mühəndisliyi · AI ilə gücləndirilmiş</span>
         </div>
         <Link href="/" style={{ color: '#a0aec0', textDecoration: 'none', fontSize: 14 }}>← LearntoDig</Link>
       </div>
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '32px 16px' }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700, color: '#fbbf24', marginBottom: 8 }}>Drilling — Qazıma Mühəndisliyi</h1>
+        <h1 style={{ fontSize: 28, fontWeight: 700, color: '#fbbf24', marginBottom: 8 }}>Drilling — Qazma Mühəndisliyi</h1>
         <p style={{ color: '#718096', marginBottom: 32 }}>3 interaktiv dərs · ROP simulyatoru · Problem ssenarileri · AI chat · Quiz</p>
 
         <div style={{ display: 'flex', gap: 8, marginBottom: 32, flexWrap: 'wrap' }}>
-          {['Qazıma əsasları', 'ROP Simulyatoru', 'Problem Ssenarileri'].map((tab, i) => (
+          {['Qazma əsasları', 'ROP Simulyatoru', 'Problem Ssenarileri'].map((tab, i) => (
             <button key={i} onClick={() => setActiveLesson(i)} style={{ padding: '10px 20px', borderRadius: 8, border: 'none', cursor: 'pointer', background: activeLesson === i ? '#fbbf24' : '#1a1d2e', color: activeLesson === i ? '#0f1117' : '#a0aec0', fontWeight: activeLesson === i ? 700 : 400, fontSize: 14 }}>
               {tab}
             </button>
@@ -191,10 +191,10 @@ export default function DrillingPage() {
         {/* Lesson 1 */}
         {activeLesson === 0 && (
           <div>
-            <h2 style={{ color: '#e2e8f0', fontSize: 20, marginBottom: 16 }}>Qazıma əsasları</h2>
+            <h2 style={{ color: '#e2e8f0', fontSize: 20, marginBottom: 16 }}>Qazma əsasları</h2>
             <div style={{ background: '#1a1d2e', borderRadius: 12, padding: 20, marginBottom: 24 }}>
               <p style={{ color: '#a0aec0', lineHeight: 1.8 }}>
-                Qazıma prosesi neft-qaz quyusunun yeraltı hədəf intervalına çatmaq üçün aparılır. <strong style={{ color: '#fbbf24' }}>Azərbaycanda</strong> Xəzər dənizindəki platformalar (Günəşli, Azəri, Çıraq) ən mürəkkəb qazıma şəraitlərindən biridir — dəniz dibi 200-500 m dərinlikdə, hədəf 5000-7000 m dərinlikdədir.
+                Qazma prosesi neft-qaz quyusunun yeraltı hədəf intervalına çatmaq üçün aparılır. <strong style={{ color: '#fbbf24' }}>Azərbaycanda</strong> Xəzər dənizindəki platformalar (Günəşli, Azəri, Çıraq) ən mürəkkəb qazma şəraitlərindən biridir — dəniz dibi 200-500 m dərinlikdə, hədəf 5000-7000 m dərinlikdədir.
               </p>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
@@ -218,10 +218,10 @@ export default function DrillingPage() {
         {activeLesson === 1 && (
           <div>
             <h2 style={{ color: '#e2e8f0', fontSize: 20, marginBottom: 8 }}>ROP Simulyatoru</h2>
-            <p style={{ color: '#a0aec0', marginBottom: 24 }}>Parametrləri dəyişdir, qazıma sürətini optimallaşdır, virtual qazımanı başlat.</p>
+            <p style={{ color: '#a0aec0', marginBottom: 24 }}>Parametrləri dəyişdir, qazma sürətini optimallaşdır, virtual qazmanı başlat.</p>
             <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: 24 }}>
               <div style={{ background: '#1a1d2e', borderRadius: 12, padding: 24 }}>
-                <h3 style={{ color: '#fbbf24', fontSize: 15, marginBottom: 20 }}>Qazıma parametrləri</h3>
+                <h3 style={{ color: '#fbbf24', fontSize: 15, marginBottom: 20 }}>Qazma parametrləri</h3>
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                     <span style={{ color: '#a0aec0', fontSize: 13 }}>WOB — Bit yükü (klb)</span>
@@ -256,7 +256,7 @@ export default function DrillingPage() {
                   <div style={{ fontSize: 13, color: '#718096' }}>fut/saat</div>
                 </div>
                 <button onClick={startDrilling} disabled={drilling} style={{ width: '100%', background: drilling ? '#374151' : '#fbbf24', color: '#0f1117', border: 'none', borderRadius: 8, padding: '12px', fontWeight: 700, cursor: drilling ? 'not-allowed' : 'pointer', fontSize: 15 }}>
-                  {drilling ? '⏳ Qazılır...' : '🔩 Virtual qazımaya başla'}
+                  {drilling ? '⏳ Qazılır...' : '🔩 Virtual qazmaya başla'}
                 </button>
               </div>
 
@@ -302,8 +302,8 @@ export default function DrillingPage() {
         {/* Lesson 3 - Problems */}
         {activeLesson === 2 && (
           <div>
-            <h2 style={{ color: '#e2e8f0', fontSize: 20, marginBottom: 8 }}>Qazıma problemləri və həlləri</h2>
-            <p style={{ color: '#a0aec0', marginBottom: 24 }}>Real qazımada qarşılaşılan problemlər və onların həlli yolları. Hər problemi klik et.</p>
+            <h2 style={{ color: '#e2e8f0', fontSize: 20, marginBottom: 8 }}>Qazma problemləri və həlləri</h2>
+            <p style={{ color: '#a0aec0', marginBottom: 24 }}>Real qazmada qarşılaşılan problemlər və onların həlli yolları. Hər problemi klik et.</p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16, marginBottom: 24 }}>
               {drillingProblems.map((problem) => (
                 <div key={problem.id} onClick={() => setActiveProblem(activeProblem === problem.id ? null : problem.id)} style={{ background: activeProblem === problem.id ? '#1a2744' : '#1a1d2e', border: `2px solid ${activeProblem === problem.id ? problem.color : '#2d3748'}`, borderRadius: 12, padding: 20, cursor: 'pointer' }}>
@@ -360,8 +360,8 @@ export default function DrillingPage() {
 
         {/* AI Chat */}
         <div style={{ marginTop: 32, background: '#1a1d2e', borderRadius: 12, padding: 24 }}>
-          <h2 style={{ color: '#fbbf24', fontSize: 18, marginBottom: 8 }}>AI Qazıma Assistenti</h2>
-          <p style={{ color: '#718096', fontSize: 13, marginBottom: 16 }}>Qazıma mühəndisliyi haqqında sual ver — Azərbaycan dilində cavab alacaqsan.</p>
+          <h2 style={{ color: '#fbbf24', fontSize: 18, marginBottom: 8 }}>AI Qazma Assistenti</h2>
+          <p style={{ color: '#718096', fontSize: 13, marginBottom: 16 }}>Qazma mühəndisliyi haqqında sual ver — Azərbaycan dilində cavab alacaqsan.</p>
           <div style={{ minHeight: 100, marginBottom: 16 }}>
             {chatMessages.map((msg, i) => (
               <div key={i} style={{ marginBottom: 12, display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>

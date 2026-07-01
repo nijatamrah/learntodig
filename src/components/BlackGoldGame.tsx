@@ -106,8 +106,8 @@ const SCENES: Scene[] = [
     ],
   },
   /* 5 */ {
-    ch: 1, title: "Well A-1 — Qazıma Başlayır",
-    story: "Gün 1, qazıma başladı. 800m-də conductor casing yerləşdirildi. 1,600m-ə qədər irəliləmə yaxşıdır. Mud logger bildirir: cutting-lərdə shale dominantdır, lakin 1,800m-də rəng dəyişir.",
+    ch: 1, title: "Well A-1 — Qazma Başlayır",
+    story: "Gün 1, qazma başladı. 800m-də conductor casing yerləşdirildi. 1,600m-ə qədər irəliləmə yaxşıdır. Mud logger bildirir: cutting-lərdə shale dominantdır, lakin 1,800m-də rəng dəyişir.",
     detail: "LWD (Logging While Drilling) məlumatları real vaxt axışı verir. Gamma Ray azalır — potensial reservoir zonasına yaxınlaşırıq.",
     ev: { t: "ev-i", m: "1,800m: GR düşür, resistivity artır — reservoir yaxınlaşır" },
     choices: [
@@ -162,7 +162,7 @@ const SCENES: Scene[] = [
   },
   /* 10 */ {
     ch: 2, title: "Mud Program Seçimi",
-    story: "Qazıma maye proqramı seçilməlidir. Hövzədə H2S qazı riski var — sour service şərtlər. Mud type seçimi həm əməliyyat, həm ətraf mühit baxımından önəmlidir.",
+    story: "Qazma maye proqramı seçilməlidir. Hövzədə H2S qazı riski var — sour service şərtlər. Mud type seçimi həm əməliyyat, həm ətraf mühit baxımından önəmlidir.",
     detail: "OBM (Oil-Based Mud): H2S üçün ən yaxşı, amma offshore-da tullantı problemi var. WBM (Water-Based): ətraf mühitə dost, lakin H2S-ə davamlılıq zəifdir. SBM (Synthetic): optimal, bahalı.",
     ev: { t: "ev-w", m: "H2S riski: sahədə sour service şərtlər mövcuddur" },
     choices: [
@@ -206,7 +206,7 @@ const SCENES: Scene[] = [
   },
   /* 14 */ {
     ch: 3, title: "Quyu #1 — TD Çatdı",
-    story: "Problemi həll etdin! Qazıma davam etdi. TD: 4,512m. MWD məlumatları: horizontal section boyunca GR log stabil — xalis sand. Əla nəticə.",
+    story: "Problemi həll etdin! Qazma davam etdi. TD: 4,512m. MWD məlumatları: horizontal section boyunca GR log stabil — xalis sand. Əla nəticə.",
     detail: "LWD resistivity: 45-120 ohm.m arası — yüksək karbohidrat saturasiyası. Net pay horizontal seksiyada: 380m. Bu gözləntilərdən 15% yüksəkdir.",
     ev: { t: "ev-s", m: "TD: 4,512m. Horizontal net pay: 380m — gözləntilərdən yaxşı!" },
     choices: [

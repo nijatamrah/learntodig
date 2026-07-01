@@ -34,7 +34,7 @@ const petrelConcepts = [
     color: '#8B5CF6',
     icon: '📡',
     desc: 'Seysmik dalğalar yeraltı quruluşu aşkar edir. Petrel seysmik datanı geoloji modellə birləşdirir.',
-    detail: 'Seysmik interpretasiya antiklinal, qırılma və digər tələ strukturlarını göstərir. Quyu qazımadan əvvəl əsas məlumat mənbəyidir.',
+    detail: 'Seysmik interpretasiya antiklinal, qırılma və digər tələ strukturlarını göstərir. Quyu qazmadan əvvəl əsas məlumat mənbəyidir.',
   },
 ];
 
@@ -50,7 +50,7 @@ const modelLayers = [
 const quizQuestions = [
   {
     q: 'Petrel proqramı nə üçün istifadə edilir?',
-    options: ['Quyu qazımaq üçün', 'Rezervuar modelləməsi üçün', 'Neft satmaq üçün', 'Boru kəməri dizaynı üçün'],
+    options: ['Quyu qazmaq üçün', 'Rezervuar modelləməsi üçün', 'Neft satmaq üçün', 'Boru kəməri dizaynı üçün'],
     correct: 1,
   },
   {

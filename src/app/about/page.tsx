@@ -16,7 +16,7 @@ const features = [
   { icon: "📂", text: "LAS fayl yükləmə və quyu loq analizi" },
   { icon: "🗺️", text: "Azərbaycan yataqları — Günəşli, Çıraq, Azəri, Şahdəniz" },
   { icon: "🏭", text: "Industry Map — karyera yolları, vəzifələr, maaşlar" },
-  { icon: "🔥", text: "Günlük qazıma — streak sistemi ilə davamlılıq" },
+  { icon: "🔥", text: "Günlük qazma — streak sistemi ilə davamlılıq" },
 ];
 
 export default function AboutPage() {

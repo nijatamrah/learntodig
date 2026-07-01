@@ -47,7 +47,7 @@ const roles: Role[] = [
     salaryShort: "$85–170k",
     salaryRange: "$85,000 – $170,000",
     dept: "Operations",
-    description: "Quyu dizaynı, qazıma proqramı və məlumat analizi aparır",
+    description: "Quyu dizaynı, qazma proqramı və məlumat analizi aparır",
     skills: [
       "Well design",
       "Hydraulics",

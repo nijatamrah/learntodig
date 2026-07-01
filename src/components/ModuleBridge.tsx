@@ -36,10 +36,10 @@ const TOPIC_TO_MODULE: Record<string, ModuleInfo> = {
     name: "Drilling Modulu",
     url: "/learn/drilling",
     icon: "⚙️",
-    tagline: "ROP və qazıma parametrlərini real simulyatorda sına",
+    tagline: "ROP və Qazma parametrlərini real simulyatorda sına",
     bullets: [
       "WOB, RPM dəyiş — ROP-un necə dəyişdiyini gör",
-      "Qazıma problemlərini simulyasiya et",
+      "Qazma problemlərini simulyasiya et",
       "AI ilə optimal parametr strategiyası tap",
     ],
   },

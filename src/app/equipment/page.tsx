@@ -7,7 +7,7 @@ const equipment = [
   {
     id: "derrick",
     name: "Drilling Derrick",
-    az: "Qazıma Qüllesi",
+    az: "Qazma Qüllesi",
     href: "/equipment/derrick",
     icon: Layers,
     color: "#FF6B2B",
@@ -15,7 +15,7 @@ const equipment = [
     colorBorder: "rgba(255,107,43,0.25)",
     parts: 8,
     description:
-      "Crown block-dan drill bit-ə qədər tam qazıma qülləsinin bütün komponentlərini kəşf et.",
+      "Crown block-dan drill bit-ə qədər tam qazma qülləsinin bütün komponentlərini kəşf et.",
     tags: ["Crown Block", "Top Drive", "BHA", "Drill Bit"],
     status: "ready",
   },
@@ -45,7 +45,7 @@ const equipment = [
     colorBorder: "rgba(74,222,128,0.25)",
     parts: 7,
     description:
-      "Qazıma məhlulunun səthdən quyuya və geri dövriyyəsini idarə edən sistem.",
+      "Qazma məhlulunun səthdən quyuya və geri dövriyyəsini idarə edən sistem.",
     tags: ["Mud Pump", "Shale Shaker", "Degasser", "Mud Pit"],
     status: "ready",
   },

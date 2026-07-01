@@ -71,7 +71,7 @@ const COMPONENTS: Component[] = [
     az: "Yuxarı Fırladan",
     category: "rotation",
     purpose:
-      "Müasir qazıma qurğularında Kelly və rotary table-ın yerini alan sistem. Drill string-ə birbaşa yuxarıdan fırlanma hərəkəti verir. Elektrik və ya hidravlik mühərriklə işləyir.",
+      "Müasir qazma qurğularında Kelly və rotary table-ın yerini alan sistem. Drill string-ə birbaşa yuxarıdan fırlanma hərəkəti verir. Elektrik və ya hidravlik mühərriklə işləyir.",
     facts: [
       "Kelly/rotary table sistemindən daha sürətli trip (boru çıxarma) edir",
       "90-cı illərdən etibarən standart avadanlığa çevrilib",
@@ -89,10 +89,10 @@ const COMPONENTS: Component[] = [
     id: "drillpipe",
     num: 4,
     name: "Drill String / Drill Pipe",
-    az: "Qazıma Sütunu",
+    az: "Qazma Sütunu",
     category: "drilling",
     purpose:
-      "Səthdən quyu dibinə qədər uzanan boru sistemı. Üç əsas vəzifəsi var: fırlanma momentini (torque) bit-ə ötürmək, qazıma məhlulunu aşağı göndərmək, WOB (weight on bit) tənzimləmək.",
+      "Səthdən quyu dibinə qədər uzanan boru sistemı. Üç əsas vəzifəsi var: fırlanma momentini (torque) bit-ə ötürmək, qazma məhlulunu aşağı göndərmək, WOB (weight on bit) tənzimləmək.",
     facts: [
       "Hər boru 9.14 m (30 ft) uzunluğundadır — API standartı",
       "Üç boru bir 'stand' (27 m) — kökdə saxlanılır",
@@ -134,12 +134,12 @@ const COMPONENTS: Component[] = [
     az: "Quyu Dibi Qurğusu",
     category: "drilling",
     purpose:
-      "Drill string-in ən aşağı hissəsi — bit-dən yuxarıya doğru bir neçə ixtisaslaşmış alət ardıcıllığı. Qazıma istiqamətini, sürətini və ölçüm funksiyalarını idarə edir.",
+      "Drill string-in ən aşağı hissəsi — bit-dən yuxarıya doğru bir neçə ixtisaslaşmış alət ardıcıllığı. Qazma istiqamətini, sürətini və ölçüm funksiyalarını idarə edir.",
     facts: [
       "Drill Collar: ağır polad boru, bit üzərindəki yükü (WOB) yaradır",
       "Stabilizer: quyunun düz qalmasını təmin edir",
       "MWD (Measurement While Drilling): dərinlik, inclination, azimuth",
-      "LWD (Logging While Drilling): porosity, resistivity — qazıma zamanı",
+      "LWD (Logging While Drilling): porosity, resistivity — qazma zamanı",
       "Mud Motor: hidravlik gücü fırlanmaya çevirir — top drive-sız",
     ],
     params: [
@@ -152,10 +152,10 @@ const COMPONENTS: Component[] = [
     id: "substructure",
     num: 7,
     name: "Substructure & Rig Floor",
-    az: "Alt Quruluş və Qazıma Meydançası",
+    az: "Alt Quruluş və Qazma Meydançası",
     category: "structure",
     purpose:
-      "Bütün qazıma avadanlığının dayandığı əsas platforma. BOP-a çıxışı təmin edir, derrickman-ın işlədiyi rotary table, driller kabini, pipe rack hamısı burada yerləşir.",
+      "Bütün qazma avadanlığının dayandığı əsas platforma. BOP-a çıxışı təmin edir, derrickman-ın işlədiyi rotary table, driller kabini, pipe rack hamısı burada yerləşir.",
     facts: [
       "Hündürlüyü BOP ölçüsündən asılıdır: adətən 4 – 12 m",
       "V-door: boruların aşağıdan yuxarıya verildiyi açıq tərəf",
@@ -171,10 +171,10 @@ const COMPONENTS: Component[] = [
     id: "bit",
     num: 8,
     name: "Drill Bit",
-    az: "Qazıma Kəsəri",
+    az: "Qazma Kəsəri",
     category: "drilling",
     purpose:
-      "BHA-nın ən aşağı ucunda yerləşir, birbaşa süxuru kəsir. PDC, tricone, və ya elmas kəsər növləri var — formasiyaya görə seçilir. Bütün qazıma prosesinin ən kritik nöqtəsi.",
+      "BHA-nın ən aşağı ucunda yerləşir, birbaşa süxuru kəsir. PDC, tricone, və ya elmas kəsər növləri var — formasiyaya görə seçilir. Bütün qazma prosesinin ən kritik nöqtəsi.",
     facts: [
       "PDC (Polycrystalline Diamond Compact): yumşaq-orta formasyonlar, yüksək ROP",
       "Tricone (roller cone): sərt formasyonlar, üç fırlanan konus",
@@ -202,7 +202,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   lifting: "Qaldırma",
   rotation: "Fırlanma",
   safety: "Təhlükəsizlik",
-  drilling: "Qazıma",
+  drilling: "Qazma",
   structure: "Quruluş",
 };
 
@@ -259,7 +259,7 @@ export default function DerrickPage() {
             </span>
           </div>
           <h1 className="font-['Space_Grotesk'] text-2xl font-bold md:text-4xl">
-            Qazıma Qüllesi — <span className="text-white/[0.45]">Drilling Derrick</span>
+            Qazma Qüllesi — <span className="text-white/[0.45]">Drilling Derrick</span>
           </h1>
           <p className="mt-2 max-w-lg text-[14px] leading-relaxed text-white/[0.5]">
             Hər komponent üzərinə klikləyərək texniki məlumatları, parametrləri

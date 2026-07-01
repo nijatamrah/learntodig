@@ -140,7 +140,7 @@ export interface FieldStat {
         permeability: "100–800 mD",
       },
       history: [
-        { year: 1985, event: "Kəşf", detail: "Sovet Azərbaycanı dövründə kəşfiyyat qazıması zamanı aşkarlandı" },
+        { year: 1985, event: "Kəşf", detail: "Sovet Azərbaycanı dövründə kəşfiyyat qazması zamanı aşkarlandı" },
         { year: 1994, event: "Müqavilə", detail: "Günəşli ilə birlikdə ACG PSA çərçivəsinə daxil edildi" },
         { year: 1997, event: "Çıraq-1 platforması", detail: "ACG blokundan ilk kommersiya nefti Çıraqdan hasil edildi — 7 noyabr 1997" },
         { year: 2013, event: "Yeni Çıraq", detail: "'Chirag Oil Project' çərçivəsində yeni platforma quraşdırıldı, hasilat genişləndirildi" },
@@ -157,7 +157,7 @@ export interface FieldStat {
       funFacts: [
         "7 noyabr 1997 — ACG blokundan ilk kommersiya nefti məhz Çıraq platformasından hasil edildi. Bu tarix Azərbaycan üçün tarixi əhəmiyyət daşıyır.",
         "Çıraq-1 platforması Xəzərdə fəaliyyət göstərən ilk şərq-Qərb birgə müəssisə platformasıdır.",
-        "Yataqda tətbiq edilən horizontal qazıma texnologiyası neft hasil olunan intervalı əhəmiyyətli dərəcədə artırdı.",
+        "Yataqda tətbiq edilən horizontal qazma texnologiyası neft hasil olunan intervalı əhəmiyyətli dərəcədə artırdı.",
         "Çıraq nefti Günəşli ilə eyni BTC-BKKT boru kəməri sistemindən keçərək Ceyhan limanına çatır.",
       ],
       significance: "Çıraq tarixi baxımdan əvəzsizdir — ACG blokunun ilk hasilat nöqtəsi olmaqla, o, 1997-ci ildə beynəlxalq müqavilənin ilk meyvəsini verdi. Bu, Azərbaycanın müstəqilliyindən sonra xarici investisiyalarla neft sənayesinin yenidən qurulmasının rəmzidir.",

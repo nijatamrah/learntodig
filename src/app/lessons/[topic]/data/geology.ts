@@ -86,7 +86,7 @@ export const geologyLesson: Lesson = {
             "Üzvi maddə saxlayaraq neft əmələ gətirir",
             "Keçirimsiz örtük kimi neftin yuxarı axmasına mane olur",
             "Nefti yüksək məsaməliliyinə görə saxlayır",
-            "Qazıma zamanı drill bit-i soyudur",
+            "Qazma zamanı drill bit-i soyudur",
           ],
           answer: 1,
           explanation: "Cap rock (seal) — şalenin keçirimsizliyi neftin rezervuardan qaçmasına mane olur. Mənbə lay (source rock) isə neft əmələ gətirən başqa roldur.",
@@ -290,7 +290,7 @@ export const geologyLesson: Lesson = {
           terms: [
             { az: "Şale nefti", en: "Shale oil / Tight oil" },
             { az: "Hidravlik çatlatma", en: "Hydraulic fracturing (fracking)" },
-            { az: "Üfüqi qazıma", en: "Horizontal drilling" },
+            { az: "Üfüqi qazma", en: "Horizontal drilling" },
             { az: "Qeyri-ənənəvi ehtiyat", en: "Unconventional resource" },
           ],
           formula: {
@@ -335,13 +335,13 @@ export const geologyLesson: Lesson = {
         {
           question: "Şale neftini çıxarmaq üçün nə tələb olunur?",
           options: [
-            "Yalnız şaquli qazıma",
-            "Üfüqi qazıma + hidravlik çatlatma (fracking)",
+            "Yalnız şaquli qazma",
+            "Üfüqi qazma + hidravlik çatlatma (fracking)",
             "Yalnız kimyəvi EOR",
             "Antiklinal tələsi",
           ],
           answer: 1,
-          explanation: "Şalenin keçiriciliyi çox aşağıdır (<0.1 mD). Üfüqi qazıma lay boyunca kontakt artırır; fracking isə süni çat sistemi yaradaraq neftin axmasına imkan verir.",
+          explanation: "Şalenin keçiriciliyi çox aşağıdır (<0.1 mD). Üfüqi qazma lay boyunca kontakt artırır; fracking isə süni çat sistemi yaradaraq neftin axmasına imkan verir.",
         },
       ],
     },

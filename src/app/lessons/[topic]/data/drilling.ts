@@ -9,7 +9,7 @@ export const drillingLesson: Lesson = {
       sections: [
         {
           heading: "Qazma nədir? | What is Drilling?",
-          body: "Qazma — yeraltı neft və qaz yataqlarına çatmaq üçün gruntda quyu açma prosesidir. Müasir rotary qazıma sistemlərinin 3 əsas hissəsi var: drill bit (qazıma ucu) — süxuru kəsir; drill string (qazıma sütunu) — dönüş momentini ötürür; drilling rig (qazıma qurğusu) — bütün sistemi saxlayır.",
+          body: "Qazma — yeraltı neft və qaz yataqlarına çatmaq üçün gruntda quyu açma prosesidir. Müasir rotary qazma sistemlərinin 3 əsas hissəsi var: drill bit (qazma ucu) — süxuru kəsir; drill string (qazma sütunu) — dönüş momentini ötürür; drilling rig (qazma qurğusu) — bütün sistemi saxlayır.",
           terms: [
             { az: "Qazma", en: "Drilling" },
             { az: "Qazma ucu", en: "Drill bit" },
@@ -21,7 +21,7 @@ export const drillingLesson: Lesson = {
         },
         {
           heading: "ROP — Qazma sürəti | Rate of Penetration",
-          body: "ROP drill bit-in bir saat ərzində neçə metr qazıdığını göstərir. ROP nə qədər yüksək olsa, qazıma bir o qədər sürətli və ucuz olur. ROP-a 5 əsas amil təsir edir: WOB, RPM, bit növü, süxur sərtliyi, drilling fluid keyfiyyəti.",
+          body: "ROP drill bit-in bir saat ərzində neçə metr qazıdığını göstərir. ROP nə qədər yüksək olsa, qazma bir o qədər sürətli və ucuz olur. ROP-a 5 əsas amil təsir edir: WOB, RPM, bit növü, süxur sərtliyi, drilling fluid keyfiyyəti.",
           terms: [
             { az: "Qazma sürəti", en: "Rate of Penetration (ROP)" },
             { az: "Bit üzərindəki yük", en: "Weight on Bit (WOB)" },
@@ -56,7 +56,7 @@ export const drillingLesson: Lesson = {
         },
         {
           heading: "Qazma növləri | Types of Drilling",
-          body: "Şaquli qazma (vertical) — ən sadə, düz aşağı. Maillik qazıma (directional) — müəyyən bucaqda yönəldilmişdir. Üfüqi qazıma (horizontal) — rezervuar lay boyunca, shale yataqları üçün vacib. Çoxşaxəli qazıma (multilateral) — bir quyudan bir neçə istiqamətdə qazıma.",
+          body: "Şaquli qazma (vertical) — ən sadə, düz aşağı. Maillik qazma (directional) — müəyyən bucaqda yönəldilmişdir. Üfüqi qazma (horizontal) — rezervuar lay boyunca, shale yataqları üçün vacib. Çoxşaxəli qazma (multilateral) — bir quyudan bir neçə istiqamətdə qazma.",
           terms: [
             { az: "Şaquli qazma", en: "Vertical drilling" },
             { az: "Yönəldilmiş qazma", en: "Directional drilling" },

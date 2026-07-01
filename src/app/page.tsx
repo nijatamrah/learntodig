@@ -94,7 +94,7 @@ export default function HomePage() {
           <div className="flex gap-3 flex-wrap justify-center">
             <Link href="/register">
               <button className="bg-[#FF6B2B] text-white px-9 py-3.5 rounded-xl font-['Space_Grotesk'] font-bold text-[15px] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(255,107,43,0.35)] transition-all">
-                Qazımağa başla →
+                Qazmağa başla →
               </button>
             </Link>
             <Link href="/learn/well-log">
@@ -273,7 +273,7 @@ export default function HomePage() {
             </p>
             <Link href="/register">
               <button className="bg-[#FF6B2B] text-white px-12 py-4 rounded-xl font-['Space_Grotesk'] font-bold text-[16px] hover:-translate-y-0.5 hover:shadow-[0_8px_36px_rgba(255,107,43,0.4)] transition-all">
-                Qazımağa başla →
+                Qazmağa başla →
               </button>
             </Link>
           </div>

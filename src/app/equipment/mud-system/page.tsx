@@ -23,10 +23,10 @@ const COMPONENTS: Component[] = [
     id: "mud-pump",
     num: 1,
     name: "Mud Pump",
-    az: "Qazıma Məhlulu Nasosu",
+    az: "Qazma Məhlulu Nasosu",
     category: "pumping",
     purpose:
-      "Bütün dövriyyə sisteminin qəlbi. Qazıma məhlulunu yüksək təzyiqlə standpipe vasitəsilə drill string-ə vurur. Əksər qurğularda iki ədəd triplex (üç pistonlu) nasос paralel işləyir.",
+      "Bütün dövriyyə sisteminin qəlbi. Qazma məhlulunu yüksək təzyiqlə standpipe vasitəsilə drill string-ə vurur. Əksər qurğularda iki ədəd triplex (üç pistonlu) nasос paralel işləyir.",
     facts: [
       "Triplex nasос: 3 pistonlu, simplex (1 pistonlu) ilə müqayisədə daha az titrəyiş",
       "Duplex: ikitərəfli iş prinsipi — hər iki istiqamətdə məhlul vurur",
@@ -133,7 +133,7 @@ const COMPONENTS: Component[] = [
     az: "Məhlul Hovuzları",
     category: "storage",
     purpose:
-      "Qazıma məhlulunun saxlandığı, hazırlandığı və dövriyyəyə göndərildiyi əsas saxlama sistemi. Active pit dövriyyədəki məhluludur, reserve pit ehtiyat məhlulu saxlayır.",
+      "Qazma məhlulunun saxlandığı, hazırlandığı və dövriyyəyə göndərildiyi əsas saxlama sistemi. Active pit dövriyyədəki məhluludur, reserve pit ehtiyat məhlulu saxlayır.",
     facts: [
       "Active system: suction pit → nasоs → quyu → şeykər → aktiv pit dövriyyəsi",
       "Pit volume monitoring: pit səviyyəsi artarsa kick, azalarsa məhlul itkisi siqnalı",
@@ -154,7 +154,7 @@ const COMPONENTS: Component[] = [
     az: "Kimyəvi Qarışdırma Sistemi",
     category: "control",
     purpose:
-      "Qazıma məhluluna kimyəvi maddələr (barit, bentonit, polimerlar, inhibitorlar) əlavə etmək üçün istifadə olunan hopper, jet mixer və agitator sistemi. Mud engineer-in əsas iş yeridir.",
+      "Qazma məhluluna kimyəvi maddələr (barit, bentonit, polimerlar, inhibitorlar) əlavə etmək üçün istifadə olunan hopper, jet mixer və agitator sistemi. Mud engineer-in əsas iş yeridir.",
     facts: [
       "Hopper: toz halında kimyəvi maddəni məhlula qarışdıran venturi sistemi",
       "Agitator: pit-dəki məhluln çökməsinin qarşısını alan qarışdırıcılar",
@@ -236,7 +236,7 @@ export default function MudSystemPage() {
             <span className="text-white/[0.45]">Məhlul Dövriyyəsi</span>
           </h1>
           <p className="mt-2 max-w-lg text-[14px] leading-relaxed text-white/[0.5]">
-            Qazıma məhlulunun nasоsdan quyuya, quyudan səthinə qayıdışını
+            Qazma məhlulunun nasоsdan quyuya, quyudan səthinə qayıdışını
             idarə edən tam sistem. Hər komponentə klikləyib öyrən.
           </p>
 

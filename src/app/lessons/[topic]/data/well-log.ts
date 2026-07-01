@@ -14,10 +14,10 @@ export const wellLogLesson: Lesson = {
             { az: "Quyu jurnallaması", en: "Well logging" },
             { az: "Loq aləti", en: "Logging tool / Sonde" },
             { az: "LAS faylı", en: "LAS file (Log ASCII Standard)" },
-            { az: "Qazıma zamanı jurnallama", en: "LWD (Logging While Drilling)" },
+            { az: "Qazma zamanı jurnallama", en: "LWD (Logging While Drilling)" },
           ],
           caseStudy:
-            "🇦🇿 Azərbaycan nümunəsi: ACG quyularında Schlumberger-in LWD alətləri qazıma zamanı real vaxt loqları ötürür. Bu məlumatlar qazıma istiqamətini tənzimləmək üçün dərhal istifadə edilir.",
+            "🇦🇿 Azərbaycan nümunəsi: ACG quyularında Schlumberger-in LWD alətləri qazma zamanı real vaxt loqları ötürür. Bu məlumatlar qazma istiqamətini tənzimləmək üçün dərhal istifadə edilir.",
         },
         {
           heading: "GR — Gamma Ray Loqu | Gamma Ray Log",
@@ -326,7 +326,7 @@ export const wellLogLesson: Lesson = {
         {
           question: "PLT nə üçün istifadə olunur?",
           options: [
-            "Qazıma zamanı loq almaq",
+            "Qazma zamanı loq almaq",
             "İstismar quyusunda hansı layların nə qədər istehsal etdiyini müəyyən etmək",
             "Cement bond yoxlamaq",
             "Reservoir təzyiqini ölçmək",
