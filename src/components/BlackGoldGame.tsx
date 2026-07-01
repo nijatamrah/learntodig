@@ -710,7 +710,7 @@ export default function BlackGoldGame() {
     const { budget_n, time_n, risk_n, rep_n, production_n } = normalizedStats(gs);
 
     // Giriş edibsə profildən adı çək, olmasa manual input istifadə et
-    let finalName = nameInput.trim() || "Anonymous";
+    let finalName = "Anonymous";
     let userId: string | null = null;
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -727,7 +727,7 @@ export default function BlackGoldGame() {
       // auth yoxdursa manual ad ilə davam edirik
     }
 
-    const { error } = await supabase.from("game_scores").insert({
+    const { error } = await supabase.from("game_scores").upsert({
       user_id: userId,
       module_name: MODULE_NAME,
       score: calcScore(gs),
@@ -738,7 +738,7 @@ export default function BlackGoldGame() {
       production: production_n,
       full_name: finalName,
       scenario_path: choicePath.join("-"),
-    });
+    }, { onConflict: "user_id" });
 
     setSubmitting(false);
 
@@ -848,18 +848,11 @@ export default function BlackGoldGame() {
           </div>
         ))}
       </div>
-      <div className="rounded-xl border border-white/8 bg-white/4 p-4 mb-4 text-left">
-        <p className="text-sm text-gray-400 mb-3">Adını daxil et — leaderboard-a əlavə et (login olmusansa, avtomatik profil adın istifadə olunacaq):</p>
-        <div className="flex gap-2">
-          <input type="text" placeholder="Adın..." value={nameInput} onChange={e => setNameInput(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && submitScore()}
-            disabled={submitting || submitted}
-            className="flex-1 px-3 py-2 rounded-lg border border-white/15 bg-white/6 text-sm outline-none disabled:opacity-50" />
-          <button onClick={submitScore} disabled={submitting || submitted}
-            className="px-4 py-2 rounded-lg text-white text-sm font-medium disabled:opacity-50" style={{ background: "#1D9E75" }}>
-            {submitting ? "Göndərilir..." : submitted ? "Göndərildi ✓" : "Göndər"}
-          </button>
-        </div>
+      <div className="rounded-xl border border-white/8 bg-white/4 p-4 mb-4 text-left text-center">
+        <button onClick={submitScore} disabled={submitting || submitted}
+          className="px-6 py-2.5 rounded-lg text-white text-sm font-medium disabled:opacity-50" style={{ background: "#1D9E75" }}>
+          {submitting ? "Göndərilir..." : submitted ? "Göndərildi ✓" : "Nəticəni göndər"}
+        </button>
         {submitError && <p className="text-xs text-red-400 mt-2">{submitError}</p>}
       </div>
       <button onClick={restart} className="w-full py-3 rounded-xl border border-white/15 text-gray-400 text-sm">Yenidən oyna →</button>
