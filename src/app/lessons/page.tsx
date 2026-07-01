@@ -9,11 +9,11 @@ const levels = [
 ];
 
 const topics = [
-  { id: "geology",    label: "Geologiya",    icon: "🪨", levels: ["baslangic", "orta", "ireli"] },
-  { id: "drilling",   label: "Drilling",     icon: "⛏",  levels: ["baslangic", "orta", "ireli"] },
-  { id: "reservoir",  label: "Rezervuar",    icon: "🛢️", levels: ["baslangic", "orta", "ireli"] },
-  { id: "well-log",   label: "Quyu loqları", icon: "📊", levels: ["baslangic", "orta", "ireli"] },
-  { id: "production", label: "Hasilat",      icon: "⚡", levels: ["baslangic","orta", "ireli"] },
+  { id: "geology",    label: "Geologiya Dərsləri",    icon: "🪨", levels: ["baslangic", "orta", "ireli"] },
+  { id: "drilling",   label: "Qazma Dərsləri",     icon: "⛏",  levels: ["baslangic", "orta", "ireli"] },
+  { id: "reservoir",  label: "Rezervuar Dərsləri",    icon: "🛢️", levels: ["baslangic", "orta", "ireli"] },
+  { id: "well-log",   label: "Quyu Logging Dərsləri", icon: "📊", levels: ["baslangic", "orta", "ireli"] },
+  { id: "production", label: "Hasilat Dərsləri",      icon: "⚡", levels: ["baslangic","orta", "ireli"] },
 ];
 
 export default function LessonsPage() {

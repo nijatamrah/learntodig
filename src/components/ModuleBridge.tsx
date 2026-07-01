@@ -33,7 +33,7 @@ const TOPIC_TO_MODULE: Record<string, ModuleInfo> = {
     ],
   },
   drilling: {
-    name: "Drilling Modulu",
+    name: "Qazma Modulu",
     url: "/learn/drilling",
     icon: "⚙️",
     tagline: "ROP və Qazma parametrlərini real simulyatorda sına",
