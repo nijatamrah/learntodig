@@ -141,7 +141,7 @@ export default function HomePage() {
           {[
             { icon: "📚", title: "Kitablar sıxıcıdır", desc: "500 səhifəlik nəzəriyyə, sıfır praktika. Oxuyursan, anlayırsan ki başa düşməmisən." },
             { icon: "🎬", title: "YouTube çatışmır", desc: "Pərakəndə videolar, Azərbaycan konteksti yox, ardıcıllıq yox." },
-            { icon: "🏢", title: "Şirkətə girməmiş", desc: "Real alətlərə — Petrel, Eclipse, LAS analizi — yalnız işə girəndən sonra çıxış var." },
+            { icon: "🏢", title: "Şirkətlər tələb edir", desc: "Real alətlərə — Petrel, Eclipse, LAS analizi — yalnız işə girəndən sonra çıxış var." },
           ].map((item) => (
             <div key={item.title} className="rounded-2xl border border-[rgba(255,255,255,0.06)] p-6 text-left" style={{ background: "#0D1220" }}>
               <div className="text-2xl mb-4">{item.icon}</div>
