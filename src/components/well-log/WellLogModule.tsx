@@ -74,8 +74,8 @@ function parseLasPreview(text: string) {
   const lines = text.split("\n");
   const sections: LasSection[] = [];
   let current: LasSection | null = null;
-  let dataLines: string[] = [];
-  let curveNames: string[] = [];
+  const dataLines: string[] = [];
+  const curveNames: string[] = [];
   let inData = false;
   let inCurve = false;
 
