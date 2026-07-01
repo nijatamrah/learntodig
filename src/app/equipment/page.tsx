@@ -76,7 +76,7 @@ export default function EquipmentPage() {
           <div className="flex items-center gap-2 mb-5">
             <Wrench size={14} className="text-[#FF6B2B]" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#FF6B2B]">
-              Tools &amp; Equipment
+             Alət və Avadanlıqlar
             </span>
           </div>
           <h1

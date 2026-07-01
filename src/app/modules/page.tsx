@@ -7,7 +7,7 @@ const modules = [
   { href: "/learn/geology",   icon: "🪨", title: "Geologiya modulu",        desc: "Litologiya, stratigrafiya, neft tələsi · AI chat · Quiz",             accent: "#22C55E", tag: "AI · Quiz" },
   { href: "/learn/petrel",    icon: "🗺️", title: "Petrel simulyatoru",      desc: "Rezervuar modelləməsi, məsaməlilik, keçiricilik · AI chat",           accent: "#3B82F6", tag: "AI · 3D" },
   { href: "/learn/eclipse",   icon: "⚡", title: "Eclipse simulyatoru",     desc: "Rezervuar simulyasiyası, hasilat proqnozu, ssenari müqayisəsi",       accent: "#A78BFA", tag: "Ssenari" },
-  { href: "/learn/drilling",  icon: "⛏",  title: "Drilling simulyatoru",    desc: "Qazma parametrləri, ROP optimizasiyası, problem ssenarileri",        accent: "#FBBF24", tag: "ROP" },
+  { href: "/learn/drilling",  icon: "⛏",  title: "Qazma simulyatoru",    desc: "Qazma parametrləri, ROP optimizasiyası, problem ssenarileri",        accent: "#FBBF24", tag: "ROP" },
 ];
 
 export default function ModulesPage() {

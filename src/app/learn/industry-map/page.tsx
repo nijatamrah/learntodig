@@ -196,7 +196,7 @@ export default function IndustryMap() {
             Bölmə 6
           </p>
           <h1 className="text-3xl font-bold text-white mb-3">
-            Industry Map
+            Karyera Xəritəsi
           </h1>
           <p className="text-gray-400 text-sm max-w-xl">
             Neft-qaz sahəsinin bütün peşələri — maaşlar, bacarıqlar, proqramlar

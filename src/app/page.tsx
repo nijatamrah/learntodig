@@ -157,7 +157,7 @@ export default function HomePage() {
         <div className="max-w-[1060px] mx-auto px-6 py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[#00D4FF] font-['Space_Grotesk'] mb-4">Industry Map</p>
+              <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[#00D4FF] font-['Space_Grotesk'] mb-4">Karyera Xəritəsi</p>
               <h2 className="font-['Space_Grotesk'] text-[clamp(1.7rem,3.5vw,2.4rem)] font-bold leading-[1.15] mb-5 text-[#F0F4FF]">
                 Sahənin xəritəsini gör,<br />istiqaməti seç.
               </h2>
@@ -208,7 +208,7 @@ export default function HomePage() {
           {[
             { step: "01", color: "#FF6B2B", title: "Dərslər", desc: "Geologiya, Drilling, Quyu Loqları, Rezervuar, Hasilat — hər mövzu 5 bölmə + quiz + AI chat ilə.", tags: ["Geologiya", "Drilling", "Rezervuar", "Hasilat"], href: "/lessons" },
             { step: "02", color: "#00D4FF", title: "Modullar", desc: "Öyrəndiyini real simulyatorda tətbiq et. LAS faylı yüklə, IPR əyrisi qur, Eclipse ssenariləri müqayisə et.", tags: ["Well Log AI", "Prosper", "Petrel", "Eclipse"], href: "/modules" },
-            { step: "03", color: "#A78BFA", title: "Kəşf et", desc: "Azərbaycan yataqlarını kəşf et, Tools & Equipment öyrən, Industry Map ilə karyeranı planla.", tags: ["Yataqlar", "Tools", "Industry Map", "Oyun"], href: "/register" },
+            { step: "03", color: "#A78BFA", title: "Kəşf et", desc: "Azərbaycan yataqlarını kəşf et, Alət və Avadanlıqları öyrən, Karyera Xəritəsi ilə karyeranı planla.", tags: ["Yataqlar", "Tools", "Karyera Xəritəsi", "Oyun"], href: "/register" },
           ].map((item) => (
             <Link key={item.step} href={item.href}>
               <div className="rounded-2xl border border-[rgba(255,255,255,0.06)] p-7 h-full hover:border-[rgba(255,255,255,0.14)] hover:-translate-y-1 transition-all cursor-pointer" style={{ background: "#0D1220" }}>
@@ -240,11 +240,11 @@ export default function HomePage() {
               { icon: "🗺️", title: "Azərbaycan Yataqları", desc: "Günəşli, Çıraq, ACG — xəritə, tarixi, istehsal məlumatları.", color: "#34D399", href: "/azerbaijan-fields" },
               { icon: "📰", title: "Canlı Xəbərlər", desc: "Rigzone, OilPrice — dünya neft-qaz sənayesindən anlıq yeniliklər.", color: "#00D4FF", href: "/news" },
               { icon: "🎮", title: "Bilik Oyunu", desc: "Quiz sualları ilə öyrəndiyini yoxla, rəqiblərlə yarış.", color: "#A78BFA", href: "/game" },
-              { icon: "🔧", title: "Tools & Equipment", desc: "Sahədə istifadə olunan avadanlıqları spesifik öyrən.", color: "#FBBF24", href: "/tools-equipment" },
+              { icon: "🔧", title: "Alət və Avadanlıqlar", desc: "Sahədə istifadə olunan avadanlıqları spesifik öyrən.", color: "#FBBF24", href: "/tools-equipment" },
               { icon: "📖", title: "Terminoloji Lüğət", desc: "400+ neft-qaz termini, izahları ilə. Azərbaycan dilində.", color: "#FF6B2B", href: "#" },
               { icon: "💰", title: "Neftin Qiyməti", desc: "Brent, WTI — real vaxt rejimində qiymət banneri.", color: "#F87171", href: "#" },
               { icon: "🤖", title: "AI Chat", desc: "Hər dərsdə, hər modulda — Claude ilə istənilən sualı sor.", color: "#00D4FF", href: "/lessons" },
-              { icon: "🏭", title: "Industry Map", desc: "Vəzifə xəritəsi, maaşlar, tələb olunan bacarıqlar.", color: "#A78BFA", href: "/register" },
+              { icon: "🏭", title: "Karyera Xəritəsi", desc: "Vəzifə xəritəsi, maaşlar, tələb olunan bacarıqlar.", color: "#A78BFA", href: "/register" },
             ].map((item) => (
               <Link key={item.title} href={item.href}>
                 <div className="rounded-2xl border border-[rgba(255,255,255,0.06)] p-5 h-full hover:border-[rgba(255,255,255,0.12)] hover:-translate-y-0.5 transition-all cursor-pointer" style={{ background: "#0D1220" }}>
@@ -269,7 +269,7 @@ export default function HomePage() {
               Sahəni kəşf etmək<br />bir klik uzaqlıqdadır.
             </h2>
             <p className="text-[#4A5A72] text-[1rem] mb-10 max-w-[420px] mx-auto leading-relaxed">
-              Qeydiyyat pulsuz, bir dəqiqə çəkir. Industry Map-dən başla, dərslərə keç, simulyatoru aç.
+             Qeydiyyat saniyələr çəkir, kəşf isə elə indi başlaya bilər — Karyera Xəritəsindən - Dərslərə - Simulyatorlara qədər hər şey hazırdır.
             </p>
             <Link href="/register">
               <button className="bg-[#FF6B2B] text-white px-12 py-4 rounded-xl font-['Space_Grotesk'] font-bold text-[16px] hover:-translate-y-0.5 hover:shadow-[0_8px_36px_rgba(255,107,43,0.4)] transition-all">

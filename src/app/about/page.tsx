@@ -5,7 +5,7 @@ const steps = [
   "Mövzu seç — Geologiya, Drilling, Rezervuar, Quyu Loqları və ya Hasilat",
   "Dərsi oxu, quizlə yoxla, anlamadığını AI-dan sor",
   "Modullar bölməsindən real parametrlərlə simulyasiya et",
-  "Azərbaycan yataqları, Industry Map və Tools bölmələrini kəşf et",
+  "Azərbaycan yataqları, Karyera Xəritəsi , Alət və Avadanlıqlar bölmələrini kəşf et",
 ];
 
 const features = [
@@ -15,7 +15,7 @@ const features = [
   { icon: "⚙️", text: "6 simulyator — Well Log, Prosper, Petrel, Eclipse, Drilling, Geologiya" },
   { icon: "📂", text: "LAS fayl yükləmə və quyu loq analizi" },
   { icon: "🗺️", text: "Azərbaycan yataqları — Günəşli, Çıraq, Azəri, Şahdəniz" },
-  { icon: "🏭", text: "Industry Map — karyera yolları, vəzifələr, maaşlar" },
+  { icon: "🏭", text: "Karyera Xəritəsi — karyera yolları, vəzifələr, maaşlar" },
   { icon: "🔥", text: "Günlük qazma — streak sistemi ilə davamlılıq" },
 ];
 

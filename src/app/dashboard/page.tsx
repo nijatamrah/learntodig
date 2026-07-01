@@ -10,8 +10,8 @@ const quickLinks = [
   { title: "Dərslər", desc: "Geologiya, Drilling, Rezervuar və daha çox", icon: "📚", color: "#FF6B2B", href: "/lessons", tag: "5 mövzu" },
   { title: "Modullar", desc: "Real simulyatorlar — LAS, IPR, Eclipse", icon: "⚡", color: "#00D4FF", href: "/modules", tag: "6 modul" },
   { title: "Azərbaycan Yataqları", desc: "Günəşli, ACG, Çıraq — xəritə və tarix", icon: "🗺️", color: "#34D399", href: "/azerbaijan-fields", tag: "İnteraktiv" },
-  { title: "Industry Map", desc: "Karyera yolları, vəzifələr, maaşlar", icon: "🏭", color: "#A78BFA", href: "/learn/industry-map", tag: "Yeni" },
-  { title: "Tools & Equipment", desc: "Sahədəki əsas alətlər və avadanlıqlar", icon: "🔧", color: "#FBBF24", href: "/equipment", tag: "Kataloq" },
+  { title: "Karyera Xəritəsi", desc: "Karyera yolları, vəzifələr, maaşlar", icon: "🏭", color: "#A78BFA", href: "/learn/industry-map", tag: "Yeni" },
+  { title: "Alət və Avadanlıqlar", desc: "Sahədəki əsas alətlər və avadanlıqlar", icon: "🔧", color: "#FBBF24", href: "/equipment", tag: "Kataloq" },
   { title: "Bilik Oyunu", desc: "Quiz sualları ilə özünü yoxla", icon: "🎮", color: "#F87171", href: "/game", tag: "Oyna" },
 ];
 
