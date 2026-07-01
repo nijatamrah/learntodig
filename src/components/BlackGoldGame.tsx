@@ -840,7 +840,7 @@ export default function BlackGoldGame() {
           { l: "Vaxt", v: Math.round(gs.time) + "%", p: gs.time, c: "#378ADD" },
           { l: "Risk", v: Math.round(gs.risk) + "%", p: gs.risk, c: gs.risk > 60 ? "#E24B4A" : gs.risk > 35 ? "#BA7517" : "#639922" },
           { l: "Rep.", v: Math.round(gs.rep) + "%", p: gs.rep, c: "#7F77DD" },
-          { l: "Oil", v: gs.oil + "M", p: Math.min(100, gs.oil * 1.5), c: "#BA7517" },
+          { l: "Hasilat", v: gs.oil + "M", p: Math.min(100, gs.oil * 1.5), c: "#BA7517" },
         ].map(stat => (
           <div key={stat.l} className="rounded-lg border border-white/8 bg-black/20 px-2 py-1.5">
             <div className="text-xs text-gray-500 mb-1">{stat.l}</div>
