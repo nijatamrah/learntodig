@@ -1,9 +1,10 @@
 "use client";
- 
+
 import { useEffect, useRef, useState } from "react";
- 
+import { createClient } from "@/utils/supabase/client";
+
 // ─── Types ────────────────────────────────────────────────────────────────────
- 
+
 interface GameState {
   budget: number;
   time: number;
@@ -11,14 +12,14 @@ interface GameState {
   rep: number;
   oil: number;
 }
- 
+
 interface Choice {
   t: string;
   s: string;
   e: Partial<GameState> & { next?: number | null };
   next?: number | null;
 }
- 
+
 interface Scene {
   ch: number;
   title: string;
@@ -28,27 +29,30 @@ interface Scene {
   choices: Choice[];
   final?: boolean;
 }
- 
+
 interface LeaderboardEntry {
-  name: string;
-  score: number;
-  outcome: string;
-  date: string;
+  full_name: string;
+  average_score: number;
+  budget: number;
+  production: number;
+  completed_at: string;
 }
- 
+
+const MODULE_NAME = "black_gold_simulation";
+
 // ─── Constants ────────────────────────────────────────────────────────────────
- 
+
 const AC: Record<number, string> = {
   0: "#1D9E75", 1: "#378ADD", 2: "#7F77DD",
   3: "#BA7517", 4: "#D85A30", 5: "#639922", 6: "#888780",
 };
- 
+
 const CHS = ["Exploration", "Appraisal", "Planning", "Drilling", "Completion", "Production", "Abandonment"];
- 
+
 const INITIAL_STATE: GameState = { budget: 100, time: 100, risk: 20, rep: 50, oil: 0 };
- 
+
 // ─── Scenes ───────────────────────────────────────────────────────────────────
- 
+
 const SCENES: Scene[] = [
   /* 0 */ {
     ch: 0, title: "Caspian Basin — Gün 1",
@@ -301,9 +305,9 @@ const SCENES: Scene[] = [
     final: true,
   },
 ];
- 
+
 // ─── Score ─────────────────────────────────────────────────────────────────────
- 
+
 function calcScore(s: GameState) {
   return Math.round(Math.max(0, s.budget * 0.35 + s.oil * 1.1 + s.rep * 0.5 + Math.max(0, 100 - s.risk) * 0.4));
 }
@@ -314,16 +318,27 @@ function getOutcome(score: number) {
   if (score >= 60) return "📈 Junior Engineer";
   return "📚 Trainee — Yenidən cəhd et";
 }
- 
+
+// Normallaşdırılmış (0-100, "yüksək = yaxşı") dəyərlər — DB-yə bunlar yazılır
+function normalizedStats(s: GameState) {
+  return {
+    budget_n: Math.max(0, Math.min(100, s.budget)),
+    time_n: Math.max(0, Math.min(100, s.time)),
+    risk_n: Math.max(0, Math.min(100, 100 - s.risk)), // risk əksinədir: aşağı risk = yaxşı
+    rep_n: Math.max(0, Math.min(100, s.rep)),
+    production_n: Math.max(0, Math.min(100, s.oil * 1.5)),
+  };
+}
+
 // ─── Canvas Drawing ────────────────────────────────────────────────────────────
- 
+
 function drawScene(canvas: HTMLCanvasElement, ch: number) {
   const W = canvas.width;
   const H = canvas.height;
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
   ctx.clearRect(0, 0, W, H);
- 
+
   if (ch === 0) {
     // EXPLORATION — dəniz, seysmik, gəmi
     ctx.fillStyle = "#060d18"; ctx.fillRect(0, 0, W, H);
@@ -341,10 +356,8 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
       }
       ctx.stroke();
     }
-    // Formation layers
     [{ y: 215, c: "#071220" }, { y: 235, c: "#0a1a08" }, { y: 253, c: "#12100a" }, { y: 270, c: "#0a0f18" }]
       .forEach(l => { ctx.fillStyle = l.c; ctx.fillRect(0, l.y, W, 30); });
-    // Seismic arcs
     for (let p = 0; p < 3; p++) {
       const px = 150 + p * 160;
       ctx.strokeStyle = `rgba(55,138,221,${0.15 + p * 0.08})`; ctx.lineWidth = 1;
@@ -352,23 +365,20 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
         ctx.beginPath(); ctx.arc(px, 100, 20 + i * 18, Math.PI * 0.3, Math.PI * 0.7); ctx.stroke();
       }
     }
-    // Ship
     ctx.fillStyle = "#112240"; ctx.fillRect(W / 2 - 60, 112, 120, 20);
     ctx.fillStyle = "#0d1a30"; ctx.fillRect(W / 2 - 35, 96, 28, 18);
     ctx.strokeStyle = "#2a4a6a"; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.moveTo(W / 2 - 22, 112); ctx.lineTo(W / 2 - 10, 82); ctx.lineTo(W / 2 + 2, 112); ctx.stroke();
-    // Label
     ctx.fillStyle = "rgba(29,158,117,0.85)"; ctx.font = "500 12px sans-serif";
     ctx.fillText("Seysmik kəşfiyyat — Blok 7", 14, 22);
     ctx.fillStyle = "rgba(255,255,255,0.35)"; ctx.font = "10px sans-serif";
     ctx.fillText("Su dərinliyi: 150m  |  Hədəf: 4,000m", 14, 38);
-    // Info box
     ctx.fillStyle = "rgba(6,13,24,0.8)"; ctx.fillRect(W - 170, 8, 158, 58);
     ctx.strokeStyle = "rgba(29,158,117,0.3)"; ctx.lineWidth = 0.5; ctx.strokeRect(W - 170, 8, 158, 58);
     ctx.fillStyle = "rgba(29,158,117,0.8)"; ctx.font = "10px sans-serif"; ctx.fillText("AVO anomaliya", W - 162, 26);
     ctx.fillStyle = "#EF9F27"; ctx.font = "500 14px sans-serif"; ctx.fillText("Karbohidrat işarəsi", W - 162, 46);
     ctx.fillStyle = "rgba(255,255,255,0.35)"; ctx.font = "9px sans-serif"; ctx.fillText("Confidence: 72%", W - 162, 60);
- 
+
   } else if (ch === 1) {
     // APPRAISAL — wireline log
     ctx.fillStyle = "#050810"; ctx.fillRect(0, 0, W, H);
@@ -390,7 +400,6 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
     });
     ctx.fillStyle = "#2a2a2a"; ctx.fillRect(240, 0, 18, 300);
     ctx.fillStyle = "#378ADD"; ctx.fillRect(247, 0, 4, 300);
-    // GR log
     ctx.strokeStyle = "rgba(29,158,117,0.9)"; ctx.lineWidth = 1.5; ctx.beginPath();
     for (let y = 0; y < 300; y += 2) {
       const base = flayers.find(l => y >= l.y && y < l.y + l.h);
@@ -399,7 +408,6 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
       y === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.stroke();
-    // Resistivity log
     ctx.strokeStyle = "rgba(186,117,23,0.9)"; ctx.lineWidth = 1.5; ctx.beginPath();
     for (let y = 0; y < 300; y += 2) {
       const base = flayers.find(l => y >= l.y && y < l.y + l.h);
@@ -408,11 +416,9 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
       y === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.stroke();
-    // Reservoir highlight
     ctx.fillStyle = "rgba(29,158,117,0.06)"; ctx.fillRect(258, 150, W - 258, 80);
     ctx.strokeStyle = "rgba(29,158,117,0.4)"; ctx.lineWidth = 0.5; ctx.setLineDash([4, 3]);
     ctx.strokeRect(258, 150, W - 258, 80); ctx.setLineDash([]);
-    // Legend
     ctx.fillStyle = "rgba(5,8,16,0.9)"; ctx.fillRect(258, 0, W - 258, 38);
     [[280, "#1D9E75", "GR"], [330, "#BA7517", "RT"], [385, "rgba(127,119,221,0.7)", "NPHI"]].forEach(([x, c, label]) => {
       ctx.fillStyle = c as string; ctx.fillRect(x as number, 12, 18, 3);
@@ -421,7 +427,7 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
     });
     ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.font = "10px sans-serif";
     ctx.fillText("Well A-1  |  4,180m TD  |  Net pay: 38m", 14, 290);
- 
+
   } else if (ch === 2) {
     // PLANNING — casing schematic
     ctx.fillStyle = "#080810"; ctx.fillRect(0, 0, W, H);
@@ -463,7 +469,7 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
     ctx.fillText("Casing design — HPHT 5-string", 14, 22);
     ctx.fillStyle = "rgba(255,255,255,0.35)"; ctx.font = "10px sans-serif";
     ctx.fillText("TD: 4,512m  |  185°C / 9,200 psi", 14, 38);
- 
+
   } else if (ch === 3) {
     // DRILLING — rig, parametrlər
     ctx.fillStyle = "#060d06"; ctx.fillRect(0, 0, W, H);
@@ -471,7 +477,6 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
     ctx.fillStyle = "#0d1a0d"; ctx.fillRect(0, 140, W, 160);
     [{ y: 140, c: "#0e1a0e" }, { y: 185, c: "#141a0a" }, { y: 225, c: "#0a1014" }, { y: 265, c: "#101a08" }]
       .forEach(l => { ctx.fillStyle = l.c; ctx.fillRect(0, l.y, W, 42); });
-    // Derrick
     ctx.strokeStyle = "#2a3a2a"; ctx.lineWidth = 2.5;
     ctx.beginPath(); ctx.moveTo(W / 2 - 55, 140); ctx.lineTo(W / 2, 12); ctx.lineTo(W / 2 + 55, 140); ctx.stroke();
     for (let i = 1; i < 5; i++) {
@@ -480,18 +485,15 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
     }
     ctx.fillStyle = "#1a2a1a"; ctx.fillRect(W / 2 - 65, 136, 130, 10);
     ctx.fillStyle = "#2a3a2a"; ctx.fillRect(W / 2 - 10, 130, 20, 10);
-    // Drill string
     ctx.fillStyle = "#5a5a5a"; ctx.fillRect(W / 2 - 3, 146, 6, 154);
     ctx.fillStyle = "#4a3a1a"; ctx.fillRect(W / 2 - 5, 272, 10, 18);
     ctx.fillStyle = "#BA7517";
     ctx.beginPath(); ctx.moveTo(W / 2 - 7, 290); ctx.lineTo(W / 2 + 7, 290); ctx.lineTo(W / 2, 300); ctx.closePath(); ctx.fill();
-    // Mud flow
     ctx.strokeStyle = "rgba(29,158,117,0.35)"; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
     ctx.beginPath(); ctx.moveTo(W / 2 - 60, 140); ctx.lineTo(W / 2 - 95, 185); ctx.lineTo(W / 2 - 95, 300); ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle = "#1a2a1a"; ctx.fillRect(W / 2 - 130, 175, 38, 32);
     ctx.fillStyle = "rgba(29,158,117,0.5)"; ctx.font = "8px sans-serif"; ctx.fillText("Mud pump", W / 2 - 128, 218);
-    // Drilling params panel
     ctx.fillStyle = "rgba(6,13,6,0.88)"; ctx.fillRect(8, 8, 145, 80);
     ctx.strokeStyle = "rgba(186,117,23,0.3)"; ctx.lineWidth = 0.5; ctx.strokeRect(8, 8, 145, 80);
     ctx.fillStyle = "rgba(186,117,23,0.8)"; ctx.font = "500 10px sans-serif"; ctx.fillText("DRILLING PARAMS", 14, 24);
@@ -500,13 +502,12 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
         ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.font = "9px sans-serif"; ctx.fillText(l, 14, 38 + i * 13);
         ctx.fillStyle = c; ctx.font = "500 10px sans-serif"; ctx.fillText(v, 80, 38 + i * 13);
       });
-    // Pore pressure
     ctx.fillStyle = "rgba(6,13,6,0.88)"; ctx.fillRect(W - 155, 8, 143, 65);
     ctx.strokeStyle = "rgba(226,75,74,0.3)"; ctx.lineWidth = 0.5; ctx.strokeRect(W - 155, 8, 143, 65);
     ctx.fillStyle = "rgba(226,75,74,0.8)"; ctx.font = "500 10px sans-serif"; ctx.fillText("PORE PRESSURE", W - 149, 24);
     ctx.fillStyle = "#E24B4A"; ctx.font = "500 20px sans-serif"; ctx.fillText("4,820 psi", W - 149, 50);
     ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.font = "9px sans-serif"; ctx.fillText("↑ Rising", W - 149, 66);
- 
+
   } else if (ch === 4) {
     // COMPLETION — perforasiya
     ctx.fillStyle = "#060608"; ctx.fillRect(0, 0, W, H);
@@ -514,11 +515,9 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
       .forEach(z => { ctx.fillStyle = z.c; ctx.fillRect(0, z.y, W, z.h); });
     ctx.fillStyle = "rgba(29,158,117,0.4)"; ctx.font = "500 10px sans-serif"; ctx.fillText("Zona B — əsas target", 10, 185);
     ctx.fillStyle = "rgba(255,255,255,0.2)"; ctx.font = "9px sans-serif"; ctx.fillText("Water contact risk", 10, 262);
-    // Casing
     ctx.fillStyle = "#383838"; ctx.fillRect(W / 2 - 22, 0, 10, 300); ctx.fillRect(W / 2 + 12, 0, 10, 300);
     ctx.fillStyle = "#4a4a4a"; ctx.fillRect(W / 2 - 12, 0, 24, 100);
     ctx.fillStyle = "#2a2a22"; ctx.fillRect(W / 2 - 35, 0, 13, 300); ctx.fillRect(W / 2 + 22, 0, 13, 300);
-    // Perforations
     for (let i = 0; i < 7; i++) {
       const py = 175 + i * 13;
       ctx.strokeStyle = "#EF9F27"; ctx.lineWidth = 1.5;
@@ -528,14 +527,12 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
       ctx.beginPath(); ctx.arc(W / 2 - 55, py - 8 + (i % 2) * 16, 4, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.arc(W / 2 + 55, py - 8 + (i % 2) * 16, 4, 0, Math.PI * 2); ctx.fill();
     }
-    // Frac rings
     for (let r = 15; r < 120; r += 18) {
       ctx.strokeStyle = `rgba(186,117,23,${Math.max(0.02, 0.12 - r * 0.0008)})`; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.arc(W / 2, 205, r, 0, Math.PI * 2); ctx.stroke();
     }
     ctx.fillStyle = "#1D9E75"; ctx.fillRect(W / 2 - 5, 0, 10, 300);
     ctx.fillStyle = "#3a3a3a"; ctx.fillRect(W / 2 - 22, 0, 44, 20);
-    // Panel
     ctx.fillStyle = "rgba(6,6,8,0.85)"; ctx.fillRect(W - 172, 8, 160, 70);
     ctx.fillStyle = "rgba(29,158,117,0.8)"; ctx.font = "500 10px sans-serif"; ctx.fillText("COMPLETION STATUS", W - 164, 24);
     [["Perf interval", "Zona A+B — 180m"], ["Stimulation", "Matrix acid done"], ["ICD installed", "3 zones active"], ["Wellhead", "Pressure OK"]]
@@ -543,7 +540,7 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
         ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.font = "9px sans-serif"; ctx.fillText(l, W - 164, 36 + i * 13);
         ctx.fillStyle = "rgba(255,255,255,0.6)"; ctx.fillText(v, W - 164 + 72, 36 + i * 13);
       });
- 
+
   } else if (ch === 5) {
     // PRODUCTION — platform, decline chart
     ctx.fillStyle = "#040c18"; ctx.fillRect(0, 0, W, H);
@@ -556,7 +553,6 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
       }
       ctx.stroke();
     }
-    // Platform legs
     ctx.strokeStyle = "#1a2a3a"; ctx.lineWidth = 4;
     [[W / 2 - 65, 170], [W / 2 - 35, 170], [W / 2 + 35, 170], [W / 2 + 65, 170]].forEach(([x, y]) => {
       ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + (x < W / 2 ? -8 : 8), 300); ctx.stroke();
@@ -566,7 +562,6 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
     ctx.strokeStyle = "#EF9F27"; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(W / 2 + 95, 120); ctx.lineTo(W / 2 + 95, 70); ctx.stroke();
     ctx.fillStyle = "#EF9F27"; ctx.beginPath(); ctx.arc(W / 2 + 95, 65, 7, 0, Math.PI * 2); ctx.fill();
-    // Decline chart
     ctx.fillStyle = "rgba(4,12,24,0.88)"; ctx.fillRect(8, 8, 190, 118);
     ctx.strokeStyle = "rgba(29,158,117,0.2)"; ctx.lineWidth = 0.5; ctx.strokeRect(8, 8, 190, 118);
     ctx.fillStyle = "rgba(29,158,117,0.7)"; ctx.font = "500 10px sans-serif"; ctx.fillText("Production (bbl/day)", 14, 24);
@@ -583,7 +578,6 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
     const mp = dpts[Math.floor(dpts.length * 0.4)];
     ctx.fillStyle = "#EF9F27"; ctx.beginPath(); ctx.arc(mp[0], mp[1], 4, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.font = "9px sans-serif"; ctx.fillText("8,200 bbl/day (4 wells)", 14, 114);
-    // Well status
     ctx.fillStyle = "rgba(4,12,24,0.88)"; ctx.fillRect(W - 130, 10, 118, 56);
     ctx.fillStyle = "rgba(255,255,255,0.4)"; ctx.font = "500 9px sans-serif"; ctx.fillText("WELLS STATUS", W - 122, 24);
     [["#1", "2,400 b/d", "#1D9E75"], ["#2", "2,100 b/d", "#1D9E75"], ["#3", "1,900 b/d", "#EF9F27"], ["#4", "1,800 b/d", "#1D9E75"]]
@@ -591,7 +585,7 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
         ctx.fillStyle = "rgba(255,255,255,0.25)"; ctx.font = "9px sans-serif"; ctx.fillText("Well " + w, W - 122, 34 + i * 11);
         ctx.fillStyle = c; ctx.fillText(v, W - 82, 34 + i * 11);
       });
- 
+
   } else {
     // ABANDONMENT
     ctx.fillStyle = "#080808"; ctx.fillRect(0, 0, W, H);
@@ -612,7 +606,6 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
     ctx.beginPath(); ctx.moveTo(W / 2 - 22, 5); ctx.lineTo(W / 2 + 22, 45); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(W / 2 + 22, 5); ctx.lineTo(W / 2 - 22, 45); ctx.stroke();
     ctx.fillStyle = "rgba(226,75,74,0.5)"; ctx.font = "500 9px sans-serif"; ctx.fillText("Wellhead removed", W / 2 - 42, 56);
-    // Monitoring panel
     ctx.fillStyle = "rgba(8,8,8,0.88)"; ctx.fillRect(8, 8, 175, 88);
     ctx.strokeStyle = "rgba(99,153,34,0.3)"; ctx.lineWidth = 0.5; ctx.strokeRect(8, 8, 175, 88);
     ctx.fillStyle = "rgba(99,153,34,0.8)"; ctx.font = "500 10px sans-serif"; ctx.fillText("ENV. MONITORING — Aktiv", 14, 24);
@@ -621,7 +614,6 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
         ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.font = "9px sans-serif"; ctx.fillText(l, 14, 36 + i * 14);
         ctx.fillStyle = c; ctx.fillText(v, 56, 36 + i * 14);
       });
-    // Timeline
     ctx.fillStyle = "rgba(8,8,8,0.88)"; ctx.fillRect(W - 195, 8, 183, 88);
     ctx.fillStyle = "rgba(136,135,128,0.7)"; ctx.font = "500 10px sans-serif"; ctx.fillText("PROJECT LIFECYCLE", W - 187, 24);
     [["2024", "Exploration", "#1D9E75"], ["2025", "Appraisal", "#378ADD"], ["2026", "Drilling", "#BA7517"], ["2028", "Production", "#639922"], ["2034", "Abandonment", "#888780"]]
@@ -632,9 +624,9 @@ function drawScene(canvas: HTMLCanvasElement, ch: number) {
       });
   }
 }
- 
+
 // ─── Component ────────────────────────────────────────────────────────────────
- 
+
 export default function BlackGoldGame() {
   const [screen, setScreen] = useState<"intro" | "game" | "result" | "board">("intro");
   const [sIdx, setSIdx] = useState(0);
@@ -645,13 +637,32 @@ export default function BlackGoldGame() {
   const [done, setDone] = useState(false);
   const [nameInput, setNameInput] = useState("");
   const [lb, setLb] = useState<LeaderboardEntry[]>([]);
+  const [loadingLb, setLoadingLb] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [choicePath, setChoicePath] = useState<number[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
- 
+  const [supabase] = useState(() => createClient());
+
+  async function fetchLeaderboard() {
+    setLoadingLb(true);
+    const { data, error } = await supabase
+      .from("game_scores")
+      .select("full_name, average_score, budget, production, completed_at")
+      .eq("module_name", MODULE_NAME)
+      .order("average_score", { ascending: false })
+      .limit(10);
+    if (!error && data) setLb(data as LeaderboardEntry[]);
+    setLoadingLb(false);
+  }
+
   useEffect(() => {
-    try { setLb(JSON.parse(localStorage.getItem("bg_lb2") || "[]")); } catch { }
+    fetchLeaderboard();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
- 
+
   useEffect(() => {
     if (screen === "game" && canvasRef.current) {
       const canvas = canvasRef.current;
@@ -659,7 +670,7 @@ export default function BlackGoldGame() {
       drawScene(canvas, SCENES[sIdx].ch);
     }
   }, [screen, sIdx]);
- 
+
   function applyFx(e: Partial<GameState> & { next?: number | null }) {
     setGs(prev => {
       const s = { ...prev };
@@ -671,55 +682,94 @@ export default function BlackGoldGame() {
       return s;
     });
   }
- 
+
   function choose(i: number) {
     const sc = SCENES[sIdx];
     const ch = sc.choices[i];
     applyFx(ch.e);
     setLastCons(ch.s);
     setShowCons(true);
+    setChoicePath(prev => [...prev, i]);
     const nx = ch.e.next ?? ch.next ?? null;
     setPending(nx);
     if (sc.final || nx === null || nx >= SCENES.length) setDone(true);
   }
- 
+
   function continueGame() {
     setShowCons(false);
     if (done) { setScreen("result"); return; }
     if (pending !== null) setSIdx(pending);
     topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
- 
-  function submitScore() {
-    const s = calcScore(gs);
-    const entry: LeaderboardEntry = {
-      name: nameInput.trim() || "Anonymous",
-      score: s,
-      outcome: getOutcome(s),
-      date: new Date().toLocaleDateString("az-AZ"),
-    };
-    const updated = [...lb, entry].sort((a, b) => b.score - a.score).slice(0, 10);
-    setLb(updated);
-    try { localStorage.setItem("bg_lb2", JSON.stringify(updated)); } catch { }
+
+  async function submitScore() {
+    if (submitting || submitted) return;
+    setSubmitting(true);
+    setSubmitError(null);
+
+    const { budget_n, time_n, risk_n, rep_n, production_n } = normalizedStats(gs);
+
+    // Giriş edibsə profildən adı çək, olmasa manual input istifadə et
+    let finalName = nameInput.trim() || "Anonymous";
+    let userId: string | null = null;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        userId = user.id;
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name")
+          .eq("id", user.id)
+          .single();
+        if (profile?.full_name) finalName = profile.full_name;
+      }
+    } catch {
+      // auth yoxdursa manual ad ilə davam edirik
+    }
+
+    const { error } = await supabase.from("game_scores").insert({
+      user_id: userId,
+      module_name: MODULE_NAME,
+      score: calcScore(gs),
+      budget: budget_n,
+      time_score: time_n,
+      risk: risk_n,
+      reputation: rep_n,
+      production: production_n,
+      full_name: finalName,
+      scenario_path: choicePath.join("-"),
+    });
+
+    setSubmitting(false);
+
+    if (error) {
+      console.error("Score göndərilmədi:", error);
+      setSubmitError("Nəticə göndərilmədi. Yenidən cəhd et.");
+      return;
+    }
+
+    setSubmitted(true);
+    await fetchLeaderboard();
     setScreen("board");
   }
- 
+
   function restart() {
     setScreen("intro"); setSIdx(0); setGs({ ...INITIAL_STATE });
-    setShowCons(false); setLastCons(""); setPending(null); setDone(false); setNameInput("");
+    setShowCons(false); setLastCons(""); setPending(null); setDone(false);
+    setNameInput(""); setSubmitted(false); setSubmitError(null); setChoicePath([]);
   }
- 
+
   const sc = SCENES[sIdx];
   const score = calcScore(gs);
   const ac = AC[sc?.ch ?? 0];
- 
+
   const evClass: Record<string, string> = {
     "ev-w": "bg-amber-500/10 text-amber-400 border border-amber-500/30",
     "ev-s": "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30",
     "ev-i": "bg-blue-500/10 text-blue-400 border border-blue-500/30",
     "ev-d": "bg-red-500/10 text-red-400 border border-red-500/30",
   };
- 
+
   // ── Intro ──────────────────────────────────────────────────────────────────
   if (screen === "intro") return (
     <div className="max-w-2xl mx-auto py-10 px-4 text-center">
@@ -748,7 +798,7 @@ export default function BlackGoldGame() {
       </div>
     </div>
   );
- 
+
   // ── Leaderboard ────────────────────────────────────────────────────────────
   if (screen === "board") return (
     <div className="max-w-2xl mx-auto py-6 px-4">
@@ -756,7 +806,9 @@ export default function BlackGoldGame() {
         <button onClick={() => setScreen(done ? "result" : "intro")} className="px-3 py-1.5 rounded-lg border border-white/15 text-gray-400 text-xs">← Geri</button>
         <h2 className="text-lg font-medium">🏆 Leaderboard</h2>
       </div>
-      {lb.length === 0 ? (
+      {loadingLb ? (
+        <p className="text-center text-gray-500 text-sm py-10">Yüklənir...</p>
+      ) : lb.length === 0 ? (
         <p className="text-center text-gray-500 text-sm py-10">Hələ heç kim oynamamışdır. İlk sən ol!</p>
       ) : (
         <div className="flex flex-col gap-2">
@@ -766,10 +818,12 @@ export default function BlackGoldGame() {
                 {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : i + 1}
               </div>
               <div className="flex-1">
-                <div className="font-medium text-sm">{e.name}</div>
-                <div className="text-xs text-gray-500">{e.outcome} · {e.date}</div>
+                <div className="font-medium text-sm">{e.full_name}</div>
+                <div className="text-xs text-gray-500">
+                  {e.completed_at ? new Date(e.completed_at).toLocaleDateString("az-AZ") : ""}
+                </div>
               </div>
-              <div className="text-lg font-medium" style={{ color: "#1D9E75" }}>{e.score}</div>
+              <div className="text-lg font-medium" style={{ color: "#1D9E75" }}>{Math.round(e.average_score)}</div>
             </div>
           ))}
         </div>
@@ -779,7 +833,7 @@ export default function BlackGoldGame() {
       </button>
     </div>
   );
- 
+
   // ── Result ─────────────────────────────────────────────────────────────────
   if (screen === "result") return (
     <div className="max-w-2xl mx-auto py-8 px-4 text-center">
@@ -795,18 +849,23 @@ export default function BlackGoldGame() {
         ))}
       </div>
       <div className="rounded-xl border border-white/8 bg-white/4 p-4 mb-4 text-left">
-        <p className="text-sm text-gray-400 mb-3">Adını daxil et — leaderboard-a əlavə et:</p>
+        <p className="text-sm text-gray-400 mb-3">Adını daxil et — leaderboard-a əlavə et (login olmusansa, avtomatik profil adın istifadə olunacaq):</p>
         <div className="flex gap-2">
           <input type="text" placeholder="Adın..." value={nameInput} onChange={e => setNameInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && submitScore()}
-            className="flex-1 px-3 py-2 rounded-lg border border-white/15 bg-white/6 text-sm outline-none" />
-          <button onClick={submitScore} className="px-4 py-2 rounded-lg text-white text-sm font-medium" style={{ background: "#1D9E75" }}>Göndər</button>
+            disabled={submitting || submitted}
+            className="flex-1 px-3 py-2 rounded-lg border border-white/15 bg-white/6 text-sm outline-none disabled:opacity-50" />
+          <button onClick={submitScore} disabled={submitting || submitted}
+            className="px-4 py-2 rounded-lg text-white text-sm font-medium disabled:opacity-50" style={{ background: "#1D9E75" }}>
+            {submitting ? "Göndərilir..." : submitted ? "Göndərildi ✓" : "Göndər"}
+          </button>
         </div>
+        {submitError && <p className="text-xs text-red-400 mt-2">{submitError}</p>}
       </div>
       <button onClick={restart} className="w-full py-3 rounded-xl border border-white/15 text-gray-400 text-sm">Yenidən oyna →</button>
     </div>
   );
- 
+
   // ── Game ───────────────────────────────────────────────────────────────────
   return (
     <div ref={topRef} className="max-w-2xl mx-auto">
@@ -827,12 +886,12 @@ export default function BlackGoldGame() {
           );
         })}
       </div>
- 
+
       {/* Canvas */}
       <div className="relative overflow-hidden" style={{ height: 300, background: "#060d18" }}>
         <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} />
       </div>
- 
+
       {/* Stats */}
       <div className="grid grid-cols-5 gap-1.5 px-3 py-2" style={{ background: "var(--color-background-secondary)", borderBottom: "0.5px solid rgba(255,255,255,0.08)" }}>
         {[
@@ -851,7 +910,7 @@ export default function BlackGoldGame() {
           </div>
         ))}
       </div>
- 
+
       {/* Story */}
       <div className="p-4" style={{ background: "var(--color-background-primary)", borderTop: "none" }}>
         {showCons ? (
@@ -898,4 +957,3 @@ export default function BlackGoldGame() {
     </div>
   );
 }
- 
