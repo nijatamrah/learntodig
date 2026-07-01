@@ -58,33 +58,88 @@ const SAMPLE_FILES = [
 ];
 
 // ─── LAS fayl strukturunu parse et (modal üçün) ───────────────────────────
+interface LasField {
+  key: string;    // STRT
+  unit: string;   // FT
+  value: string;  // 10180.0
+  desc: string;   // START DEPTH
+}
+
+interface LasSection {
+  name: string;
+  fields: LasField[];
+}
+
 function parseLasPreview(text: string) {
   const lines = text.split("\n");
-  const sections: { name: string; lines: string[] }[] = [];
-  let current: { name: string; lines: string[] } | null = null;
-  const dataLines: string[] = [];
+  const sections: LasSection[] = [];
+  let current: LasSection | null = null;
+  let dataLines: string[] = [];
+  let curveNames: string[] = [];
   let inData = false;
+  let inCurve = false;
 
   for (const line of lines) {
     const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
     if (trimmed.startsWith("~A")) {
       inData = true;
+      inCurve = false;
       current = null;
       continue;
     }
+
     if (inData) {
-      if (trimmed && !trimmed.startsWith("#")) dataLines.push(trimmed);
+      dataLines.push(trimmed);
       continue;
     }
+
     if (trimmed.startsWith("~")) {
       if (current) sections.push(current);
-      current = { name: trimmed, lines: [] };
-    } else if (current && trimmed && !trimmed.startsWith("#")) {
-      current.lines.push(trimmed);
+      inCurve = trimmed.toUpperCase().includes("CURVE");
+      current = { name: trimmed, fields: [] };
+      continue;
+    }
+
+    if (current) {
+      // Format: " KEY.UNIT   VALUE : DESCRIPTION"
+      const colonIdx = trimmed.indexOf(":");
+      const dotIdx = trimmed.indexOf(".");
+      if (colonIdx === -1) continue;
+
+      const leftPart = trimmed.slice(0, colonIdx).trim();
+      const desc = trimmed.slice(colonIdx + 1).trim();
+
+      let key = leftPart;
+      let unit = "";
+      let value = "";
+
+      if (dotIdx !== -1 && dotIdx < colonIdx) {
+        key = leftPart.slice(0, dotIdx).trim();
+        const afterDot = leftPart.slice(dotIdx + 1).trim();
+        // afterDot = "FT   10180.0" — unit + value boşluqla ayrılır
+        const spaceIdx = afterDot.search(/\s/);
+        if (spaceIdx !== -1) {
+          unit = afterDot.slice(0, spaceIdx).trim();
+          value = afterDot.slice(spaceIdx).trim();
+        } else {
+          unit = afterDot;
+        }
+      }
+
+      if (inCurve && key) curveNames.push(key);
+
+      current.fields.push({ key, unit, value, desc });
     }
   }
   if (current) sections.push(current);
-  return { sections, dataLines: dataLines.slice(0, 8) };
+
+  return {
+    sections,
+    curveNames,
+    dataLines: dataLines.slice(0, 10),
+  };
 }
 
 // ─── Modal: LAS faylının içi ──────────────────────────────────────────────
@@ -182,13 +237,14 @@ function LasPreviewModal({
                     padding: "10px 14px", fontFamily: "ui-monospace, monospace",
                     fontSize: "0.78rem", color: "#94a3b8", lineHeight: 1.7,
                   }}>
-                    {sec.lines.map((l, i) => (
+                    {sec.fields.map((f, i) => (
                       <div key={i} style={{ display: "flex", gap: 12 }}>
                         <span style={{ color: "#4f5b99", minWidth: 160 }}>
-                          {l.split(".")[0]?.trim()}
+                          {f.key}
+                          {f.unit ? `.${f.unit}` : ""}
                         </span>
                         <span style={{ color: "#cbd5e1" }}>
-                          {l.split(":")[1]?.trim() ?? ""}
+                          {f.desc || f.value}
                         </span>
                       </div>
                     ))}
