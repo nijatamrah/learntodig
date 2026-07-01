@@ -801,7 +801,7 @@ export default function BlackGoldGame() {
 
   // ── Leaderboard ────────────────────────────────────────────────────────────
   if (screen === "board") return (
-    <div className="max-w-2xl mx-auto py-6 px-4">
+    <div className="max-w-2xl mx-auto pt-12 pb-6 px-4">
       <div className="flex items-center gap-3 mb-5">
         <button onClick={() => setScreen(done ? "result" : "intro")} className="px-3 py-1.5 rounded-lg border border-white/15 text-gray-400 text-xs">← Geri</button>
         <h2 className="text-lg font-medium">🏆 Leaderboard</h2>
