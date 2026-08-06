@@ -18,7 +18,7 @@ const petrelConcepts = [
     color: '#10B981',
     icon: '🕳️',
     desc: 'Məsaməlilik süxurun boş həcminin ümumi həcmə nisbətidir. Yüksək məsaməlilik daha çox neft saxlaya bilən süxur deməkdir.',
-    detail: 'Tipik dəyərlər: Qumdaşı 15-35%, Əhəngdaşı 5-20%, Şal 5-15%. Petrel-də məsaməlilik 3D modeldə rənglə göstərilir.',
+    detail: 'Tipik dəyərlər: Qumdaşı 15-35%, Əhəngdaşı 5-20%, Şist 5-15%. Petrel-də məsaməlilik 3D modeldə rənglə göstərilir.',
   },
   {
     id: 'permeability',
@@ -40,11 +40,11 @@ const petrelConcepts = [
 
 const modelLayers = [
   { name: 'Üst örtük (Overburden)', color: '#374151', porosity: '2%', perm: '0.01 mD', fluid: 'Quru' },
-  { name: 'Şal (Qapaq)', color: '#4B5563', porosity: '8%', perm: '0.1 mD', fluid: 'Quru' },
+  { name: 'Şist (Qapaq)', color: '#4B5563', porosity: '8%', perm: '0.1 mD', fluid: 'Quru' },
   { name: 'Qumdaşı A (Kollektor)', color: '#B45309', porosity: '28%', perm: '250 mD', fluid: 'Neft' },
   { name: 'Keçid Zonası', color: '#92400E', porosity: '18%', perm: '50 mD', fluid: 'Neft+Su' },
   { name: 'Qumdaşı B (Su zonası)', color: '#1D4ED8', porosity: '25%', perm: '180 mD', fluid: 'Su' },
-  { name: 'Alt şal', color: '#1F2937', porosity: '5%', perm: '0.05 mD', fluid: 'Quru' },
+  { name: 'Alt şist', color: '#1F2937', porosity: '5%', perm: '0.05 mD', fluid: 'Quru' },
 ];
 
 const quizQuestions = [
@@ -70,7 +70,7 @@ const quizQuestions = [
   },
   {
     q: 'Hansı süxurun məsaməliliyi ən yüksəkdir?',
-    options: ['Şal', 'Granit', 'Qumdaşı', 'Duz'],
+    options: ['Şist', 'Granit', 'Qumdaşı', 'Duz'],
     correct: 2,
   },
 ];

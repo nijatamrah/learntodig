@@ -56,7 +56,7 @@ export async function POST(request: Request) {
 
 Aşağıdakı LAS quyu loq analizi verilmişdir. İzah et:
 - Loq datası ümumilikdə nə göstərir?
-- Hansı dərinlik intervalları neft, qaz, su və ya şal kimi qiymətləndirilir və NİYƏ (GR, resistivlik və digər əyri məntiqi ilə)?
+- Hansı dərinlik intervalları neft, qaz, su və ya şist kimi qiymətləndirilir və NİYƏ (GR, resistivlik və digər əyri məntiqi ilə)?
 - Ən perspektivli (neft/qaz) zonalar hansılardır?
 - Su zonaları harada görünür və nə deməkdir?
 

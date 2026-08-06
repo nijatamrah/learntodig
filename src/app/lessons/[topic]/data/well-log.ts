@@ -21,19 +21,19 @@ export const wellLogLesson: Lesson = {
         },
         {
           heading: "GR — Gamma Ray Loqu | Gamma Ray Log",
-          body: "GR loqu süxurun təbii radioaktivliyini ölçür, API vahidi ilə ifadə olunur. Şale (gil) — yüksək GR (>75 API). Sandstone, limestone — aşağı GR (<50 API). GR loqu litologiyanı müəyyən etməyin ən sadə üsuludur.",
+          body: "GR loqu süxurun təbii radioaktivliyini ölçür, API vahidi ilə ifadə olunur. Şist (gil) — yüksək GR (>75 API). Sandstone, limestone — aşağı GR (<50 API). GR loqu litologiyanı müəyyən etməyin ən sadə üsuludur.",
           terms: [
             { az: "Qamma şüa loqu", en: "Gamma Ray (GR) log" },
             { az: "API vahidi", en: "API unit" },
-            { az: "Şale bazası", en: "Shale baseline (GR_sh)" },
+            { az: "Şist bazası", en: "Shale baseline (GR_sh)" },
             { az: "Təmiz xətt", en: "Clean line (GR_clean)" },
           ],
           formula: {
             expression: "IGR = (GR_log - GR_clean) / (GR_sh - GR_clean)",
-            legend: "IGR — şale indeksi (0=təmiz, 1=tam şale) | GR_log — ölçülmüş | GR_clean — minimum | GR_sh — maksimum",
+            legend: "IGR — şist indeksi (0=təmiz, 1=tam şist) | GR_log — ölçülmüş | GR_clean — minimum | GR_sh — maksimum",
           },
           example:
-            "💡 Nümunə: GR_log=55, GR_clean=20, GR_sh=100.\nIGR = (55-20)/(100-20) = 35/80 = 0.44 → ~44% şale — orta keyfiyyətli rezervuar.",
+            "💡 Nümunə: GR_log=55, GR_clean=20, GR_sh=100.\nIGR = (55-20)/(100-20) = 35/80 = 0.44 → ~44% şist — orta keyfiyyətli rezervuar.",
           caseStudy:
             "🌍 Dünya nümunəsi: Şimali dənizin Brent Group formasyonlarında GR korrelyasiyası onlarca quyu arasında aparılmışdır — GR pattern-ləri hər alt formasiyanı müəyyən edir.",
         },
@@ -75,7 +75,7 @@ export const wellLogLesson: Lesson = {
         },
         {
           heading: "Loq interpretasiya iş axını | Log Interpretation Workflow",
-          body: "Professional loq interpretasiyası addım-addım: (1) GR ilə litologiya (şale/reservoir ayrımı); (2) RHOB/NPHI ilə məsaməlilik; (3) Archie ilə Sw; (4) So = 1-Sw-Sg; (5) Net pay müəyyənliyi (GR<cutoff, φ>cutoff, Sw<cutoff). Net pay — kommersial mənada neft ehtiva edən lay qalınlığıdır.",
+          body: "Professional loq interpretasiyası addım-addım: (1) GR ilə litologiya (şist/reservoir ayrımı); (2) RHOB/NPHI ilə məsaməlilik; (3) Archie ilə Sw; (4) So = 1-Sw-Sg; (5) Net pay müəyyənliyi (GR<cutoff, φ>cutoff, Sw<cutoff). Net pay — kommersial mənada neft ehtiva edən lay qalınlığıdır.",
           terms: [
             { az: "Xalis məhsuldar lay", en: "Net pay" },
             { az: "Ayrım dəyəri", en: "Cutoff value" },
@@ -93,7 +93,7 @@ export const wellLogLesson: Lesson = {
           question: "GR_log=40, GR_clean=15, GR_sh=95. IGR neçədir?",
           options: ["0.25", "0.31", "0.42", "0.50"],
           answer: 1,
-          explanation: "IGR = (40-15)/(95-15) = 25/80 = 0.3125 ≈ 0.31. ~31% şale — yaxşı keyfiyyətli reservoir.",
+          explanation: "IGR = (40-15)/(95-15) = 25/80 = 0.3125 ≈ 0.31. ~31% şist — yaxşı keyfiyyətli reservoir.",
         },
         {
           question: "Archie: a=1, m=2, Rw=0.08, φ=0.18, Rt=80. Sw neçədir?",
@@ -106,7 +106,7 @@ export const wellLogLesson: Lesson = {
           options: [
             "Yüksək su doyması",
             "NPHI azalır, RHOB da azalır — qaz varlığı",
-            "Şale zonası",
+            "Şist zonası",
             "Yüksək neft özlülüyü",
           ],
           answer: 1,
@@ -177,7 +177,7 @@ export const wellLogLesson: Lesson = {
         },
         {
           heading: "Shaly Sand Analysis | Gil-Qum Analizi",
-          body: "Real rezervuarlarda şale qarışığı (shaly sand) Archie tənliyinin düzgün işləməsinə mane olur — şale öz-özlüyündə kondüktiv olduğundan Rt aşağı görünür, Sw overestimate olunur. Waxman-Smits modeli şalenin CEC-ini nəzərə alır. Dual-Water modeli iki su sistemi — bağlı su və sərbəst su — ayrı modelləşdirir.",
+          body: "Real rezervuarlarda şist qarışığı (shaly sand) Archie tənliyinin düzgün işləməsinə mane olur — ale öz-özlüyündə kondüktiv olduğundan Rt aşağı görünür, Sw overestimate olunur. Waxman-Smits modeli şistin CEC-ini nəzərə alır. Dual-Water modeli iki su sistemi — bağlı su və sərbəst su — ayrı modelləşdirir.",
           terms: [
             { az: "Gil-qum", en: "Shaly sand" },
             { az: "Katyon mübadilə tutumu", en: "CEC (Cation Exchange Capacity)" },
@@ -185,7 +185,7 @@ export const wellLogLesson: Lesson = {
             { az: "İkili su modeli", en: "Dual-water model" },
           ],
           caseStudy:
-            "🇦🇿 Azərbaycan nümunəsi: Məhsuldar Qatın Sabunçu layındakı şaly sand zonalarında Archie Sw-ni 15–20% yüksək qiymətləndirir. Waxman-Smits modeli tətbiqi net pay hesablamalarını daha dəqiq etmişdir.",
+            "🇦🇿 Azərbaycan nümunəsi: Məhsuldar Qatın Sabunçu layındakı shale sand zonalarında Archie Sw-ni 15–20% yüksək qiymətləndirir. Waxman-Smits modeli tətbiqi net pay hesablamalarını daha dəqiq etmişdir.",
         },
         {
           heading: "Borehole Image Logs — FMI | Quyu Divarı Görüntü Loqları",
@@ -222,12 +222,12 @@ export const wellLogLesson: Lesson = {
           question: "Shaly sand zonasında Archie Sw-ni necə hesablayır?",
           options: [
             "Dəqiq hesablayır",
-            "Overestimate edir — şalenin keçiriciliyi Rt-ni azaldır",
+            "Overestimate edir — şistin keçiriciliyi Rt-ni azaldır",
             "Underestimate edir",
-            "Şale təsiri yoxdur",
+            "Şist təsiri yoxdur",
           ],
           answer: 1,
-          explanation: "Şale kondüktiv → Rt aşağı görünür → Archie çox su kimi yorumlayır → Sw overestimate. Waxman-Smits/Dual-water bunu düzəldir.",
+          explanation: "Shale kondüktiv → Rt aşağı görünür → Archie çox su kimi yorumlayır → Sw overestimate. Waxman-Smits/Dual-water bunu düzəldir.",
         },
         {
           question: "FMI loqu nə üçün istifadə olunur?",

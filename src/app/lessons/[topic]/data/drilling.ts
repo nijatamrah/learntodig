@@ -56,7 +56,7 @@ export const drillingLesson: Lesson = {
         },
         {
           heading: "Qazma növləri | Types of Drilling",
-          body: "Şaquli qazma (vertical) — ən sadə, düz aşağı. Maillik qazma (directional) — müəyyən bucaqda yönəldilmişdir. Üfüqi qazma (horizontal) — rezervuar lay boyunca, shale yataqları üçün vacib. Çoxşaxəli qazma (multilateral) — bir quyudan bir neçə istiqamətdə qazma.",
+          body: "Şaquli qazma (vertical) — ən sadə, düz aşağı. Maillik qazma (directional) — müəyyən bucaqda yönəldilmişdir. Üfüqi qazma (horizontal) — rezervuar lay boyunca, şist yataqları üçün vacib. Çoxşaxəli qazma (multilateral) — bir quyudan bir neçə istiqamətdə qazma.",
           terms: [
             { az: "Şaquli qazma", en: "Vertical drilling" },
             { az: "Yönəldilmiş qazma", en: "Directional drilling" },

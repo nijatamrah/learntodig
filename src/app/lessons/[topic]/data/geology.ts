@@ -89,7 +89,7 @@ export const geologyLesson: Lesson = {
             "Qazma zamanı drill bit-i soyudur",
           ],
           answer: 1,
-          explanation: "Cap rock (seal) — şalenin keçirimsizliyi neftin rezervuardan qaçmasına mane olur. Mənbə lay (source rock) isə neft əmələ gətirən başqa roldur.",
+          explanation: "Cap rock (seal) — şistin keçirimsizliyi neftin rezervuardan qaçmasına mane olur. Mənbə lay (source rock) isə neft əmələ gətirən başqa roldur.",
         },
         {
           question: "Neft tələsinin 3 əsas komponenti hansıdır?",
@@ -286,19 +286,19 @@ export const geologyLesson: Lesson = {
         },
         {
           heading: "Qeyri-ənənəvi yataqlar — Shale Oil & Gas",
-          body: "Qeyri-ənənəvi yataqlarda neft/qaz birbaşa mənbə lay içindədir. Şale nefti/qazı çıxarmaq üçün horizontal drilling + hydraulic fracturing (fracking) tələb olunur. Fracking zamanı yüksək təzyiqlə su, qum və kimyəvi maddə qarışığı quruya vurularaq çatlar yaradılır.",
+          body: "Qeyri-ənənəvi yataqlarda neft/qaz birbaşa mənbə lay içindədir. Şist nefti/qazı çıxarmaq üçün horizontal drilling + hydraulic fracturing (fracking) tələb olunur. Fracking zamanı yüksək təzyiqlə su, qum və kimyəvi maddə qarışığı quruya vurularaq çatlar yaradılır.",
           terms: [
-            { az: "Şale nefti", en: "Shale oil / Tight oil" },
+            { az: "Şist nefti", en: "Shale oil / Tight oil" },
             { az: "Hidravlik çatlatma", en: "Hydraulic fracturing (fracking)" },
             { az: "Üfüqi qazma", en: "Horizontal drilling" },
             { az: "Qeyri-ənənəvi ehtiyat", en: "Unconventional resource" },
           ],
           formula: {
             expression: "k_shale < 0.1 mD  →  fracking tələb olunur",
-            legend: "k — keçiricilik. Şale üçün tipik: 0.0001–0.01 mD. Fracking bunu effektiv olaraq artırır.",
+            legend: "k — keçiricilik. Şist üçün tipik: 0.0001–0.01 mD. Fracking bunu effektiv olaraq artırır.",
           },
           caseStudy:
-            "🌍 Dünya nümunəsi: ABŞ-ın Permian Basin şale inqilabı 2008–2019 illər arasında ABŞ hasilatını 5 mln b/gün-dən 13 mln b/gün-ə qaldırdı. Azərbaycanda əsasən ənənəvi yataqlar inkişaf etdirilir.",
+            "🌍 Dünya nümunəsi: ABŞ-ın Permian Basin şist inqilabı 2008–2019 illər arasında ABŞ hasilatını 5 mln b/gün-dən 13 mln b/gün-ə qaldırdı. Azərbaycanda əsasən ənənəvi yataqlar inkişaf etdirilir.",
         },
         {
           heading: "Neft sistemi analizi | Petroleum System Analysis",
@@ -333,7 +333,7 @@ export const geologyLesson: Lesson = {
           explanation: "GCoS = 0.80 × 0.70 × 0.60 × 0.75 = 0.252 ≈ 25%. Bütün amillər çarpılır — bir amil zəif olduqda ümumi GCoS kəskin azalır.",
         },
         {
-          question: "Şale neftini çıxarmaq üçün nə tələb olunur?",
+          question: "Şist neftini çıxarmaq üçün nə tələb olunur?",
           options: [
             "Yalnız şaquli qazma",
             "Üfüqi qazma + hidravlik çatlatma (fracking)",
@@ -341,7 +341,7 @@ export const geologyLesson: Lesson = {
             "Antiklinal tələsi",
           ],
           answer: 1,
-          explanation: "Şalenin keçiriciliyi çox aşağıdır (<0.1 mD). Üfüqi qazma lay boyunca kontakt artırır; fracking isə süni çat sistemi yaradaraq neftin axmasına imkan verir.",
+          explanation: "Şistin keçiriciliyi çox aşağıdır (<0.1 mD). Üfüqi qazma lay boyunca kontakt artırır; fracking isə süni çat sistemi yaradaraq neftin axmasına imkan verir.",
         },
       ],
     },

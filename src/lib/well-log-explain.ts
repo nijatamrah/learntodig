@@ -22,7 +22,7 @@ const ZONE_LABELS: Record<ZoneType, string> = {
   oil: "neft",
   gas: "qaz",
   water: "su",
-  shale: "şal",
+  shale: "şist",
   unknown: "naməlum",
 };
 

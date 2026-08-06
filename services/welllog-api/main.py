@@ -208,7 +208,7 @@ Loq datası (seçmə nümunə):
 {table}
 
 Azərbaycan dilində 5-8 cümlə ilə proaktiv xülasə ver:
-1. Əsas litologiya intervalları (şal, qum, karbonatlı və s.)
+1. Əsas litologiya intervalları (şist, qum, karbonatlı və s.)
 2. Potensial neft/qaz/su zonaları (konkret dərinlik aralıqları)
 3. Ən maraqlı interval hansıdır və niyə
 4. Ümumi qiymətləndirmə

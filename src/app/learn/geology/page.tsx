@@ -16,12 +16,12 @@ const rockTypes = [
   },
   {
     id: 'shale',
-    name: 'Şal (Gil)',
+    name: 'Şist (Gil)',
     color: '#6B7280',
     gr: '80-150 GAPI',
     resd: '1-10 ohmm',
     porosity: '5-15%',
-    desc: 'Şal keçiriciliyi aşağı olan gillidir. Qapaq lay kimi nefti saxlayır. GR çox yüksək, müqavimət çox aşağıdır.',
+    desc: 'Şist keçiriciliyi aşağı olan gillidir. Qapaq lay kimi nefti saxlayır. GR çox yüksək, müqavimət çox aşağıdır.',
     icon: '⬛',
   },
   {
@@ -70,7 +70,7 @@ const trapTypes = [
 const quizQuestions = [
   {
     q: 'Hansı süxur ən yaxşı neft kollektorudur?',
-    options: ['Şal', 'Qumdaşı', 'Duz', 'Granit'],
+    options: ['Şist', 'Qumdaşı', 'Duz', 'Granit'],
     correct: 1,
   },
   {
@@ -84,7 +84,7 @@ const quizQuestions = [
     correct: 1,
   },
   {
-    q: 'Şalın əsas xüsusiyyəti nədir?',
+    q: 'Şistin əsas xüsusiyyəti nədir?',
     options: ['Yüksək məsaməlilik', 'Aşağı keçiricilik', 'Yüksək müqavimət', 'Şəffaflıq'],
     correct: 1,
   },
@@ -193,10 +193,10 @@ export default function GeologyPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 {[
                   { name: 'Torpaq / Relyef', depth: '0-50m', color: '#92400E', desc: 'Yer səthi. Üzvi maddələr, torpaq qatı.' },
-                  { name: 'Şal (Qapaq lay)', depth: '50-300m', color: '#4B5563', desc: 'Keçiriciliyi aşağı gil qatı. Neftin yuxarı keçməsinin qarşısını alır.' },
+                  { name: 'Şist (Qapaq lay)', depth: '50-300m', color: '#4B5563', desc: 'Keçiriciliyi aşağı gil qatı. Neftin yuxarı keçməsinin qarşısını alır.' },
                   { name: 'Qumdaşı (Kollektor)', depth: '300-600m', color: '#B45309', desc: 'Neft və qazı saxlayan məsaməli lay. Əsas hədəfimizdir.' },
                   { name: 'Əhəngdaşı', depth: '600-900m', color: '#1D4ED8', desc: 'Karbonat süxuru. Çatlı olduqda əla kollektor ola bilər.' },
-                  { name: 'Şal (Alt qapaq)', depth: '900-1200m', color: '#374151', desc: 'Alt keçirməz qat. Neftin daha dərinə enməsini dayandırır.' },
+                  { name: 'Şist (Alt qapaq)', depth: '900-1200m', color: '#374151', desc: 'Alt keçirməz qat. Neftin daha dərinə enməsini dayandırır.' },
                   { name: 'Kristallik bünövrə', depth: '1200m+', color: '#111827', desc: 'Maqmatik süxurlar. Adətən kollektor deyil.' },
                 ].map((layer, i) => (
                   <div key={i} onClick={() => setActiveTrap(activeTrap === layer.name ? null : layer.name)} style={{ background: layer.color, padding: '12px 16px', borderRadius: 6, cursor: 'pointer', border: activeTrap === layer.name ? '2px solid #68d391' : '2px solid transparent', display: 'flex', justifyContent: 'space-between' }}>
@@ -210,10 +210,10 @@ export default function GeologyPage() {
                   <p style={{ color: '#a0aec0' }}>
                     {[
                       { name: 'Torpaq / Relyef', desc: 'Yer səthi. Üzvi maddələr, torpaq qatı.' },
-                      { name: 'Şal (Qapaq lay)', desc: 'Keçiriciliyi aşağı gil qatı. Neftin yuxarı keçməsinin qarşısını alır.' },
+                      { name: 'Şist (Qapaq lay)', desc: 'Keçiriciliyi aşağı gil qatı. Neftin yuxarı keçməsinin qarşısını alır.' },
                       { name: 'Qumdaşı (Kollektor)', desc: 'Neft və qazı saxlayan məsaməli lay. Əsas hədəfimizdir.' },
                       { name: 'Əhəngdaşı', desc: 'Karbonat süxuru. Çatlı olduqda əla kollektor ola bilər.' },
-                      { name: 'Şal (Alt qapaq)', desc: 'Alt keçirməz qat. Neftin daha dərinə enməsini dayandırır.' },
+                      { name: 'Şist (Alt qapaq)', desc: 'Alt keçirməz qat. Neftin daha dərinə enməsini dayandırır.' },
                       { name: 'Kristallik bünövrə', desc: 'Maqmatik süxurlar. Adətən kollektor deyil.' },
                     ].find(l => l.name === activeTrap)?.desc}
                   </p>
