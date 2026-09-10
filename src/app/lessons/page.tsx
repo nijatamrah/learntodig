@@ -13,8 +13,8 @@ interface LearningPath {
 }
 
 const paths: LearningPath[] = [
-  { n: 1, slug: "geology",    icon: "🪨", name: "Geologiya",    subtitle: "Harada neft var, necə tapılır",     totalTopics: 9,  completedTopics: 0, color: "#8B6F47" },
-  { n: 2, slug: "drilling",   icon: "⛏",  name: "Qazma",        subtitle: "Quyu necə qazılır",                  totalTopics: 8,  completedTopics: 0, color: "#FF6B2B" },
+  { n: 1, slug: "geology",    icon: "🪨", name: "Geologiya",    subtitle: "Harada neft var, necə tapılır",     totalTopics: 15,  completedTopics: 0, color: "#8B6F47" },
+  { n: 2, slug: "drilling",   icon: "⛏",  name: "Qazma",        subtitle: "Quyu necə qazılır",                  totalTopics: 14,  completedTopics: 0, color: "#FF6B2B" },
   { n: 3, slug: "well-log",   icon: "📊", name: "Quyu Logging", subtitle: "Süxur və flüid necə ölçülür",        totalTopics: 7,  completedTopics: 0, color: "#3B9BD8" },
   { n: 4, slug: "reservoir",  icon: "🛢️", name: "Rezervuar",    subtitle: "Nə qədər var, necə hərəkət edir",    totalTopics: 10, completedTopics: 0, color: "#2DBE8C" },
   { n: 5, slug: "production", icon: "⚡", name: "Hasilat",      subtitle: "Neft necə çıxarılır",                totalTopics: 8,  completedTopics: 0, color: "#E8B33D" },

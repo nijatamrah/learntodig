@@ -55,6 +55,12 @@ export default function DrillingDecisionLesson() {
             <span className="text-[11px] font-['Space_Grotesk']" style={{ color: "#3D5570" }}>
               Qiymətləndirmə və Qərar
             </span>
+            <span
+              className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded uppercase tracking-wide"
+              style={{ background: "rgba(255,255,255,0.05)", color: "#6B82A0" }}
+            >
+              Son Dərs
+            </span>
           </div>
           <h1 className="font-['Space_Grotesk'] text-[1.9rem] font-bold leading-tight" style={{ color: "#F0F4FF" }}>
             Qazımaya Keçid Qərarı <span style={{ color: "#F0F4FF" }}>(Drill-or-Drop Decision)</span>
@@ -75,7 +81,7 @@ export default function DrillingDecisionLesson() {
               girişidir, sonu deyil. Tarixən neft sənayesinin ən böyük maliyyə itkiləri səhv
               qiymətləndirilmiş prospektlərə yox, düzgün qiymətləndirilmiş, lakin kifayət qədər
               ciddi təhlil edilmədən qazılmış quyulara aiddir. Bu dərsdə geoloji, texniki və
-              maliyyə göstəricilərinin necə birləşərək yekun "qazı" və ya "burax" qərarına
+              maliyyə göstəricilərinin necə birləşərək yekun &quot;qazı&quot; və ya &quot;burax&quot; qərarına
               gətirdiyini öyrənəcəyik — bu, Geologiya path-ının son dərsidir və bizi Drilling
               path-ına aparan körpüdür.
             </p>
@@ -90,8 +96,8 @@ export default function DrillingDecisionLesson() {
               və maliyyə məlumatlarını birləşdirərək prospektin faktiki qazılıb-qazılmayacağına
               dair verdiyi rəsmi qərardır. Bu qərar tək bir mütəxəssisin əlində deyil, adətən
               geoloqlar, geofiziklər, mühəndislər və maliyyə analitiklərindən ibarət komitə
-              tərəfindən verilir. Qərar müsbətdirsə, layihə "Drilling" mərhələsinə keçir; mənfidirsə,
-              prospekt ya "raf"a qoyulur (əlavə məlumat gözləyir), ya da tamamilə tərk edilir.
+              tərəfindən verilir. Qərar müsbətdirsə, layihə &quot;Drilling&quot; mərhələsinə keçir; mənfidirsə,
+              prospekt ya &quot;raf&quot;a qoyulur (əlavə məlumat gözləyir), ya da tamamilə tərk edilir.
             </p>
           </section>
 
@@ -237,6 +243,23 @@ export default function DrillingDecisionLesson() {
               <li>• Bu qərar Geologiya path-ının yekunudur və müsbət nəticə layihəni Drilling path-ına keçirir</li>
             </ul>
           </section>
+
+          {/* Congratulations block - path completion */}
+          <section
+            className="rounded-2xl px-6 py-6 text-center"
+            style={{ background: `linear-gradient(135deg, ${PATH_COLOR}14, rgba(255,255,255,0.02))`, border: `1px solid ${PATH_COLOR}33` }}
+          >
+            <p className="text-[11px] font-mono uppercase tracking-wide mb-2" style={{ color: PATH_COLOR }}>
+              Təbriklər
+            </p>
+            <p className="text-[14px] leading-[1.75]" style={{ color: "#D6E0F0" }}>
+              Bununla Geologiya (Petroleum Geology) path-ının bütün dərslərini tamamladınız —
+              neftin mənşəyindən tutmuş, çökmə hövzələri, source/reservoir/seal qayaları, tələ
+              növləri, seysmik kəşfiyyat, həcm qiymətləndirməsi, risk analizi və nəhayət qazımaya
+              keçid qərarına qədər. Bu bilik zənciri sizə bir prospekti sıfırdan qiymətləndirib
+              qərar vermə bacarığı verir — indi növbə Qazma (Drilling) path-ındadır.
+            </p>
+          </section>
         </article>
 
         <div className="mt-10 flex justify-between items-center">
@@ -248,11 +271,11 @@ export default function DrillingDecisionLesson() {
             ← Risk Analizi
           </Link>
           <Link
-            href="/learn/drilling"
+            href="/learn/geology"
             className="flex items-center gap-1.5 text-[13px] font-['Space_Grotesk'] px-4 py-2 rounded-xl"
             style={{ background: PATH_COLOR + "1E", color: PATH_COLOR, border: `1px solid ${PATH_COLOR}44` }}
           >
-            Növbəti: Drilling Path
+            Path Tamamlandı — Geologiyaya Geri Dön
             <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
