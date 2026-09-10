@@ -1,294 +1,208 @@
-'use client';
+"use client";
+import { useState } from "react";
+import Link from "next/link";
 
-import { useState } from 'react';
-import Link from 'next/link';
+const PATH_COLOR = "#8B6F47";
 
-const rockTypes = [
+interface Lesson {
+  id: string;    // e.g. "1.1.1"
+  title: string;
+  slug: string;  // route segment
+  done: boolean; // TODO: real progress from Supabase
+}
+
+interface Section {
+  id: string;     // e.g. "1.1"
+  title: string;
+  lessons: Lesson[];
+}
+
+const sections: Section[] = [
   {
-    id: 'sandstone',
-    name: 'Qumdaşı',
-    color: '#C4A35A',
-    gr: '15-45 GAPI',
-    resd: '50-500 ohmm',
-    porosity: '15-35%',
-    desc: 'Qumdaşı ən yaxşı kollektordur. Məsaməliliyi yüksəkdir, neft və qaz saxlaya bilir. GR aşağı, müqavimət yüksəkdir.',
-    icon: '🟨',
+    id: "1.1",
+    title: "Əsaslar",
+    lessons: [
+      { id: "1.1.1", title: "Neft və Qazın Mənşəyi", slug: "origin-of-petroleum", done: false },
+      { id: "1.1.2", title: "Süxur Növləri", slug: "rock-types", done: false },
+      { id: "1.1.3", title: "Source Rock (Mənbə Süxur)", slug: "source-rock", done: false },
+      { id: "1.1.4", title: "Reservoir Rock (Kollektor Süxur)", slug: "reservoir-rock", done: false },
+      { id: "1.1.5", title: "Seal / Cap Rock (Örtük Süxur)", slug: "seal-rock", done: false },
+      { id: "1.1.6", title: "Trap Types (Tələ Növləri)", slug: "trap-types", done: false },
+    ],
   },
   {
-    id: 'shale',
-    name: 'Şist (Gil)',
-    color: '#6B7280',
-    gr: '80-150 GAPI',
-    resd: '1-10 ohmm',
-    porosity: '5-15%',
-    desc: 'Şist keçiriciliyi aşağı olan gillidir. Qapaq lay kimi nefti saxlayır. GR çox yüksək, müqavimət çox aşağıdır.',
-    icon: '⬛',
+    id: "1.2",
+    title: "Hövzə və Miqrasiya",
+    lessons: [
+      { id: "1.2.1", title: "Çökmə Hövzələri", slug: "sedimentary-basins", done: false },
+      { id: "1.2.2", title: "Miqrasiya (Primary & Secondary)", slug: "migration", done: false },
+      { id: "1.2.3", title: "Petroleum System Konsepti", slug: "petroleum-system", done: false },
+    ],
   },
   {
-    id: 'limestone',
-    name: 'Əhəngdaşı',
-    color: '#93C5FD',
-    gr: '10-30 GAPI',
-    resd: '100-1000 ohmm',
-    porosity: '5-20%',
-    desc: 'Əhəngdaşı karbonat süxurudur. Çatlaqlı olduqda yaxşı kollektordur. GR aşağı, müqavimət çox yüksəkdir.',
-    icon: '🔵',
+    id: "1.3",
+    title: "Kəşfiyyat Metodları",
+    lessons: [
+      { id: "1.3.1", title: "Səth Geologiyası", slug: "surface-geology", done: false },
+      { id: "1.3.2", title: "Seysmik Kəşfiyyat", slug: "seismic-survey", done: false },
+      { id: "1.3.3", title: "Kəşfiyyat Quyuları", slug: "exploration-wells", done: false },
+    ],
   },
   {
-    id: 'dolomite',
-    name: 'Dolomit',
-    color: '#A78BFA',
-    gr: '10-25 GAPI',
-    resd: '200-2000 ohmm',
-    porosity: '10-25%',
-    desc: 'Dolomit maqnezium karbonatlı süxurdur. Çox yüksək müqaviməti var. Neft-qaz üçün əla kollektordur.',
-    icon: '🟣',
+    id: "1.4",
+    title: "Qiymətləndirmə və Qərar",
+    lessons: [
+      { id: "1.4.1", title: "Ehtiyatların İlkin Qiymətləndirilməsi", slug: "volumetric-estimation", done: false },
+      { id: "1.4.2", title: "Risk Analizi", slug: "geological-risk", done: false },
+      { id: "1.4.3", title: "Qazımaya Keçid Qərarı", slug: "drilling-decision", done: false },
+    ],
   },
 ];
 
-const trapTypes = [
-  {
-    id: 'anticline',
-    name: 'Antiklinal',
-    desc: 'Ən çox rast gəlinən tələ növü. Süxur qatları yuxarı qalxır, neft ən yüksək nöqtədə toplanır. Azərbaycanın Abşeron yarımadasındakı quyular əsasən antiklinal tələsdədir.',
-    color: '#F59E0B',
-  },
-  {
-    id: 'fault',
-    name: 'Qırılma Tələsi',
-    desc: 'Geoloji qırılma neftin hərəkətini dayandırır. Qırılma səthi qapaq rolunu oynayır. Aşkar edilməsi çətindir.',
-    color: '#EF4444',
-  },
-  {
-    id: 'stratigraphic',
-    name: 'Stratigrafik Tələ',
-    desc: 'Keçiriciliyi aşağı süxur nefti saxlayır. Qumdaşı klinozform şəklində gilə keçəndə yaranır. Azərbaycanda Kürsəngi yatağı bu tipdir.',
-    color: '#10B981',
-  },
-];
+export default function GeologyPathPage() {
+  const [openSection, setOpenSection] = useState<string | null>("1.1");
 
-const quizQuestions = [
-  {
-    q: 'Hansı süxur ən yaxşı neft kollektorudur?',
-    options: ['Şist', 'Qumdaşı', 'Duz', 'Granit'],
-    correct: 1,
-  },
-  {
-    q: 'GR (Gamma Ray) loqu nəyi ölçür?',
-    options: ['Təzyiqi', 'Temperaturunu', 'Gil tərkibini', 'Neft miqdarını'],
-    correct: 2,
-  },
-  {
-    q: 'Antiklinal tələsdə neft harada toplanır?',
-    options: ['Ən dərin nöqtədə', 'Ən yüksək nöqtədə', 'Qırılma boyunca', 'Gil içində'],
-    correct: 1,
-  },
-  {
-    q: 'Şistin əsas xüsusiyyəti nədir?',
-    options: ['Yüksək məsaməlilik', 'Aşağı keçiricilik', 'Yüksək müqavimət', 'Şəffaflıq'],
-    correct: 1,
-  },
-  {
-    q: 'Neft tələsinin 3 əsas komponenti hansıdır?',
-    options: ['Qum, gil, su', 'Kollektor, qapaq, tələ', 'Antiklinal, qırılma, stratigrafik', 'GR, RESD, DT'],
-    correct: 1,
-  },
-];
-
-export default function GeologyPage() {
-  const [activeRock, setActiveRock] = useState<string | null>(null);
-  const [activeTrap, setActiveTrap] = useState<string | null>(null);
-  const [activeLesson, setActiveLesson] = useState(0);
-  const [quizAnswers, setQuizAnswers] = useState<(number | null)[]>(Array(5).fill(null));
-  const [quizSubmitted, setQuizSubmitted] = useState(false);
-  const [chatMessages, setChatMessages] = useState<{ role: string; content: string }[]>([]);
-  const [chatInput, setChatInput] = useState('');
-  const [chatLoading, setChatLoading] = useState(false);
-
-  const selectedRock = rockTypes.find((r) => r.id === activeRock);
-
-  const handleQuizAnswer = (qIndex: number, aIndex: number) => {
-    if (quizSubmitted) return;
-    const newAnswers = [...quizAnswers];
-    newAnswers[qIndex] = aIndex;
-    setQuizAnswers(newAnswers);
-  };
-
-  const score = quizAnswers.filter((a, i) => a === quizQuestions[i].correct).length;
-
-  const sendChat = async () => {
-    if (!chatInput.trim()) return;
-    const userMsg = chatInput.trim();
-    setChatInput('');
-    setChatMessages((prev) => [...prev, { role: 'user', content: userMsg }]);
-    setChatLoading(true);
-    try {
-      const res = await fetch('/api/geology/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg }),
-      });
-      const data = await res.json();
-      setChatMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
-    } catch {
-      setChatMessages((prev) => [...prev, { role: 'assistant', content: 'Xəta baş verdi. Yenidən cəhd edin.' }]);
-    }
-    setChatLoading(false);
-  };
+  const allLessons = sections.flatMap((s) => s.lessons);
+  const totalDone = allLessons.filter((l) => l.done).length;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0f1117', color: '#e2e8f0', fontFamily: 'sans-serif' }}>
-      <div style={{ background: '#1a1d2e', borderBottom: '1px solid #2d3748', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ fontSize: 20 }}>🪨</span>
-          <span style={{ fontWeight: 700, color: '#68d391', fontSize: 18 }}>GeologyLab</span>
-          <span style={{ color: '#718096', fontSize: 14 }}>Geoloji əsaslar · AI ilə gücləndirilmiş</span>
-        </div>
-        <Link href="/" style={{ color: '#a0aec0', textDecoration: 'none', fontSize: 14 }}>← LearntoDig</Link>
-      </div>
+    <main className="min-h-screen relative overflow-hidden" style={{ background: "#080C18" }}>
+      <div
+        className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{ background: PATH_COLOR, opacity: 0.14, filter: "blur(120px)" }}
+      />
 
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '32px 16px' }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700, color: '#68d391', marginBottom: 8 }}>Geologiya modulu</h1>
-        <p style={{ color: '#718096', marginBottom: 32 }}>3 interaktiv dərs · AI chat · Quiz</p>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          opacity: 0.08,
+          backgroundImage: `
+            linear-gradient(#F0F4FF 1px, transparent 1px),
+            linear-gradient(90deg, #F0F4FF 1px, transparent 1px)
+          `,
+          backgroundSize: "36px 36px",
+          maskImage: "radial-gradient(ellipse 100% 60% at 50% 0%, black 40%, transparent 90%)",
+        }}
+      />
 
-        <div style={{ display: 'flex', gap: 8, marginBottom: 32 }}>
-          {['Litologiya', 'Stratigrafiya', 'Neft Tələsi'].map((tab, i) => (
-            <button key={i} onClick={() => setActiveLesson(i)} style={{ padding: '10px 20px', borderRadius: 8, border: 'none', cursor: 'pointer', background: activeLesson === i ? '#68d391' : '#1a1d2e', color: activeLesson === i ? '#0f1117' : '#a0aec0', fontWeight: activeLesson === i ? 700 : 400, fontSize: 14 }}>
-              {tab}
-            </button>
-          ))}
-        </div>
+      <div className="max-w-2xl mx-auto px-6 py-12 relative z-10">
 
-        {activeLesson === 0 && (
+        <Link
+          href="/lessons"
+          className="inline-flex items-center gap-1.5 text-[12px] font-['Space_Grotesk'] mb-6 transition-colors"
+          style={{ color: "#3D5570" }}
+        >
+          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          Öyrənmə yolları
+        </Link>
+
+        <div className="mb-10 flex items-end justify-between">
           <div>
-            <h2 style={{ color: '#e2e8f0', fontSize: 20, marginBottom: 16 }}>Süxur növləri</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 24 }}>
-              {rockTypes.map((rock) => (
-                <div key={rock.id} onClick={() => setActiveRock(activeRock === rock.id ? null : rock.id)} style={{ background: activeRock === rock.id ? '#1a2744' : '#1a1d2e', border: `2px solid ${activeRock === rock.id ? rock.color : '#2d3748'}`, borderRadius: 12, padding: 20, cursor: 'pointer' }}>
-                  <div style={{ fontSize: 32, marginBottom: 8 }}>{rock.icon}</div>
-                  <div style={{ fontWeight: 600, color: rock.color, fontSize: 16, marginBottom: 4 }}>{rock.name}</div>
-                  <div style={{ fontSize: 12, color: '#718096' }}>GR: {rock.gr}</div>
-                  <div style={{ fontSize: 12, color: '#718096' }}>RESD: {rock.resd}</div>
-                </div>
-              ))}
-            </div>
-            {selectedRock && (
-              <div style={{ background: '#1a1d2e', border: `1px solid ${selectedRock.color}`, borderRadius: 12, padding: 20 }}>
-                <h3 style={{ color: selectedRock.color, marginBottom: 8 }}>{selectedRock.name}</h3>
-                <p style={{ color: '#a0aec0', lineHeight: 1.7 }}>{selectedRock.desc}</p>
-                <div style={{ marginTop: 12, display: 'flex', gap: 16 }}>
-                  <span style={{ background: '#2d3748', padding: '4px 12px', borderRadius: 20, fontSize: 13 }}>Məsaməlilik: {selectedRock.porosity}</span>
-                  <span style={{ background: '#2d3748', padding: '4px 12px', borderRadius: 20, fontSize: 13 }}>GR: {selectedRock.gr}</span>
-                </div>
-              </div>
-            )}
+            <p
+              className="text-[10px] font-semibold tracking-[0.18em] uppercase font-mono mb-2"
+              style={{ color: PATH_COLOR }}
+            >
+              {`// path 01`}
+            </p>
+            <h1 className="font-['Space_Grotesk'] text-[2.2rem] font-bold leading-tight mb-2" style={{ color: "#F0F4FF" }}>
+              Geologiya
+            </h1>
+            <p className="text-[14px] font-['Space_Grotesk']" style={{ color: "#6B82A0" }}>
+              Harada neft var, necə tapılır
+            </p>
           </div>
-        )}
+          <p className="text-[12px] font-['Space_Grotesk'] whitespace-nowrap" style={{ color: "#3D5570" }}>
+            {totalDone}/{allLessons.length} dərs
+          </p>
+        </div>
 
-        {activeLesson === 1 && (
-          <div>
-            <h2 style={{ color: '#e2e8f0', fontSize: 20, marginBottom: 16 }}>Geoloji qat ardıcıllığı</h2>
-            <div style={{ background: '#1a1d2e', borderRadius: 12, padding: 24 }}>
-              <p style={{ color: '#a0aec0', marginBottom: 20 }}>Hər qata klik et — ətraflı məlumat al.</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                {[
-                  { name: 'Torpaq / Relyef', depth: '0-50m', color: '#92400E', desc: 'Yer səthi. Üzvi maddələr, torpaq qatı.' },
-                  { name: 'Şist (Qapaq lay)', depth: '50-300m', color: '#4B5563', desc: 'Keçiriciliyi aşağı gil qatı. Neftin yuxarı keçməsinin qarşısını alır.' },
-                  { name: 'Qumdaşı (Kollektor)', depth: '300-600m', color: '#B45309', desc: 'Neft və qazı saxlayan məsaməli lay. Əsas hədəfimizdir.' },
-                  { name: 'Əhəngdaşı', depth: '600-900m', color: '#1D4ED8', desc: 'Karbonat süxuru. Çatlı olduqda əla kollektor ola bilər.' },
-                  { name: 'Şist (Alt qapaq)', depth: '900-1200m', color: '#374151', desc: 'Alt keçirməz qat. Neftin daha dərinə enməsini dayandırır.' },
-                  { name: 'Kristallik bünövrə', depth: '1200m+', color: '#111827', desc: 'Maqmatik süxurlar. Adətən kollektor deyil.' },
-                ].map((layer, i) => (
-                  <div key={i} onClick={() => setActiveTrap(activeTrap === layer.name ? null : layer.name)} style={{ background: layer.color, padding: '12px 16px', borderRadius: 6, cursor: 'pointer', border: activeTrap === layer.name ? '2px solid #68d391' : '2px solid transparent', display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontWeight: 600, color: '#fff' }}>{layer.name}</span>
-                    <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)' }}>{layer.depth}</span>
+        <div className="space-y-3">
+          {sections.map((section) => {
+            const isOpen = openSection === section.id;
+            const sectionDone = section.lessons.filter((l) => l.done).length;
+
+            return (
+              <div
+                key={section.id}
+                className="rounded-2xl overflow-hidden"
+                style={{ background: "#0D1525E6", border: `1px solid ${PATH_COLOR}33` }}
+              >
+                <button
+                  onClick={() => setOpenSection(isOpen ? null : section.id)}
+                  className="w-full flex items-center justify-between px-5 py-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded"
+                      style={{ background: PATH_COLOR + "1E", color: PATH_COLOR }}
+                    >
+                      {section.id}
+                    </span>
+                    <span className="font-semibold text-[14px] font-['Space_Grotesk']" style={{ color: "#F0F4FF" }}>
+                      {section.title}
+                    </span>
                   </div>
-                ))}
-              </div>
-              {activeTrap && (
-                <div style={{ marginTop: 16, background: '#0f1117', borderRadius: 8, padding: 16, border: '1px solid #68d391' }}>
-                  <p style={{ color: '#a0aec0' }}>
-                    {[
-                      { name: 'Torpaq / Relyef', desc: 'Yer səthi. Üzvi maddələr, torpaq qatı.' },
-                      { name: 'Şist (Qapaq lay)', desc: 'Keçiriciliyi aşağı gil qatı. Neftin yuxarı keçməsinin qarşısını alır.' },
-                      { name: 'Qumdaşı (Kollektor)', desc: 'Neft və qazı saxlayan məsaməli lay. Əsas hədəfimizdir.' },
-                      { name: 'Əhəngdaşı', desc: 'Karbonat süxuru. Çatlı olduqda əla kollektor ola bilər.' },
-                      { name: 'Şist (Alt qapaq)', desc: 'Alt keçirməz qat. Neftin daha dərinə enməsini dayandırır.' },
-                      { name: 'Kristallik bünövrə', desc: 'Maqmatik süxurlar. Adətən kollektor deyil.' },
-                    ].find(l => l.name === activeTrap)?.desc}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+                  <div className="flex items-center gap-3">
+                    <span className="text-[11px] font-['Space_Grotesk']" style={{ color: "#3D5570" }}>
+                      {sectionDone}/{section.lessons.length}
+                    </span>
+                    <svg
+                      className="h-4 w-4 transition-transform duration-200"
+                      style={{ color: "#3D5570", transform: isOpen ? "rotate(90deg)" : "rotate(0deg)" }}
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </button>
 
-        {activeLesson === 2 && (
-          <div>
-            <h2 style={{ color: '#e2e8f0', fontSize: 20, marginBottom: 16 }}>Neft tələsi növləri</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
-              {trapTypes.map((trap) => (
-                <div key={trap.id} onClick={() => setActiveTrap(activeTrap === trap.id ? null : trap.id)} style={{ background: '#1a1d2e', border: `2px solid ${activeTrap === trap.id ? trap.color : '#2d3748'}`, borderRadius: 12, padding: 20, cursor: 'pointer' }}>
-                  <div style={{ fontWeight: 700, color: trap.color, fontSize: 16, marginBottom: 8 }}>{trap.name}</div>
-                  {activeTrap === trap.id ? (
-                    <p style={{ color: '#a0aec0', fontSize: 14, lineHeight: 1.7 }}>{trap.desc}</p>
-                  ) : (
-                    <p style={{ color: '#718096', fontSize: 13 }}>Ətraflı oxumaq üçün klik et</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div style={{ marginTop: 48, background: '#1a1d2e', borderRadius: 12, padding: 24 }}>
-          <h2 style={{ color: '#f6c90e', fontSize: 20, marginBottom: 20 }}>Quiz — Bilikləri yoxla</h2>
-          {quizQuestions.map((q, qi) => (
-            <div key={qi} style={{ marginBottom: 24 }}>
-              <p style={{ color: '#e2e8f0', fontWeight: 600, marginBottom: 12 }}>{qi + 1}. {q.q}</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {q.options.map((opt, oi) => {
-                  let bg = '#0f1117', border = '#2d3748';
-                  if (quizAnswers[qi] === oi) { bg = '#1a2744'; border = '#68d391'; }
-                  if (quizSubmitted && oi === q.correct) { bg = '#064e3b'; border = '#10b981'; }
-                  if (quizSubmitted && quizAnswers[qi] === oi && oi !== q.correct) { bg = '#450a0a'; border = '#ef4444'; }
-                  return (
-                    <div key={oi} onClick={() => handleQuizAnswer(qi, oi)} style={{ background: bg, border: `1px solid ${border}`, borderRadius: 8, padding: '10px 16px', cursor: 'pointer', color: '#e2e8f0', fontSize: 14 }}>
-                      {opt}
-                    </div>
-                  );
-                })}
+                {isOpen && (
+                  <div style={{ borderTop: `1px solid ${PATH_COLOR}22` }}>
+                    {section.lessons.map((lesson) => (
+                      <Link
+                        key={lesson.id}
+                        href={`/learn/geology/${lesson.slug}`}
+                        className="flex items-center justify-between px-5 py-3 group transition-colors"
+                        style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.03)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span
+                            className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[10px]"
+                            style={{
+                              background: lesson.done ? "#22C55E22" : "rgba(255,255,255,0.05)",
+                              border: `1px solid ${lesson.done ? "#22C55E66" : "rgba(255,255,255,0.1)"}`,
+                              color: lesson.done ? "#22C55E" : "#3D5570",
+                            }}
+                          >
+                            {lesson.done ? "✓" : ""}
+                          </span>
+                          <span className="text-[11px] font-mono" style={{ color: "#3D5570" }}>
+                            {lesson.id}
+                          </span>
+                          <span className="text-[13.5px] font-['Space_Grotesk']" style={{ color: "#D6E0F0" }}>
+                            {lesson.title}
+                          </span>
+                        </div>
+                        <svg
+                          className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                          style={{ color: PATH_COLOR }}
+                          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
-          {!quizSubmitted ? (
-            <button onClick={() => setQuizSubmitted(true)} style={{ background: '#68d391', color: '#0f1117', border: 'none', borderRadius: 8, padding: '12px 32px', fontWeight: 700, cursor: 'pointer', fontSize: 16 }}>Yoxla</button>
-          ) : (
-            <div style={{ background: score >= 4 ? '#064e3b' : '#450a0a', borderRadius: 8, padding: 16, color: score >= 4 ? '#68d391' : '#ef4444', fontWeight: 700, fontSize: 18 }}>
-              Nəticə: {score}/5 — {score >= 4 ? 'Əla! Davam et.' : 'Dərslərə qayıt və yenidən cəhd et.'}
-            </div>
-          )}
-        </div>
-
-        <div style={{ marginTop: 32, background: '#1a1d2e', borderRadius: 12, padding: 24 }}>
-          <h2 style={{ color: '#90cdf4', fontSize: 18, marginBottom: 8 }}>AI Geologiya Assistenti</h2>
-          <p style={{ color: '#718096', fontSize: 13, marginBottom: 16 }}>Geologiya haqqında istənilən sual ver — Azərbaycan dilində cavab alacaqsan.</p>
-          <div style={{ minHeight: 120, marginBottom: 16 }}>
-            {chatMessages.map((msg, i) => (
-              <div key={i} style={{ marginBottom: 12, display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
-                <div style={{ maxWidth: '80%', padding: '10px 14px', borderRadius: 10, fontSize: 14, lineHeight: 1.6, background: msg.role === 'user' ? '#2b4c7e' : '#2d3748', color: '#e2e8f0' }}>
-                  {msg.content}
-                </div>
-              </div>
-            ))}
-            {chatLoading && <div style={{ color: '#718096', fontSize: 14 }}>AI cavab hazırlayır...</div>}
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && sendChat()} placeholder="Məs: Antiklinal tələs nədir?" style={{ flex: 1, background: '#0f1117', border: '1px solid #2d3748', borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 14 }} />
-            <button onClick={sendChat} disabled={chatLoading} style={{ background: '#90cdf4', color: '#0f1117', border: 'none', borderRadius: 8, padding: '10px 20px', fontWeight: 700, cursor: 'pointer' }}>Göndər</button>
-          </div>
+            );
+          })}
         </div>
       </div>
-    </div>
+    </main>
   );
 }
