@@ -2,12 +2,12 @@
 import Link from "next/link";
 
 const modules = [
-  { href: "/learn/well-log",  icon: "📋", title: "Loq analizi (WellLogAI)", desc: "LAS faylı yüklə, quyu loqlarını vizuallaşdır və AI ilə analiz et", accent: "#F59E0B", tag: "AI · LAS" },
-  { href: "/learn/prosper",   icon: "🛢️", title: "Prosper simulyatoru",     desc: "Quyu parametrlərini dəyişdir, məhsuldarlıq və axın rejimini izlə",   accent: "#FF6B2B", tag: "Simulyator" },
-  { href: "/learn/geology",   icon: "🪨", title: "Geologiya modulu",        desc: "Litologiya, stratigrafiya, neft tələsi · AI chat · Quiz",             accent: "#22C55E", tag: "AI · Quiz" },
-  { href: "/learn/petrel",    icon: "🗺️", title: "Petrel simulyatoru",      desc: "Rezervuar modelləməsi, məsaməlilik, keçiricilik · AI chat",           accent: "#3B82F6", tag: "AI · 3D" },
-  { href: "/learn/eclipse",   icon: "⚡", title: "Eclipse simulyatoru",     desc: "Rezervuar simulyasiyası, hasilat proqnozu, ssenari müqayisəsi",       accent: "#A78BFA", tag: "Ssenari" },
-  { href: "/learn/drilling",  icon: "⛏",  title: "Qazma simulyatoru",    desc: "Qazma parametrləri, ROP optimizasiyası, problem ssenarileri",        accent: "#FBBF24", tag: "ROP" },
+  { href: "/modules/well-log",  icon: "📋", title: "Loq analizi (WellLogAI)", desc: "LAS faylı yüklə, quyu loqlarını vizuallaşdır və AI ilə analiz et", accent: "#F59E0B", tag: "AI · LAS" },
+  { href: "/modules/prosper",   icon: "🛢️", title: "Prosper simulyatoru",     desc: "Quyu parametrlərini dəyişdir, məhsuldarlıq və axın rejimini izlə",   accent: "#FF6B2B", tag: "Simulyator" },
+  { href: "/modules/geology",   icon: "🪨", title: "Geologiya modulu",        desc: "Litologiya, stratigrafiya, neft tələsi · AI chat · Quiz",             accent: "#22C55E", tag: "AI · Quiz" },
+  { href: "/modules/petrel",    icon: "🗺️", title: "Petrel simulyatoru",      desc: "Rezervuar modelləməsi, məsaməlilik, keçiricilik · AI chat",           accent: "#3B82F6", tag: "AI · 3D" },
+  { href: "/modules/eclipse",   icon: "⚡", title: "Eclipse simulyatoru",     desc: "Rezervuar simulyasiyası, hasilat proqnozu, ssenari müqayisəsi",       accent: "#A78BFA", tag: "Ssenari" },
+  { href: "/modules/drilling",  icon: "⛏",  title: "Qazma simulyatoru",    desc: "Qazma parametrləri, ROP optimizasiyası, problem ssenarileri",        accent: "#FBBF24", tag: "ROP" },
 ];
 
 export default function ModulesPage() {

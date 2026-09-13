@@ -28,7 +28,7 @@ import {
 
 // Tək başlıq kimi qalan linklər
 const singleLinks = [
-  { href: "/learn/industry-map", label: "Karyera Xəritəsi", icon: Map     },
+  { href: "/industry-map", label: "Karyera Xəritəsi", icon: Map     },
   { href: "/news",               label: "Xəbərlər",       icon: Newspaper },
   { href: "/about",              label: "Haqqında",       icon: Info      },
 ];
@@ -39,7 +39,7 @@ const navGroups = [
     label: "Öyrən",
     icon: GraduationCap,
     items: [
-      { href: "/lessons",           label: "Dərslər",              icon: BookOpen },
+      { href: "/learn",           label: "Dərslər",              icon: BookOpen },
       { href: "/equipment",         label: "Alət və Avadanlıqlar", icon: Wrench   },
       { href: "/azerbaijan-fields", label: "Yataqlar",             icon: MapPin   },
     ],
