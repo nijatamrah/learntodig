@@ -18,11 +18,13 @@ import {
   Newspaper,
   Map,
   Wrench,
+  MessageCircle,
 } from "lucide-react";
  
 const links = [
   { href: "/modules",            label: "Modullar",          icon: LayoutGrid },
   { href: "/lessons",            label: "Dərslər",           icon: BookOpen   },
+  { href: "/messages",           label: "Mesajlar",          icon: MessageCircle },
   { href: "/equipment",          label: "Alət və Avadanlıqlar", icon: Wrench     },
   { href: "/azerbaijan-fields",  label: "Yataqlar",          icon: MapPin     },
   { href: "/game",               label: "Oyun",              icon: Gamepad2   },

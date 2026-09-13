@@ -93,7 +93,7 @@ export default function NewsPage() {
   const rest = filtered.slice(3);
 
   return (
-    <main className="min-h-screen bg-[#070C1A] pt-24 pb-16 px-4">
+    <main className="min-h-screen bg-[#070C1A]  pb-16 px-4">
       <div className="mx-auto max-w-4xl">
 
         {/* Header */}

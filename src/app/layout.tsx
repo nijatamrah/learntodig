@@ -51,5 +51,5 @@ export default function RootLayout({
 }
 
 function NavContent({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>;
+  return <div className="pt-16">{children}</div>;
 }
