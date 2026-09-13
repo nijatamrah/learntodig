@@ -89,25 +89,17 @@ export default function MessagesPage() {
   }
 
   async function startConversation(otherId: string) {
-    alert("Klikləndi: " + otherId + " | myId: " + myId);
-
     if (!myId || starting) return;
     setStarting(true);
 
     const [user_a, user_b] = [myId, otherId].sort();
 
-    const { data: existing, error: existingError } = await supabase
+    const { data: existing } = await supabase
       .from("conversations")
       .select("id")
       .eq("user_a", user_a)
       .eq("user_b", user_b)
       .maybeSingle();
-
-    if (existingError) {
-      alert("Axtarış xətası: " + existingError.message);
-      setStarting(false);
-      return;
-    }
 
     let conversationId = existing?.id as string | undefined;
 
@@ -117,12 +109,7 @@ export default function MessagesPage() {
         .insert({ user_a, user_b })
         .select("id")
         .single();
-
-      if (error) {
-        alert("Yaratma xətası: " + error.message);
-        setStarting(false);
-        return;
-      }
+      if (error) { setStarting(false); return; }
       conversationId = created.id;
     }
 
@@ -138,7 +125,7 @@ export default function MessagesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#080C18] text-[#F0F4FF]  px-6">
+    <main className="min-h-screen bg-[#080C18] text-[#F0F4FF] pt-24 px-6">
       <div className="max-w-[700px] mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h1 className="font-['Space_Grotesk'] text-2xl font-bold">Mesajlar</h1>

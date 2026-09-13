@@ -28,8 +28,7 @@ function LoginForm() {
     setLoading(false)
  
     if (error) {
-      console.log("GİRİŞ XƏTASI:", error)
-      setError('XƏTA: ' + error.message + ' (status: ' + error.status + ')')
+      setError('Email və ya şifrə yanlışdır')
       return
     }
  
