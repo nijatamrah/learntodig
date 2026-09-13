@@ -1,5 +1,7 @@
 "use client";
  
+"use client";
+ 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -19,12 +21,14 @@ import {
   Map,
   Wrench,
   MessageCircle,
+  MessagesSquare,
 } from "lucide-react";
  
 const links = [
   { href: "/modules",            label: "Modullar",          icon: LayoutGrid },
   { href: "/lessons",            label: "Dərslər",           icon: BookOpen   },
   { href: "/messages",           label: "Mesajlar",          icon: MessageCircle },
+  { href: "/debates",            label: "Debat Otaqları",    icon: MessagesSquare },
   { href: "/equipment",          label: "Alət və Avadanlıqlar", icon: Wrench     },
   { href: "/azerbaijan-fields",  label: "Yataqlar",          icon: MapPin     },
   { href: "/game",               label: "Oyun",              icon: Gamepad2   },
