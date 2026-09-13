@@ -68,7 +68,7 @@ const equipment = [
 
 export default function EquipmentPage() {
   return (
-    <main className="min-h-screen bg-[#0A0F1E] pt-16">
+    <main className="min-h-screen bg-[#0A0F1E] ">
 
       {/* Hero */}
       <section className="relative border-b border-white/[0.06] px-6 py-14 md:px-10 md:py-20">

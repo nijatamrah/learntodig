@@ -207,7 +207,7 @@ export default function ChristmasTreePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0A0F1E] pt-16 text-[#F0F4FF]">
+    <main className="min-h-screen bg-[#0A0F1E]  text-[#F0F4FF]">
 
       {/* Breadcrumb */}
       <div className="border-b border-white/[0.06] px-6 py-3 md:px-10">
