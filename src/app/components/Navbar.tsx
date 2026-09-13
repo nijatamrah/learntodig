@@ -1,8 +1,6 @@
 "use client";
  
-"use client";
- 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
@@ -22,19 +20,46 @@ import {
   Wrench,
   MessageCircle,
   MessagesSquare,
+  GraduationCap,
+  Hammer,
+  Users,
+  ChevronDown,
 } from "lucide-react";
- 
-const links = [
-  { href: "/modules",            label: "Modullar",          icon: LayoutGrid },
-  { href: "/lessons",            label: "Dərslər",           icon: BookOpen   },
-  { href: "/messages",           label: "Mesajlar",          icon: MessageCircle },
-  { href: "/debates",            label: "Debat Otaqları",    icon: MessagesSquare },
-  { href: "/equipment",          label: "Alət və Avadanlıqlar", icon: Wrench     },
-  { href: "/azerbaijan-fields",  label: "Yataqlar",          icon: MapPin     },
-  { href: "/game",               label: "Oyun",              icon: Gamepad2   },
-  { href: "/learn/industry-map", label: "Karyera Xəritəsi",      icon: Map        },
-  { href: "/news",               label: "Xəbərlər",          icon: Newspaper  },
-  { href: "/about",              label: "Haqqında",          icon: Info       },
+
+// Tək başlıq kimi qalan linklər
+const singleLinks = [
+  { href: "/learn/industry-map", label: "Karyera Xəritəsi", icon: Map     },
+  { href: "/news",               label: "Xəbərlər",       icon: Newspaper },
+  { href: "/about",              label: "Haqqında",       icon: Info      },
+];
+
+// Dropdown qrupları — hər qrupun öz başlığı və içindəki linklər
+const navGroups = [
+  {
+    label: "Öyrən",
+    icon: GraduationCap,
+    items: [
+      { href: "/lessons",           label: "Dərslər",              icon: BookOpen },
+      { href: "/equipment",         label: "Alət və Avadanlıqlar", icon: Wrench   },
+      { href: "/azerbaijan-fields", label: "Yataqlar",             icon: MapPin   },
+    ],
+  },
+  {
+    label: "Praktika et",
+    icon: Hammer,
+    items: [
+      { href: "/modules", label: "Modullar", icon: LayoutGrid },
+      { href: "/game",    label: "Oyun",     icon: Gamepad2   },
+    ],
+  },
+  {
+    label: "Networking",
+    icon: Users,
+    items: [
+      { href: "/messages", label: "Mesajlar",       icon: MessageCircle  },
+      { href: "/debates",  label: "Debat Otaqları", icon: MessagesSquare },
+    ],
+  },
 ];
  
 function LDLogo({ size = 32 }: { size?: number }) {
@@ -74,6 +99,19 @@ function NavbarInner() {
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [openMobileGroup, setOpenMobileGroup] = useState<string | null>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenGroup(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
  
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -127,8 +165,76 @@ function NavbarInner() {
         </Link>
  
         {/* Desktop nav links */}
-        <div className="hidden items-center lg:flex">
-          {links.map((l) => {
+        <div ref={navRef} className="hidden items-center lg:flex">
+          {navGroups.map((group) => {
+            const GroupIcon = group.icon;
+            const groupActive = group.items.some((i) => pathname.startsWith(i.href));
+            const isOpen = openGroup === group.label;
+            return (
+              <div key={group.label} className="relative">
+                <button
+                  onClick={() => setOpenGroup(isOpen ? null : group.label)}
+                  className={`group relative flex items-center gap-[7px] px-[14px] py-[10px] text-[11.5px] font-semibold uppercase tracking-[0.06em] transition-colors duration-200 ${
+                    groupActive || isOpen
+                      ? "text-white"
+                      : "text-white/[0.68] hover:text-white/[0.92]"
+                  }`}
+                >
+                  <GroupIcon
+                    size={15}
+                    className={
+                      groupActive || isOpen
+                        ? "text-[#FF6B2B]"
+                        : "text-white/[0.50] transition-colors duration-200 group-hover:text-white/[0.75]"
+                    }
+                  />
+                  {group.label}
+                  <ChevronDown
+                    size={13}
+                    className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                  />
+                  <span
+                    className={`absolute bottom-0 h-[2.5px] rounded-t-sm bg-[#FF6B2B] transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                      groupActive
+                        ? "left-[8%] right-[8%]"
+                        : "left-1/2 right-1/2 group-hover:left-[10%] group-hover:right-[10%]"
+                    }`}
+                  />
+                </button>
+
+                {isOpen && (
+                  <div className="absolute left-0 top-full mt-1 min-w-[210px] overflow-hidden rounded-xl border border-white/[0.08] bg-[#0D1525] shadow-[0_12px_32px_rgba(0,0,0,0.4)]">
+                    {group.items.map((item) => {
+                      const ItemIcon = item.icon;
+                      const active = pathname.startsWith(item.href);
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setOpenGroup(null)}
+                          className={`flex items-center gap-2.5 px-4 py-3 text-[13px] font-medium transition-colors ${
+                            active
+                              ? "bg-white/[0.05] text-white"
+                              : "text-white/[0.75] hover:bg-white/[0.04] hover:text-white"
+                          }`}
+                        >
+                          <ItemIcon
+                            size={15}
+                            className={active ? "text-[#FF6B2B]" : "text-white/[0.45]"}
+                          />
+                          {item.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          <div className="mx-1 h-4 w-px bg-white/[0.08]" />
+
+          {singleLinks.map((l) => {
             const active = pathname.startsWith(l.href);
             const Icon = l.icon;
             return (
@@ -223,7 +329,61 @@ function NavbarInner() {
       {/* Mobile panel */}
       {mobileOpen && (
         <div className="space-y-1 border-t border-white/[0.06] bg-[rgba(10,15,30,0.98)] px-6 py-4 lg:hidden">
-          {links.map((l) => {
+          {navGroups.map((group) => {
+            const GroupIcon = group.icon;
+            const groupActive = group.items.some((i) => pathname.startsWith(i.href));
+            const isOpen = openMobileGroup === group.label;
+            return (
+              <div key={group.label}>
+                <button
+                  onClick={() => setOpenMobileGroup(isOpen ? null : group.label)}
+                  className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-[13px] font-semibold uppercase tracking-[0.05em] ${
+                    groupActive ? "text-white" : "text-white/[0.68]"
+                  }`}
+                >
+                  <span className="flex items-center gap-3">
+                    <GroupIcon
+                      size={17}
+                      className={groupActive ? "text-[#FF6B2B]" : "text-white/[0.45]"}
+                    />
+                    {group.label}
+                  </span>
+                  <ChevronDown
+                    size={15}
+                    className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="ml-4 space-y-1 border-l border-white/[0.08] pl-3">
+                    {group.items.map((item) => {
+                      const ItemIcon = item.icon;
+                      const active = pathname.startsWith(item.href);
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setMobileOpen(false)}
+                          className={`flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium ${
+                            active ? "text-white" : "text-white/[0.65]"
+                          }`}
+                        >
+                          <ItemIcon
+                            size={15}
+                            className={active ? "text-[#FF6B2B]" : "text-white/[0.4]"}
+                          />
+                          {item.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          <div className="my-2 border-t border-white/[0.06]" />
+
+          {singleLinks.map((l) => {
             const active = pathname.startsWith(l.href);
             const Icon = l.icon;
             return (
