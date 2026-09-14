@@ -123,7 +123,7 @@ export default function AboutPage() {
 
         <div className="mt-8 flex gap-3">
           <Link
-            href="/lessons"
+            href="/learn"
             className="rounded-xl px-6 py-3 text-[13px] font-bold font-['Space_Grotesk'] text-white transition-all hover:-translate-y-0.5"
             style={{ background: "#FF6B2B" }}
           >

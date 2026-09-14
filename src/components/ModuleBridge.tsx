@@ -45,7 +45,7 @@ const TOPIC_TO_MODULE: Record<string, ModuleInfo> = {
   },
   reservoir: {
     name: "Petrel Modulu",
-    url: "/learn/petrel",
+    url: "/modules/petrel",
     icon: "🗺️",
     tagline: "Rezervuar modelini qur, məsaməlilik və keçiriciliyi xəritələ",
     bullets: [
@@ -56,7 +56,7 @@ const TOPIC_TO_MODULE: Record<string, ModuleInfo> = {
   },
   production: {
     name: "Prosper Modulu",
-    url: "/learn/prosper",
+    url: "/modules/prosper",
     icon: "🛢️",
     tagline: "IPR əyrisi çək, ESP dizaynını optimallaşdır",
     bullets: [

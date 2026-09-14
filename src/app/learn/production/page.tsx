@@ -84,7 +84,7 @@ export default function ProductionPathPage() {
       <div className="max-w-2xl mx-auto px-6 py-12 relative z-10">
 
         <Link
-          href="/lessons"
+          href="/learn"
           className="inline-flex items-center gap-1.5 text-[12px] font-['Space_Grotesk'] mb-6"
           style={{ color: "#3D5570" }}
         >

@@ -351,15 +351,15 @@ export default function IndustryMap() {
                 <div className="flex flex-wrap gap-2">
                   {active.id === "reservoir" && (
                     <>
-                      <ModuleLink href="/learn/eclipse" label="Eclipse" />
-                      <ModuleLink href="/learn/petrel" label="Petrel" />
+                      <ModuleLink href="/modules/eclipse" label="Eclipse" />
+                      <ModuleLink href="/modules/petrel" label="Petrel" />
                     </>
                   )}
                   {active.id === "drilling" && (
                     <ModuleLink href="/learn/drilling" label="Drilling" />
                   )}
                   {active.id === "production" && (
-                    <ModuleLink href="/learn/prosper" label="Prosper" />
+                    <ModuleLink href="/modules/prosper" label="Prosper" />
                   )}
                   {active.id === "petrophysicist" && (
                     <ModuleLink href="/learn/well-log" label="Well Log AI" />

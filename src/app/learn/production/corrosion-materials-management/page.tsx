@@ -284,7 +284,7 @@ export default function CorrosionMaterialsManagementLesson() {
             ← Workover Əməliyyatları
           </Link>
           <Link
-            href="/lessons"
+            href="/learn"
             className="flex items-center gap-1.5 text-[13px] font-['Space_Grotesk'] px-4 py-2 rounded-xl"
             style={{ background: PATH_COLOR + "1E", color: PATH_COLOR, border: `1px solid ${PATH_COLOR}44` }}
           >

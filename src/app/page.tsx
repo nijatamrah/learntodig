@@ -206,7 +206,7 @@ export default function HomePage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { step: "01", color: "#FF6B2B", title: "Dərslər", desc: "Geologiya, Drilling, Quyu Loqları, Rezervuar, Hasilat — hər mövzu 5 bölmə + quiz + AI chat ilə.", tags: ["Geologiya", "Drilling", "Rezervuar", "Hasilat"], href: "/lessons" },
+            { step: "01", color: "#FF6B2B", title: "Dərslər", desc: "Geologiya, Drilling, Quyu Loqları, Rezervuar, Hasilat — hər mövzu 5 bölmə + quiz + AI chat ilə.", tags: ["Geologiya", "Drilling", "Rezervuar", "Hasilat"], href: "/learn" },
             { step: "02", color: "#00D4FF", title: "Modullar", desc: "Öyrəndiyini real simulyatorda tətbiq et. LAS faylı yüklə, IPR əyrisi qur, Eclipse ssenariləri müqayisə et.", tags: ["Well Log AI", "Prosper", "Petrel", "Eclipse"], href: "/modules" },
             { step: "03", color: "#A78BFA", title: "Kəşf et", desc: "Azərbaycan yataqlarını kəşf et, Alət və Avadanlıqları öyrən, Karyera Xəritəsi ilə karyeranı planla.", tags: ["Yataqlar", "Tools", "Karyera Xəritəsi", "Oyun"], href: "/register" },
           ].map((item) => (
@@ -243,7 +243,7 @@ export default function HomePage() {
               { icon: "🔧", title: "Alət və Avadanlıqlar", desc: "Sahədə istifadə olunan avadanlıqları spesifik öyrən.", color: "#FBBF24", href: "/tools-equipment" },
               { icon: "📖", title: "Terminoloji Lüğət", desc: "400+ neft-qaz termini, izahları ilə. Azərbaycan dilində.", color: "#FF6B2B", href: "#" },
               { icon: "💰", title: "Neftin Qiyməti", desc: "Brent, WTI — real vaxt rejimində qiymət banneri.", color: "#F87171", href: "#" },
-              { icon: "🤖", title: "AI Chat", desc: "Hər dərsdə, hər modulda — Claude ilə istənilən sualı sor.", color: "#00D4FF", href: "/lessons" },
+              { icon: "🤖", title: "AI Chat", desc: "Hər dərsdə, hər modulda — Claude ilə istənilən sualı sor.", color: "#00D4FF", href: "/learn" },
               { icon: "🏭", title: "Karyera Xəritəsi", desc: "Vəzifə xəritəsi, maaşlar, tələb olunan bacarıqlar.", color: "#A78BFA", href: "/register" },
             ].map((item) => (
               <Link key={item.title} href={item.href}>
