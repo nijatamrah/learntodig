@@ -78,7 +78,7 @@ export default function ConversationPage() {
   }, [supabase, conversationId]);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    bottomRef.current?.scrollIntoView({ behavior: messages.length <= 1 ? "auto" : "smooth" });
   }, [messages]);
 
   async function sendMessage() {
@@ -110,8 +110,8 @@ export default function ConversationPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#080C18] text-[#F0F4FF] flex flex-col ">
-      <div className="border-b border-white/[0.07] px-4 py-3 flex items-center gap-3 sticky top-16 bg-[#080C18] z-10">
+    <main className="h-[calc(100vh-4rem)] bg-[#080C18] text-[#F0F4FF] flex flex-col overflow-hidden">
+      <div className="border-b border-white/[0.07] px-4 py-3 flex items-center gap-3 bg-[#080C18] z-10">
         <Link href="/messages" className="text-white/50 hover:text-white">
           <ArrowLeft size={18} />
         </Link>
@@ -121,24 +121,26 @@ export default function ConversationPage() {
         <span className="font-semibold text-[14.5px]">{otherName}</span>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-5 max-w-[700px] w-full mx-auto space-y-2.5">
-        {messages.map((m) => {
-          const mine = m.sender_id === myId;
-          return (
-            <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-              <div
-                className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-[13.5px] ${
-                  mine
-                    ? "bg-[#FF6B2B] text-white rounded-br-sm"
-                    : "bg-white/[0.07] text-[#F0F4FF] rounded-bl-sm"
-                }`}
-              >
-                {m.content}
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="flex flex-col justify-end min-h-full px-4 py-5 max-w-[700px] w-full mx-auto space-y-2.5">
+          {messages.map((m) => {
+            const mine = m.sender_id === myId;
+            return (
+              <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
+                <div
+                  className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-[13.5px] ${
+                    mine
+                      ? "bg-[#FF6B2B] text-white rounded-br-sm"
+                      : "bg-white/[0.07] text-[#F0F4FF] rounded-bl-sm"
+                  }`}
+                >
+                  {m.content}
+                </div>
               </div>
-            </div>
-          );
-        })}
-        <div ref={bottomRef} />
+            );
+          })}
+          <div ref={bottomRef} />
+        </div>
       </div>
 
       <div className="border-t border-white/[0.07] p-3 max-w-[700px] w-full mx-auto flex items-center gap-2">
