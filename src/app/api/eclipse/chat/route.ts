@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
 
+import { guardAI } from "@/lib/ai-guard";
 export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
+  const guard = await guardAI("legacy-eclipse");
+  if (!guard.ok) return guard.response;
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ reply: 'ANTHROPIC_API_KEY tapılmadı.' }, { status: 500 });

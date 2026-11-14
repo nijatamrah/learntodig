@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 
+import { guardAI } from "@/lib/ai-guard";
 export const runtime = "nodejs";
 
 const MODEL = "claude-sonnet-4-5";
@@ -22,12 +23,10 @@ type ExplainRequest = {
 };
 
 export async function POST(request: Request) {
-  const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
+  const guard = await guardAI("prosper-explain");
+  if (!guard.ok) return guard.response;
 
-  console.log(
-    "[prosper/explain] ANTHROPIC_API_KEY:",
-    apiKey ? `${apiKey.slice(0, 10)}… (len=${apiKey.length})` : "MISSING",
-  );
+  const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
 
   if (!apiKey) {
     return NextResponse.json(

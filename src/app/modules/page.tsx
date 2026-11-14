@@ -1,95 +1,91 @@
-"use client";
 import Link from "next/link";
+import { MODULES } from "@/lib/modules/registry";
+import type { ModuleStatus } from "@/lib/modules/types";
 
-const modules = [
-  { href: "/modules/well-log",  icon: "📋", title: "Loq analizi (WellLogAI)", desc: "LAS faylı yüklə, quyu loqlarını vizuallaşdır və AI ilə analiz et", accent: "#F59E0B", tag: "AI · LAS" },
-  { href: "/modules/prosper",   icon: "🛢️", title: "Prosper simulyatoru",     desc: "Quyu parametrlərini dəyişdir, məhsuldarlıq və axın rejimini izlə",   accent: "#FF6B2B", tag: "Simulyator" },
-  { href: "/modules/geology",   icon: "🪨", title: "Geologiya modulu",        desc: "Litologiya, stratigrafiya, neft tələsi · AI chat · Quiz",             accent: "#22C55E", tag: "AI · Quiz" },
-  { href: "/modules/petrel",    icon: "🗺️", title: "Petrel simulyatoru",      desc: "Rezervuar modelləməsi, məsaməlilik, keçiricilik · AI chat",           accent: "#3B82F6", tag: "AI · 3D" },
-  { href: "/modules/eclipse",   icon: "⚡", title: "Eclipse simulyatoru",     desc: "Rezervuar simulyasiyası, hasilat proqnozu, ssenari müqayisəsi",       accent: "#A78BFA", tag: "Ssenari" },
-  { href: "/modules/drilling",  icon: "⛏",  title: "Qazma simulyatoru",    desc: "Qazma parametrləri, ROP optimizasiyası, problem ssenarileri",        accent: "#FBBF24", tag: "ROP" },
-];
+export const metadata = { title: "Modullar | LearntoDig" };
+
+const STATUS: Record<ModuleStatus, { label: string; color: string }> = {
+  live: { label: "Aktiv", color: "#34D399" },
+  restoring: { label: "Yenilənir", color: "#FBBF24" },
+  planned: { label: "Tezliklə", color: "#6B82A0" },
+};
 
 export default function ModulesPage() {
   return (
     <main className="min-h-screen" style={{ background: "#080C18" }}>
-      <div className="max-w-2xl mx-auto px-6 py-12">
-
+      <div className="max-w-5xl mx-auto px-6 py-12">
         <div className="mb-10">
           <p className="text-[10px] font-semibold tracking-[0.18em] uppercase font-mono mb-2" style={{ color: "#00D4FF" }}>
-            {`// praktika · simulyatorlar`}
+            {`// praktika · real iş axınları`}
           </p>
           <h1 className="font-['Space_Grotesk'] text-[2.2rem] font-bold leading-tight mb-2" style={{ color: "#F0F4FF" }}>
             Modullar
           </h1>
-          <p className="text-[14px] font-['Space_Grotesk']" style={{ color: "#6B82A0" }}>
-            Simulyatorlar, AI chat və interaktiv alətlər
+          <p className="text-[14px] font-['Space_Grotesk'] max-w-2xl" style={{ color: "#6B82A0" }}>
+            Real mühəndislik proqramlarının iş axınını məşq et: hesablama, missiya və AI müəllim ilə.
           </p>
         </div>
 
-        <ul className="space-y-3">
-          {modules.map((m) => (
-            <li key={m.href}>
-              <Link href={m.href}>
-                <div
-                  className="group relative flex items-center gap-4 rounded-2xl px-5 py-4 transition-all duration-200 hover:-translate-y-0.5 overflow-hidden"
-                  style={{ background: "#0D1525", border: "1px solid rgba(255,255,255,0.07)" }}
-                  onMouseEnter={e => (e.currentTarget.style.border = "1px solid rgba(255,255,255,0.15)")}
-                  onMouseLeave={e => (e.currentTarget.style.border = "1px solid rgba(255,255,255,0.07)")}
-                >
-                  {/* Sol accent xətti */}
+        <ul className="grid md:grid-cols-2 gap-4">
+          {MODULES.map((m) => {
+            const st = STATUS[m.status];
+            const clickable = m.status !== "planned";
+            const card = (
+              <div
+                className="relative h-full rounded-2xl p-5 overflow-hidden transition-all duration-200 hover:-translate-y-0.5"
+                style={{
+                  background: "#0D1525",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  opacity: clickable ? 1 : 0.55,
+                }}
+              >
+                <div className="absolute left-0 top-0 bottom-0 w-[3px]" style={{ background: m.accent }} />
+                <div className="flex items-start justify-between gap-3 mb-3">
                   <div
-                    className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-2xl"
-                    style={{ background: m.accent }}
-                  />
-
-                  {/* Icon */}
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center text-[1.2rem] flex-shrink-0 ml-1"
+                    className="w-11 h-11 rounded-xl flex items-center justify-center text-[1.3rem]"
                     style={{ background: m.accent + "20" }}
                   >
                     {m.icon}
                   </div>
-
-                  {/* Mətn */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span
-                        className="font-semibold text-[14px] font-['Space_Grotesk']"
-                        style={{ color: "#F0F4FF" }}
-                      >
-                        {m.title}
-                      </span>
-                      <span
-                        className="text-[10px] px-2 py-0.5 rounded-md font-semibold font-mono"
-                        style={{
-                          background: m.accent + "18",
-                          color: m.accent,
-                          border: `1px solid ${m.accent}35`,
-                        }}
-                      >
-                        {m.tag}
-                      </span>
-                    </div>
-                    <p
-                      className="text-[12px] font-['Space_Grotesk'] leading-relaxed"
-                      style={{ color: "#6B82A0" }}
-                    >
-                      {m.desc}
-                    </p>
-                  </div>
-
-                  <svg
-                    className="h-4 w-4 flex-shrink-0 transition-all duration-200 group-hover:translate-x-0.5"
-                    style={{ color: "#3D5570" }}
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                  <span
+                    className="text-[10px] px-2 py-0.5 rounded-md font-semibold font-mono"
+                    style={{ background: st.color + "18", color: st.color }}
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
+                    {st.label}
+                  </span>
                 </div>
-              </Link>
-            </li>
-          ))}
+
+                <h2 className="font-semibold text-[16px] font-['Space_Grotesk'] mb-0.5" style={{ color: "#F0F4FF" }}>
+                  {m.title}
+                </h2>
+                <p className="text-[11px] font-mono mb-2" style={{ color: m.accent }}>
+                  {m.realTool}
+                </p>
+                <p className="text-[12px] font-['Space_Grotesk'] leading-relaxed mb-4" style={{ color: "#6B82A0" }}>
+                  {m.desc}
+                </p>
+
+                <ul className="space-y-1 mb-4">
+                  {m.skills.slice(0, 3).map((s) => (
+                    <li key={s} className="text-[11px] font-['Space_Grotesk']" style={{ color: "#8DA2BF" }}>
+                      · {s}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="flex gap-3 text-[11px] font-mono" style={{ color: "#4A6A8A" }}>
+                  <span>{m.level}</span>
+                  <span>~{m.hours} saat</span>
+                  <span>{m.skills.length} bacarıq</span>
+                </div>
+              </div>
+            );
+            return (
+              <li key={m.id}>
+                {clickable ? <Link href={m.href}>{card}</Link> : card}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </main>

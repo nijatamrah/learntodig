@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import type { WellLogExplainPayload } from "@/lib/well-log-explain";
 import { zoneLabel } from "@/lib/well-log-explain";
 
+import { guardAI } from "@/lib/ai-guard";
 export const runtime = "nodejs";
 
 const MODEL = "claude-sonnet-4-5";
@@ -17,6 +18,9 @@ function formatZoneIntervals(payload: WellLogExplainPayload): string {
 }
 
 export async function POST(request: Request) {
+  const guard = await guardAI("well-log-explain");
+  if (!guard.ok) return guard.response;
+
   const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
 
   if (!apiKey) {

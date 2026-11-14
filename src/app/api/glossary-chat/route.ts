@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 
+import { guardAI } from "@/lib/ai-guard";
 const client = new Anthropic();
 
 export async function POST(req: NextRequest) {
+  const guard = await guardAI("glossary");
+  if (!guard.ok) return guard.response;
+
   try {
     const { messages } = await req.json();
 

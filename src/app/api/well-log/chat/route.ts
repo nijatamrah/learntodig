@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import type { WellLogChatContext } from "@/lib/well-log-explain";
 import { zoneLabel } from "@/lib/well-log-explain";
 
+import { guardAI } from "@/lib/ai-guard";
 export const runtime = "nodejs";
 
 const MODEL = "claude-sonnet-4-5";
@@ -52,6 +53,9 @@ ${ctx.denseSampleTable}`;
 }
 
 export async function POST(request: Request) {
+  const guard = await guardAI("well-log-chat");
+  if (!guard.ok) return guard.response;
+
   const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
 
   if (!apiKey) {
