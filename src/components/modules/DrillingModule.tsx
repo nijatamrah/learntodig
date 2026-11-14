@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import ModuleShell, { type ShellTab } from "./ModuleShell";
 import ModuleChat from "./ModuleChat";
 import { getModule } from "@/lib/modules/registry";
@@ -32,9 +33,12 @@ function Sections({ progress }: { progress: ProgressRow[] }) {
         {DRILLING_SECTIONS.map((s) => (
           <li
             key={s.id}
-            className="rounded-2xl border border-[rgba(255,255,255,0.07)] bg-[#0D1525] p-4"
-            style={{ opacity: s.status === "soon" ? 0.6 : 1 }}
+            className="relative rounded-2xl border border-[rgba(255,255,255,0.07)] bg-[#0D1525] p-4 transition-colors hover:border-[rgba(255,255,255,0.18)]"
+            style={{ opacity: s.status === "live" ? 1 : 0.6 }}
           >
+            {s.status === "live" && (
+              <Link href={`/modules/drilling/${s.id}`} className="absolute inset-0 rounded-2xl" aria-label={`${s.title} bölməsini aç`} />
+            )}
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-[11px] font-mono text-[#6B82A0]">{String(s.order).padStart(2, "0")}</span>
               <span

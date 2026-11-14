@@ -13,10 +13,16 @@ export interface ShellTab {
 interface Props {
   mod: ModuleDef;
   tabs: ShellTab[];
+  /** Bölmə səhifələri üçün: başlığı və geri linkini dəyişmək */
+  title?: string;
+  subtitle?: string;
+  eyebrow?: string;
+  backHref?: string;
+  backLabel?: string;
 }
 
 // Bütün modulların ortaq çərçivəsi: başlıq, Tələbə/Mühəndis rejimi, tab-lar.
-export default function ModuleShell({ mod, tabs }: Props) {
+export default function ModuleShell({ mod, tabs, title, subtitle, eyebrow, backHref, backLabel }: Props) {
   const [active, setActive] = useState(tabs[0]?.id);
   const [mode, setMode] = useState<LearnerMode>("student");
   const current = tabs.find((t) => t.id === active) ?? tabs[0];
@@ -24,19 +30,19 @@ export default function ModuleShell({ mod, tabs }: Props) {
   return (
     <main className="min-h-screen bg-[#080C18] text-[#F0F4FF]">
       <div className="max-w-5xl mx-auto px-6 py-10">
-        <Link href="/modules" className="text-[12px] text-[#6B82A0] hover:text-[#00D4FF] font-['Space_Grotesk']">
-          ← Modullar
+        <Link href={backHref ?? "/modules"} className="text-[12px] text-[#6B82A0] hover:text-[#00D4FF] font-['Space_Grotesk']">
+          {backLabel ?? "← Modullar"}
         </Link>
 
         <div className="mt-4 mb-8 flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-[10px] font-semibold tracking-[0.18em] uppercase font-mono mb-2" style={{ color: mod.accent }}>
-              {`// ${mod.realTool}`}
+              {`// ${eyebrow ?? mod.realTool}`}
             </p>
             <h1 className="font-['Space_Grotesk'] text-[2rem] font-bold leading-tight">
-              {mod.icon} {mod.title}
+              {title ?? `${mod.icon} ${mod.title}`}
             </h1>
-            <p className="text-[14px] text-[#6B82A0] mt-1 font-['Space_Grotesk'] max-w-xl">{mod.desc}</p>
+            <p className="text-[14px] text-[#6B82A0] mt-1 font-['Space_Grotesk'] max-w-xl">{subtitle ?? mod.desc}</p>
           </div>
 
           <div
