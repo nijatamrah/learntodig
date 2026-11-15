@@ -19,10 +19,14 @@ interface Props {
   eyebrow?: string;
   backHref?: string;
   backLabel?: string;
+  /** Tab-lardan əvvəl göstərilən blok (məsələn, bölmənin məqsədləri) */
+  intro?: ReactNode;
+  /** Tab məzmunundan sonra göstərilən blok (məsələn, növbəti bölməyə keçid) */
+  footer?: ReactNode;
 }
 
 // Bütün modulların ortaq çərçivəsi: başlıq, Tələbə/Mühəndis rejimi, tab-lar.
-export default function ModuleShell({ mod, tabs, title, subtitle, eyebrow, backHref, backLabel }: Props) {
+export default function ModuleShell({ mod, tabs, title, subtitle, eyebrow, backHref, backLabel, intro, footer }: Props) {
   const [active, setActive] = useState(tabs[0]?.id);
   const [mode, setMode] = useState<LearnerMode>("student");
   const current = tabs.find((t) => t.id === active) ?? tabs[0];
@@ -65,6 +69,8 @@ export default function ModuleShell({ mod, tabs, title, subtitle, eyebrow, backH
           </div>
         </div>
 
+        {intro}
+
         <div className="flex gap-1 border-b border-[rgba(255,255,255,0.07)] mb-6 overflow-x-auto">
           {tabs.map((t) => (
             <button
@@ -83,6 +89,8 @@ export default function ModuleShell({ mod, tabs, title, subtitle, eyebrow, backH
         </div>
 
         {current?.render({ mode })}
+
+        {footer}
       </div>
     </main>
   );

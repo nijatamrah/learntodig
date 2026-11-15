@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface QuizQuestion {
   q: string;
@@ -16,9 +16,24 @@ interface Props {
   onComplete?: (scorePercent: number) => void;
 }
 
+function shuffled(n: number) {
+  const a = Array.from({ length: n }, (_, i) => i);
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 export default function Quiz({ questions, accent, onComplete }: Props) {
+  // answers[qi] = orijinal option indeksi; orders[qi] = göstərmə sırası (hər cəhddə qarışdırılır)
   const [answers, setAnswers] = useState<(number | null)[]>(() => questions.map(() => null));
+  const [orders, setOrders] = useState<number[][]>(() => questions.map((q) => q.options.map((_, i) => i)));
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    setOrders(questions.map((q) => shuffled(q.options.length)));
+  }, [questions]);
 
   const score = answers.reduce<number>((n, a, i) => (a === questions[i].correct ? n + 1 : n), 0);
   const percent = Math.round((score / questions.length) * 100);
@@ -30,6 +45,7 @@ export default function Quiz({ questions, accent, onComplete }: Props) {
 
   function reset() {
     setAnswers(questions.map(() => null));
+    setOrders(questions.map((q) => shuffled(q.options.length)));
     setSubmitted(false);
   }
 
@@ -41,7 +57,8 @@ export default function Quiz({ questions, accent, onComplete }: Props) {
             {qi + 1}. {item.q}
           </p>
           <div className="space-y-2">
-            {item.options.map((opt, oi) => {
+            {orders[qi].map((oi) => {
+              const opt = item.options[oi];
               const chosen = answers[qi] === oi;
               const isCorrect = submitted && oi === item.correct;
               const isWrong = submitted && chosen && oi !== item.correct;
@@ -87,7 +104,7 @@ export default function Quiz({ questions, accent, onComplete }: Props) {
               onClick={reset}
               className="px-4 py-2 rounded-xl text-[12px] border border-[rgba(255,255,255,0.12)] text-[#D5DEF0] font-['Space_Grotesk']"
             >
-              Yenidən
+              Yenidən (suallar qarışdırılır)
             </button>
           </>
         )}

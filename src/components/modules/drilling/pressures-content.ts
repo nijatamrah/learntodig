@@ -1,13 +1,7 @@
 import type { QuizQuestion } from "../Quiz";
 
-export interface MissionItem {
-  id: string;
-  prompt: string;
-  unit: string;
-  answer: number;
-  tol: number;
-  solution: string;
-}
+import type { MissionItem } from "./MissionRunner";
+import type { FormulaGroup } from "./FormulaSheet";
 
 export const MISSION_INTRO =
   "Sən 9,500 ft TVD hədəfli quyunun qazma mühəndisisən. Aşağıdakı üç tapşırığı kalkulyatorla və ya əllə həll et. Hər cavab avtomatik yoxlanır və həllin addımları göstərilir.";
@@ -158,4 +152,50 @@ export const QUIZ: QuizQuestion[] = [
     correct: 1,
     explanation: "Window bağlandıqda MW-ni artırmaq lost circulation, azaltmaq kick deməkdir. Həll: bölməni qısaltmaq (əlavə string), MPD və ya dizayn dəyişikliyi. Margin-ləri əsassız silmək təhlükəlidir.",
   },
+];
+
+export const PRESSURES_FORMULAS: FormulaGroup[] = [
+  {
+    title: "Hidrostatik təzyiq",
+    rows: [
+      { name: "Hidrostatik təzyiq", formula: "Ph = 0.052 · MW · TVD", note: "MW ppg, TVD ft, Ph psi" },
+      { name: "Məhlul qradiyenti", formula: "G = 0.052 · MW  [psi/ft]" },
+      { name: "Ekvivalent məhlul çəkisi", formula: "EMW = P / (0.052 · TVD)  [ppg]" },
+      { name: "Overbalance", formula: "OB = Ph − Pp", note: "mənfi olarsa underbalance (kick riski)" },
+    ],
+  },
+  {
+    title: "Gərginlik və Pp",
+    rows: [
+      { name: "Effektiv gərginlik (Terzaghi)", formula: "σe = S − Pp" },
+      { name: "Eaton (sonik)", formula: "Pp/D = OBG − (OBG − NPG)·(Δtn/Δto)^3" },
+      { name: "Eaton (rezistivlik)", formula: "Pp/D = OBG − (OBG − NPG)·(Ro/Rn)^1.2" },
+      { name: "Overburden (sıxlıqdan)", formula: "1 g/cc ≈ 0.4335 psi/ft ≈ 8.345 ppg" },
+    ],
+  },
+  {
+    title: "Çat təzyiqi",
+    rows: [
+      { name: "Hubbert–Willis (min.)", formula: "Pf = Pp + (S − Pp)/3" },
+      { name: "Eaton", formula: "Pf = Pp + ν/(1−ν)·(S − Pp)" },
+      { name: "Leak-off test", formula: "EMW = MW + P_leakoff / (0.052·TVD_shoe)" },
+      { name: "Maks. icazəli MW", formula: "MW_max = EMW_LOT − margin" },
+    ],
+  },
+  {
+    title: "Mud window",
+    rows: [
+      { name: "Aşağı hədd", formula: "MW_min = max(Pp, collapse) + trip margin" },
+      { name: "Yuxarı hədd", formula: "MW_max = FG − frac margin" },
+      { name: "Casing seat (bottom-up)", formula: "FG(shoe) − margin ≥ Pp(TD) + trip margin" },
+    ],
+  },
+];
+
+export const PRESSURES_OBJECTIVES = [
+  "Hidrostatik təzyiqi və overbalance-ı TVD ilə düzgün hesablamaq",
+  "Normal və anormal təzyiqi fərqləndirmək, səbəblərini izah etmək",
+  "Sonik loqdan Eaton üsulu ilə Pp qiymətləndirmək",
+  "LOT nəticəsindən shoe-da maksimum icazəli məhlul çəkisini tapmaq",
+  "Mud window qurmaq və bottom-up üsulu ilə casing seat seçmək",
 ];
