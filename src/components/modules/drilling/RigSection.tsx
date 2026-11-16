@@ -20,7 +20,7 @@ export default function RigSection() {
       aiSectionTitle="Rig sistemləri"
       aiPlaceholder="Məsələn: Niyə traveling block sistemində xətlərin sayını artırırlar?"
       contentTabs={[
-        { id: "schematic", label: "Sxem", render: () => <RigSchematic /> },
+        { id: "schematic", label: "Vizual", render: () => <RigSchematic /> },
         { id: "theory", label: "Nəzəriyyə", render: ({ mode }) => <RigTheory mode={mode} /> },
         { id: "calc", label: "Kalkulyatorlar", render: () => <RigCalculators /> },
         { id: "mission", label: "Missiya", render: () => <MissionRunner intro={RIG_MISSION_INTRO} items={RIG_MISSION} /> },

@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import PressuresSection from "@/components/modules/drilling/PressuresSection";
+import TorqueDragSection from "@/components/modules/drilling/TorqueDragSection";
+import DrillstringSection from "@/components/modules/drilling/DrillstringSection";
 import HydraulicsSection from "@/components/modules/drilling/HydraulicsSection";
 import FluidsSection from "@/components/modules/drilling/FluidsSection";
 import RigSection from "@/components/modules/drilling/RigSection";
@@ -8,6 +10,8 @@ import RigSection from "@/components/modules/drilling/RigSection";
 const SECTIONS: Record<string, () => React.ReactElement> = {
   "rig-systems": () => <RigSection />,
   "drilling-fluids": () => <FluidsSection />,
+  "torque-drag": () => <TorqueDragSection />,
+  "drillstring-bha": () => <DrillstringSection />,
   hydraulics: () => <HydraulicsSection />,
   pressures: () => <PressuresSection />,
 };

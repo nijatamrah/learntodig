@@ -2,6 +2,7 @@
 
 import SectionFrame from "./SectionFrame";
 import PressuresTheory from "./PressuresTheory";
+import WellPressureVisual from "./WellPressureVisual";
 import PressureCalculators from "./PressureCalculators";
 import MudWindowSimulator from "./MudWindowSimulator";
 import PressureMission from "./PressureMission";
@@ -20,6 +21,7 @@ export default function PressuresSection() {
       aiSectionTitle="Təzyiqlər və mud window"
       aiPlaceholder="Məsələn: Niyə anormal təzyiqli zonada çat qradiyenti Pp-yə yaxınlaşır?"
       contentTabs={[
+        { id: "visual", label: "Vizual", render: () => <WellPressureVisual /> },
         { id: "theory", label: "Nəzəriyyə", render: ({ mode }) => <PressuresTheory mode={mode} /> },
         { id: "calc", label: "Kalkulyatorlar", render: () => <PressureCalculators /> },
         { id: "window", label: "Mud window", render: ({ mode }) => <MudWindowSimulator mode={mode} /> },

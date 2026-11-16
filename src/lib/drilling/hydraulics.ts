@@ -283,3 +283,14 @@ export function circulatingSystem(s: SystemInput): SystemResult {
     valid,
   };
 }
+
+/** Simulyator və vizual üçün ortaq sabit həndəsə */
+export const DEFAULT_GEOMETRY = {
+  holeIn: 8.5,
+  casingIdIn: 8.681,
+  dpOdIn: 5,
+  dpIdIn: 4.276,
+  dcOdIn: 6.5,
+  dcIdIn: 2.813,
+  dcLen: 600,
+};

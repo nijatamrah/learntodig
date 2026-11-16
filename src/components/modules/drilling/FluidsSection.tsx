@@ -2,6 +2,7 @@
 
 import SectionFrame from "./SectionFrame";
 import FluidsTheory from "./FluidsTheory";
+import MudSystemVisual from "./MudSystemVisual";
 import FluidCalculators from "./FluidCalculators";
 import MudDiagnostics from "./MudDiagnostics";
 import MissionRunner from "./MissionRunner";
@@ -20,6 +21,7 @@ export default function FluidsSection() {
       aiSectionTitle="Qazma məhlulu"
       aiPlaceholder="Məsələn: Niyə OBM-də qaz kick-ini aşkar etmək çətindir?"
       contentTabs={[
+        { id: "visual", label: "Vizual", render: () => <MudSystemVisual /> },
         { id: "theory", label: "Nəzəriyyə", render: ({ mode }) => <FluidsTheory mode={mode} /> },
         { id: "calc", label: "Kalkulyatorlar", render: () => <FluidCalculators /> },
         { id: "diagnostics", label: "Diaqnostika", render: () => <MudDiagnostics /> },
