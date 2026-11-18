@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+import DirectionalSection from "@/components/modules/drilling/DirectionalSection";
+import CasingSection from "@/components/modules/drilling/CasingSection";
 import PressuresSection from "@/components/modules/drilling/PressuresSection";
 import BitsSection from "@/components/modules/drilling/BitsSection";
 import TorqueDragSection from "@/components/modules/drilling/TorqueDragSection";
@@ -16,6 +18,8 @@ const SECTIONS: Record<string, () => React.ReactElement> = {
   "drillstring-bha": () => <DrillstringSection />,
   hydraulics: () => <HydraulicsSection />,
   pressures: () => <PressuresSection />,
+  "casing-cementing": () => <CasingSection />,
+  directional: () => <DirectionalSection />,
 };
 
 export const metadata = { title: "Qazma · Təzyiqlər | LearntoDig" };
