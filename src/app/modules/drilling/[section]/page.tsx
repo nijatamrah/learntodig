@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import DirectionalSection from "@/components/modules/drilling/DirectionalSection";
 import WellControlSection from "@/components/modules/drilling/WellControlSection";
 import ProblemsSection from "@/components/modules/drilling/ProblemsSection";
+import EconomicsSection from "@/components/modules/drilling/EconomicsSection";
 import CasingSection from "@/components/modules/drilling/CasingSection";
 import PressuresSection from "@/components/modules/drilling/PressuresSection";
 import BitsSection from "@/components/modules/drilling/BitsSection";
@@ -24,6 +25,7 @@ const SECTIONS: Record<string, () => React.ReactElement> = {
   directional: () => <DirectionalSection />,
   "well-control": () => <WellControlSection />,
   "problems-npt": () => <ProblemsSection />,
+  economics: () => <EconomicsSection />,
 };
 
 export const metadata = { title: "Qazma · Təzyiqlər | LearntoDig" };

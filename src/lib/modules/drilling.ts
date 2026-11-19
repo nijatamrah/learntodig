@@ -36,7 +36,7 @@ export const DRILLING_SECTIONS: ModuleSection[] = [
   { id: "problems-npt", order: 11, title: "Qazma problemləri və NPT", titleEn: "Drilling Problems & NPT", status: "live",
     summary: "Stuck pipe, lost circulation və digər problemlərin diaqnostikası.",
     skills: ["Problemin səbəbini diaqnoz etmək", "Aradan qaldırma planı qurmaq"] },
-  { id: "economics", order: 12, title: "Qazma iqtisadiyyatı", titleEn: "Drilling Economics", status: "next",
+  { id: "economics", order: 12, title: "Qazma iqtisadiyyatı", titleEn: "Drilling Economics", status: "live",
     summary: "AFE, time-depth əyrisi və xərc nəzarəti.",
     skills: ["Time-depth əyrisi qurmaq", "AFE strukturunu başa düşmək"] },
 ];
